@@ -1,0 +1,345 @@
+/* ==========================================================================
+   FeaturedArticles.css — Production-Grade Cinematic Pillar Grid
+   Section Title Stagger, Micro-Pipelines, Locked State Styling
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Section Header Character Reveal
+   -------------------------------------------------------------------------- */
+.sts-featured-header-title {
+  font-family: var(--sts-font-display, sans-serif);
+  font-size: clamp(32px, 4.5vw, 44px);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.12;
+  margin-bottom: 14px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.sts-featured-header-title .word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.sts-featured-header-title .ch {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(110%);
+  color: rgba(255, 255, 255, 0.1);
+  will-change: transform, opacity;
+}
+
+.sts-featured-header-title.revealed .ch {
+  animation: featuredCharReveal 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes featuredCharReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(110%);
+    color: #FFFFFF;
+  }
+  40% {
+    color: #FFFFFF;
+    text-shadow: 0 0 16px rgba(255, 255, 255, 0.7);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    color: #FFFFFF;
+    text-shadow: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Featured Cards & Spatial Depth
+   -------------------------------------------------------------------------- */
+.sts-pillar-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 14px;
+  padding: 24px 22px 20px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.3s ease,
+              background 0.3s ease,
+              box-shadow 0.35s ease;
+  will-change: transform, box-shadow;
+}
+
+.sts-pillar-card.published {
+  cursor: pointer;
+}
+
+.sts-pillar-card.published:hover {
+  border-color: rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.038);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 42px -12px rgba(0, 0, 0, 0.9),
+              0 0 24px -4px rgba(255, 255, 255, 0.08);
+}
+
+/* Top Laser Slide on Hover */
+.sts-pillar-topline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.sts-pillar-topline b {
+  display: block;
+  width: 80px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+  transform: translateX(-80px);
+}
+
+.sts-pillar-card.published:hover .sts-pillar-topline b {
+  animation: pillarTopSlide 0.75s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes pillarTopSlide {
+  to { transform: translateX(450px); }
+}
+
+/* --------------------------------------------------------------------------
+   Topic Micro-Pipeline
+   -------------------------------------------------------------------------- */
+.sts-micro-pipeline {
+  position: relative;
+  margin: 18px 0 14px 0;
+  padding: 10px 8px 6px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 8px;
+  transition: border-color 0.25s ease, background 0.25s ease;
+}
+
+.sts-pillar-card.published:hover .sts-micro-pipeline {
+  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.sts-micro-track {
+  position: absolute;
+  top: 22px;
+  left: 26px;
+  right: 26px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.sts-micro-track-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 1px;
+  width: 0%;
+  background: rgba(255, 255, 255, 0.35);
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sts-pillar-card.published:hover .sts-micro-track-fill {
+  width: 100%;
+}
+
+.sts-micro-nodes {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+}
+
+.sts-micro-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.sts-micro-node-dot {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(14, 17, 18, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.45);
+  transition: all 0.3s ease;
+}
+
+.sts-pillar-card.published:hover .sts-micro-node:nth-child(1) .sts-micro-node-dot {
+  transition-delay: 0.06s;
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+  transform: scale(1.08);
+}
+
+.sts-pillar-card.published:hover .sts-micro-node:nth-child(2) .sts-micro-node-dot {
+  transition-delay: 0.2s;
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+  transform: scale(1.08);
+}
+
+.sts-pillar-card.published:hover .sts-micro-node:nth-child(3) .sts-micro-node-dot {
+  transition-delay: 0.36s;
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+  transform: scale(1.08);
+}
+
+.sts-micro-node-lbl {
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 9.5px;
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: 0.02em;
+  transition: color 0.3s ease;
+}
+
+.sts-pillar-card.published:hover .sts-micro-node-lbl {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+/* --------------------------------------------------------------------------
+   CTA Status & Arrow Micro-Interaction
+   -------------------------------------------------------------------------- */
+.sts-pillar-cta {
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.85);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.25s ease;
+}
+
+.sts-pillar-card.published:hover .sts-pillar-cta {
+  color: #FFFFFF;
+}
+
+.sts-pillar-cta svg {
+  transition: transform 0.25s ease;
+}
+
+.sts-pillar-card.published:hover .sts-pillar-cta svg {
+  transform: translateX(5px);
+}
+
+/* --------------------------------------------------------------------------
+   Locked "Coming Soon" Intentional Design
+   -------------------------------------------------------------------------- */
+.sts-pillar-card.locked {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.012) 0%,
+    rgba(255, 255, 255, 0.006) 100%
+  );
+  border-color: rgba(255, 255, 255, 0.045);
+  cursor: default;
+}
+
+.sts-pillar-card.locked .sts-pillar-hatch {
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.012) 0px,
+    rgba(255, 255, 255, 0.012) 1px,
+    transparent 1px,
+    transparent 8px
+  );
+  pointer-events: none;
+}
+
+.sts-pillar-card.locked:hover {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.sts-pillar-card.locked .sts-micro-track {
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.08) 0px,
+    rgba(255, 255, 255, 0.08) 3px,
+    transparent 3px,
+    transparent 6px
+  );
+}
+
+.sts-pillar-card.locked .sts-micro-node-dot {
+  opacity: 0.35;
+  border-style: dashed;
+}
+
+.sts-pillar-card.locked .sts-micro-node-lbl {
+  opacity: 0.3;
+}
+
+.sts-locked-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 9.5px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  padding: 1px 6px;
+  text-transform: uppercase;
+}
+
+/* --------------------------------------------------------------------------
+   Responsive & Accessibility
+   -------------------------------------------------------------------------- */
+@media (max-width: 960px) {
+  .sts-featured-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media (max-width: 620px) {
+  .sts-featured-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .sts-pillar-card {
+    padding: 20px 18px 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sts-featured-header-title .ch {
+    opacity: 1 !important;
+    transform: none !important;
+    color: #FFFFFF !important;
+  }
+  .sts-pillar-card {
+    transition: none !important;
+    transform: none !important;
+  }
+  .sts-pillar-cta svg {
+    transition: none !important;
+    transform: none !important;
+  }
+}

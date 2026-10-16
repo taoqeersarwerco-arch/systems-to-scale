@@ -1,0 +1,339 @@
+/* ==========================================================================
+   SYSTEMS TO SCALE — Design System & Custom Properties
+   Cinematic Monochrome (Pure Black & White) Architectural Identity
+   ========================================================================== */
+
+:root {
+  /* Ground & Dark Obsidian Surfaces */
+  --sts-ground: #080808;
+  --sts-ground-rgb: 8, 8, 8;
+  --sts-raised: #111111;
+  --sts-raised-hover: #181818;
+  --sts-panel: #141414;
+  --sts-surface: #161616;
+  --sts-surface-light: #202020;
+  
+  /* Hairline Borders */
+  --sts-border: rgba(255, 255, 255, 0.08);
+  --sts-border-subtle: rgba(255, 255, 255, 0.04);
+  --sts-border-hover: rgba(255, 255, 255, 0.28);
+  --sts-rule: rgba(255, 255, 255, 0.09);
+  --sts-rule-dark: rgba(255, 255, 255, 0.05);
+
+  /* Monochrome Unified Surfaces (No paper bands) */
+  --sts-paper: #080808;
+  --sts-paper-subtle: #111111;
+  --sts-ink: #FFFFFF;
+  --sts-ink-muted: #A3A3A3;
+  --sts-ink-dim: #737373;
+
+  /* Typography Colors — High Contrast Black & White */
+  --sts-bone: #FFFFFF;
+  --sts-muted: #A3A3A3;
+  --sts-dim: #737373;
+
+  /* Pure Monochrome Accents */
+  --sts-brass: #FFFFFF;
+  --sts-brass-hover: #E5E5E5;
+  --sts-brass-dark: #FFFFFF;
+  --sts-brass-glow: rgba(255, 255, 255, 0.16);
+  --sts-brass-dim: rgba(255, 255, 255, 0.06);
+
+  --sts-steel: #A3A3A3;
+  --sts-steel-hover: #D4D4D4;
+  --sts-steel-dark: #A3A3A3;
+  --sts-steel-glow: rgba(255, 255, 255, 0.1);
+  --sts-steel-dim: rgba(255, 255, 255, 0.04);
+
+  /* Functional Status */
+  --sts-fault: #888888;
+  --sts-danger: #FFFFFF;
+  --sts-success: #FFFFFF;
+  --sts-warning: #A3A3A3;
+
+  /* Cinematic Architectural Typography Stacks */
+  --sts-font-display: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --sts-font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --sts-font-mono: 'Space Grotesk', ui-monospace, SFMono-Regular, monospace;
+
+  /* Spacing Scale */
+  --sts-space-xs: 4px;
+  --sts-space-sm: 8px;
+  --sts-space-md: 16px;
+  --sts-space-lg: 24px;
+  --sts-space-xl: 32px;
+  --sts-space-2xl: 48px;
+  --sts-space-3xl: 64px;
+  --sts-space-4xl: 96px;
+
+  /* Layout & Sizing */
+  --sts-max-width: 1280px;
+  --sts-header-height: 52px;
+  --sts-pill-radius: 9999px;
+  --sts-card-radius: 12px;
+  --sts-sm-radius: 6px;
+
+  /* Motion & Easing */
+  --sts-ease: cubic-bezier(0.22, 1, 0.32, 1);
+  --sts-dur-in: 150ms;
+  --sts-dur-panel: 320ms;
+  --sts-dur-out: 110ms;
+}
+
+/* Base Reset & Smoothness */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background-color: var(--sts-ground);
+  color: var(--sts-bone);
+  font-family: var(--sts-font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--sts-ground);
+  color: var(--sts-bone);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Custom Cinematic Dark Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #080808;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 9999px;
+  transition: background 0.2s ease;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.45);
+}
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.18) #080808;
+}
+
+/* Utility to completely hide scrollbar on horizontal tracks */
+.sts-hide-scrollbar::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+.sts-hide-scrollbar {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+
+/* Cinematic Typography Defaults */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--sts-font-display);
+  font-weight: 600;
+  line-height: 1.15;
+  color: var(--sts-bone);
+  letter-spacing: -0.03em;
+}
+
+p {
+  color: var(--sts-muted);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--sts-dur-in) var(--sts-ease);
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  outline: none;
+}
+
+/* Eyebrows & Labels */
+.sts-eyebrow {
+  font-family: var(--sts-font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--sts-dim);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+/* Monospace Utilities */
+.sts-mono {
+  font-family: var(--sts-font-mono);
+  font-size: 0.85em;
+  letter-spacing: -0.01em;
+}
+
+.sts-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.22rem 0.65rem;
+  border-radius: var(--sts-pill-radius);
+  font-family: var(--sts-font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--sts-border);
+  color: var(--sts-bone);
+}
+
+.sts-badge-brass, .sts-badge-steel {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.16);
+  color: #FFFFFF;
+}
+
+/* Shell / Container */
+.sts-container {
+  width: 100%;
+  max-width: var(--sts-max-width);
+  margin: 0 auto;
+  padding: 0 clamp(16px, 4vw, 32px);
+}
+
+/* Section Rhythm Bands */
+.sts-section {
+  padding: clamp(72px, 10vw, 120px) 0;
+  position: relative;
+  background-color: var(--sts-ground);
+}
+
+.sts-section-hero {
+  padding-top: calc(var(--sts-header-height) + 2rem);
+  padding-bottom: 4rem;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  background-color: var(--sts-ground);
+}
+
+/* Tactile Architectural Cards (Double-Bezel & Smoky Glass) */
+.sts-card {
+  background: var(--sts-raised);
+  border: 1px solid var(--sts-border);
+  border-radius: var(--sts-card-radius);
+  padding: 28px;
+  transition: transform var(--sts-dur-panel) var(--sts-ease),
+              border-color var(--sts-dur-panel) var(--sts-ease),
+              box-shadow var(--sts-dur-panel) var(--sts-ease);
+  position: relative;
+  overflow: hidden;
+}
+
+.sts-card:hover {
+  border-color: var(--sts-border-hover);
+  box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.7),
+              0 0 20px -2px rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Paper bands replaced with pure dark obsidian */
+.sts-band-paper {
+  background: var(--sts-ground);
+  color: var(--sts-bone);
+}
+
+.sts-band-paper h1,
+.sts-band-paper h2,
+.sts-band-paper h3,
+.sts-band-paper h4 {
+  color: var(--sts-bone);
+}
+
+.sts-band-paper p {
+  color: var(--sts-muted);
+}
+
+.sts-band-paper .sts-card {
+  background: var(--sts-raised);
+  border: 1px solid var(--sts-border);
+  color: var(--sts-bone);
+}
+
+.sts-band-paper .sts-card:hover {
+  border-color: var(--sts-border-hover);
+  box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.7),
+              0 0 20px -2px rgba(255, 255, 255, 0.1);
+}
+
+/* Seamless Dividers */
+.sts-divider {
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.08) 50%, transparent 100%);
+}
+
+/* High-Contrast Action Buttons */
+.sts-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #FFFFFF;
+  color: #000000;
+  font-family: var(--sts-font-body);
+  font-weight: 600;
+  font-size: 0.92rem;
+  padding: 12px 24px;
+  border-radius: var(--sts-pill-radius);
+  transition: transform var(--sts-dur-in) var(--sts-ease), background var(--sts-dur-in) var(--sts-ease);
+}
+.sts-btn-primary:hover {
+  background: #EDEDED;
+  transform: translateY(-1px);
+}
+
+.sts-btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  font-family: var(--sts-font-body);
+  font-weight: 500;
+  font-size: 0.92rem;
+  padding: 12px 24px;
+  border-radius: var(--sts-pill-radius);
+  transition: background var(--sts-dur-in) var(--sts-ease), border-color var(--sts-dur-in) var(--sts-ease), transform var(--sts-dur-in) var(--sts-ease);
+}
+.sts-btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.45);
+  transform: translateY(-1px);
+}
+
+/* Accessibility & Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

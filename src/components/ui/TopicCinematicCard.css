@@ -1,0 +1,741 @@
+/* ==========================================================================
+   TopicCinematicCard.css — Faint Stealth Standby & Cinematic Hover Reveal
+   Pixel-Matched to cinematic_topic_card_viewport_reveal.html
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Card Container Shell
+   -------------------------------------------------------------------------- */
+.sts-cinematic-card {
+  position: relative;
+  width: 100%;
+  border-radius: 20px;
+  background: #080808;
+  border: 1px solid rgba(255, 255, 255, 0.035);
+  padding: 2.25rem 1.85rem 1.5rem;
+  overflow: hidden;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  outline: none;
+  min-height: 440px;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.35s ease,
+              box-shadow 0.35s ease,
+              background 0.35s ease;
+  will-change: transform, box-shadow;
+}
+
+.sts-cinematic-card:focus-visible {
+  border-color: #FFFFFF;
+  box-shadow: 0 0 0 2px #0E1112, 0 0 0 4px rgba(255, 255, 255, 0.85);
+}
+
+.sts-cinematic-card.breathing {
+  transform: translateY(0);
+  background: #080808;
+  border-color: rgba(255, 255, 255, 0.035);
+  box-shadow: none;
+}
+
+.sts-cinematic-card.live {
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.025);
+  border-color: rgba(255, 255, 255, 0.22);
+  box-shadow: 0 28px 60px -12px rgba(0, 0, 0, 0.95),
+              0 0 32px -4px rgba(255, 255, 255, 0.09);
+}
+
+/* Background Canvas Layer */
+.sts-card-cvs {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Atmospheric Grid Background */
+.sts-grid-bg {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 28px 28px;
+  opacity: 0;
+  transition: opacity 1.8s ease;
+  pointer-events: none;
+}
+.sts-cinematic-card.live .sts-grid-bg {
+  opacity: 1;
+}
+
+/* Vignette Shadow Overlay */
+.sts-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 40%, transparent 40%, rgba(0, 0, 0, 0.6) 100%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1.5s 0.2s ease;
+}
+.sts-cinematic-card.live .sts-vignette {
+  opacity: 1;
+}
+
+/* Inset Border Breathing Glow & Ignition Flash */
+.sts-border-glow {
+  position: absolute;
+  inset: -1px;
+  border-radius: 20px;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+.sts-cinematic-card.breathing .sts-border-glow {
+  animation: bGlow 3s ease-in-out infinite;
+  opacity: 1;
+}
+.sts-cinematic-card.live .sts-border-glow {
+  animation: bFlash 0.6s ease-out forwards;
+}
+
+@keyframes bGlow {
+  0%, 100% { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03); }
+  50% { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07); }
+}
+
+@keyframes bFlash {
+  0% { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35); }
+  100% { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08); }
+}
+
+/* Specular Light Sweep Scanline */
+.sts-scanline {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.03) 35%,
+    rgba(255, 255, 255, 0.09) 50%,
+    rgba(255, 255, 255, 0.03) 65%,
+    transparent 100%
+  );
+  transform: translateX(-100%);
+  pointer-events: none;
+}
+.sts-cinematic-card.live .sts-scanline {
+  animation: swp 1s 0.1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+@keyframes swp {
+  to { transform: translateX(100%); }
+}
+
+/* Top Border Laser Streak */
+.sts-topline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  overflow: hidden;
+  pointer-events: none;
+}
+.sts-topline b {
+  display: block;
+  width: 100px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+  transform: translateX(-100px);
+}
+.sts-cinematic-card.live .sts-topline b {
+  animation: tSlide 0.8s 0.15s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+@keyframes tSlide {
+  to { transform: translateX(750px); }
+}
+
+/* --------------------------------------------------------------------------
+   Header Status Telemetry
+   -------------------------------------------------------------------------- */
+.sts-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.sts-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  transition: background 0.5s ease;
+}
+.sts-cinematic-card.breathing .sts-status-dot {
+  animation: sDot 3s ease-in-out infinite;
+}
+.sts-cinematic-card.live .sts-status-dot {
+  background: rgba(255, 255, 255, 0.5);
+  animation: sDotLive 2s ease-in-out infinite 1.5s;
+}
+@keyframes sDot {
+  0%, 100% { background: rgba(255, 255, 255, 0.06); }
+  50% { background: rgba(255, 255, 255, 0.15); }
+}
+@keyframes sDotLive {
+  0%, 100% { background: rgba(255, 255, 255, 0.35); }
+  50% { background: rgba(255, 255, 255, 0.6); }
+}
+
+.sts-status-text {
+  font-size: 11px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  font-family: var(--sts-font-mono, monospace);
+  color: rgba(255, 255, 255, 0.15);
+  transition: color 0.6s ease;
+}
+.sts-cinematic-card.live .sts-status-text {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* --------------------------------------------------------------------------
+   Kinetic Typography
+   -------------------------------------------------------------------------- */
+.sts-title-wrap {
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+
+.sts-title {
+  font-size: 30px;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  line-height: 1.25;
+}
+
+.sts-title .word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+/* In resting state, characters are visible but faint like blueprint text */
+.sts-title .ch {
+  display: inline-block;
+  opacity: 0.22;
+  transform: translateY(0);
+  color: rgba(255, 255, 255, 0.45);
+  will-change: transform, opacity;
+  transition: opacity 0.3s ease, color 0.3s ease;
+}
+
+.sts-cinematic-card.live .sts-title .ch {
+  animation: chReveal 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(0.04s + var(--ci, 0) * 0.02s);
+}
+
+@keyframes chReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(110%);
+    color: rgba(255, 255, 255, 1);
+  }
+  40% {
+    color: rgba(255, 255, 255, 0.95);
+    text-shadow: 0 0 16px rgba(255, 255, 255, 0.65);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    color: rgba(255, 255, 255, 0.95);
+    text-shadow: none;
+  }
+}
+
+.sts-sub {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.18);
+  line-height: 1.65;
+  margin-bottom: 36px;
+  max-width: 440px;
+  min-height: 44px;
+  transition: color 0.6s ease;
+  margin-top: 4px;
+}
+.sts-cinematic-card.live .sts-sub {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* --------------------------------------------------------------------------
+   Kinetic Pipeline Track & Nodes
+   -------------------------------------------------------------------------- */
+.sts-pipeline {
+  position: relative;
+  padding: 0 14px;
+  height: 115px;
+  margin-bottom: 12px;
+}
+
+.sts-trk {
+  position: absolute;
+  top: 30px;
+  left: 36px;
+  right: 36px;
+  height: 1px;
+}
+
+.sts-trk-bg {
+  width: 100%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.035);
+  transition: background 0.3s ease;
+}
+.sts-cinematic-card.live .sts-trk-bg {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.sts-trk-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 1px;
+  width: 0;
+  background: rgba(255, 255, 255, 0.25);
+}
+.sts-cinematic-card.live .sts-trk-fill {
+  animation: drw 1.6s 0.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+@keyframes drw {
+  to { width: 100%; }
+}
+
+.sts-trk-glow {
+  position: absolute;
+  top: -5px;
+  left: 0;
+  width: 44px;
+  height: 11px;
+  border-radius: 6px;
+  background: radial-gradient(ellipse, rgba(255, 255, 255, 0.6), transparent);
+  opacity: 0;
+  filter: blur(3px);
+  pointer-events: none;
+}
+.sts-cinematic-card.live .sts-trk-glow {
+  animation: tGlow 1.3s 0.25s cubic-bezier(0.33, 1, 0.68, 1) forwards;
+}
+@keyframes tGlow {
+  0% { left: 0; opacity: 0; }
+  4% { opacity: 1; }
+  85% { opacity: 0.7; }
+  100% { left: calc(100% - 44px); opacity: 0; }
+}
+
+.sts-nodes {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+}
+
+.sts-nd {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 11px;
+  position: relative;
+}
+
+.sts-nd-ring {
+  position: relative;
+  width: 58px;
+  height: 58px;
+}
+
+.sts-rng-o {
+  position: absolute;
+  inset: -10px;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  transform: scale(0.3);
+  opacity: 0;
+  pointer-events: none;
+}
+.sts-rng-i {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  transform: scale(0.4);
+  opacity: 0;
+  pointer-events: none;
+}
+.sts-cinematic-card.live .sts-nd .sts-rng-o {
+  animation: rO 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.sts-cinematic-card.live .sts-nd .sts-rng-i {
+  animation: rI 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+@keyframes rO {
+  0% { transform: scale(0.3); border-color: rgba(255, 255, 255, 0.4); opacity: 1; }
+  100% { transform: scale(2); border-color: transparent; opacity: 0; }
+}
+@keyframes rI {
+  0% { transform: scale(0.4); border-color: rgba(255, 255, 255, 0.6); opacity: 1; }
+  100% { transform: scale(1.6); border-color: transparent; opacity: 0; }
+}
+
+/* Node Dot: Faint schematic ring in Standby, springs up with elastic overshoot on Live */
+.sts-nd-dot {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.015);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: scale(1);
+  opacity: 0.35;
+  transition: opacity 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+}
+.sts-cinematic-card.live .sts-nd .sts-nd-dot {
+  animation: dPop 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+@keyframes dPop {
+  0% {
+    transform: scale(0.3);
+    opacity: 0.2;
+  }
+  40% {
+    border-color: rgba(255, 255, 255, 0.55);
+    background: rgba(255, 255, 255, 0.08);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+    border-color: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.03);
+  }
+}
+
+.sts-nd-dot svg {
+  color: rgba(255, 255, 255, 0.25);
+  opacity: 0.35;
+  transition: color 0.3s ease, opacity 0.3s ease;
+}
+.sts-cinematic-card.live .sts-nd .sts-nd-dot svg {
+  animation: iF 0.55s forwards;
+}
+@keyframes iF {
+  0% { opacity: 0.2; color: rgba(255, 255, 255, 1); }
+  25% { color: rgba(255, 255, 255, 0.95); }
+  100% { opacity: 1; color: rgba(255, 255, 255, 0.65); }
+}
+
+.sts-nd-lbl {
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.2);
+  font-family: var(--sts-font-mono, monospace);
+  white-space: nowrap;
+  transform: translateY(0);
+  transition: color 0.3s ease;
+}
+.sts-cinematic-card.live .sts-nd .sts-nd-lbl {
+  animation: lIn 0.45s forwards;
+}
+@keyframes lIn {
+  to {
+    color: rgba(255, 255, 255, 0.6);
+    transform: translateY(0);
+  }
+}
+
+.sts-nd-pulse {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  opacity: 0;
+  transform: scale(1);
+  pointer-events: none;
+}
+.sts-cinematic-card.live .sts-nd .sts-nd-pulse {
+  animation: nP 2.5s ease-in-out infinite 2s;
+}
+@keyframes nP {
+  0%, 100% { transform: scale(1); opacity: 0; }
+  50% { transform: scale(1.2); opacity: 0.5; }
+}
+
+.sts-nd-tip {
+  position: absolute;
+  bottom: -32px;
+  left: 50%;
+  transform: translateX(-50%) translateY(6px) scale(0.95);
+  background: rgba(14, 17, 18, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.75);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s, transform 0.25s;
+  font-family: var(--sts-font-mono, monospace);
+  z-index: 20;
+}
+.sts-nd:hover .sts-nd-tip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0) scale(1);
+}
+
+/* Sequential Stagger Delays Matching Prototype */
+.sts-cinematic-card.live .sts-nd:nth-child(1) .sts-rng-o { animation-delay: .12s; }
+.sts-cinematic-card.live .sts-nd:nth-child(1) .sts-rng-i { animation-delay: .15s; }
+.sts-cinematic-card.live .sts-nd:nth-child(1) .sts-nd-dot { animation-delay: .10s; }
+.sts-cinematic-card.live .sts-nd:nth-child(1) .sts-nd-dot svg { animation-delay: .24s; }
+.sts-cinematic-card.live .sts-nd:nth-child(1) .sts-nd-lbl { animation-delay: .30s; }
+
+.sts-cinematic-card.live .sts-nd:nth-child(2) .sts-rng-o { animation-delay: .24s; }
+.sts-cinematic-card.live .sts-nd:nth-child(2) .sts-rng-i { animation-delay: .27s; }
+.sts-cinematic-card.live .sts-nd:nth-child(2) .sts-nd-dot { animation-delay: .22s; }
+.sts-cinematic-card.live .sts-nd:nth-child(2) .sts-nd-dot svg { animation-delay: .36s; }
+.sts-cinematic-card.live .sts-nd:nth-child(2) .sts-nd-lbl { animation-delay: .42s; }
+
+.sts-cinematic-card.live .sts-nd:nth-child(3) .sts-rng-o { animation-delay: .36s; }
+.sts-cinematic-card.live .sts-nd:nth-child(3) .sts-rng-i { animation-delay: .39s; }
+.sts-cinematic-card.live .sts-nd:nth-child(3) .sts-nd-dot { animation-delay: .34s; }
+.sts-cinematic-card.live .sts-nd:nth-child(3) .sts-nd-dot svg { animation-delay: .48s; }
+.sts-cinematic-card.live .sts-nd:nth-child(3) .sts-nd-lbl { animation-delay: .54s; }
+
+.sts-cinematic-card.live .sts-nd:nth-child(4) .sts-rng-o { animation-delay: .48s; }
+.sts-cinematic-card.live .sts-nd:nth-child(4) .sts-rng-i { animation-delay: .51s; }
+.sts-cinematic-card.live .sts-nd:nth-child(4) .sts-nd-dot { animation-delay: .46s; }
+.sts-cinematic-card.live .sts-nd:nth-child(4) .sts-nd-dot svg { animation-delay: .60s; }
+.sts-cinematic-card.live .sts-nd:nth-child(4) .sts-nd-lbl { animation-delay: .66s; }
+
+.sts-cinematic-card.live .sts-nd:nth-child(5) .sts-rng-o { animation-delay: .60s; }
+.sts-cinematic-card.live .sts-nd:nth-child(5) .sts-rng-i { animation-delay: .63s; }
+.sts-cinematic-card.live .sts-nd:nth-child(5) .sts-nd-dot { animation-delay: .58s; }
+.sts-cinematic-card.live .sts-nd:nth-child(5) .sts-nd-dot svg { animation-delay: .72s; }
+.sts-cinematic-card.live .sts-nd:nth-child(5) .sts-nd-lbl { animation-delay: .78s; }
+
+/* --------------------------------------------------------------------------
+   Telemetry Metrics Grid
+   -------------------------------------------------------------------------- */
+.sts-mets {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 28px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.025);
+  opacity: 0.3;
+  transform: translateY(0);
+  transition: opacity 0.6s ease, border-color 0.6s ease;
+}
+.sts-cinematic-card.live .sts-mets {
+  opacity: 1;
+  border-top-color: rgba(255, 255, 255, 0.08);
+}
+
+.sts-met {
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.015);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  border-radius: 10px;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+.sts-cinematic-card.live .sts-met {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.06);
+}
+.sts-cinematic-card.live .sts-met:hover {
+  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.sts-met-l {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.22);
+  font-family: var(--sts-font-mono, monospace);
+  letter-spacing: 0.5px;
+  margin-bottom: 5px;
+}
+.sts-cinematic-card.live .sts-met-l {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.sts-met-v {
+  font-size: 22px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.35);
+  font-variant-numeric: tabular-nums;
+  font-family: var(--sts-font-mono, monospace);
+  transition: color 0.4s ease;
+}
+.sts-cinematic-card.live .sts-met-v {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.sts-met-u {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.2);
+  margin-left: 3px;
+}
+.sts-cinematic-card.live .sts-met-u {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.sts-met-bar {
+  height: 2px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 1px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.sts-met-bar-fill {
+  height: 2px;
+  width: 0;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 1px;
+}
+
+.sts-cinematic-card.live .sts-met:nth-child(1) .sts-met-bar-fill {
+  animation: barFillCustom 0.75s 0.18s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.sts-cinematic-card.live .sts-met:nth-child(2) .sts-met-bar-fill {
+  animation: barFillCustom 0.75s 0.26s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.sts-cinematic-card.live .sts-met:nth-child(3) .sts-met-bar-fill {
+  animation: barFillCustom 0.75s 0.34s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes barFillCustom {
+  to { width: var(--bar-target, 80%); }
+}
+
+/* --------------------------------------------------------------------------
+   Footer Bar
+   -------------------------------------------------------------------------- */
+.sts-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
+  opacity: 0.35;
+  transition: opacity 0.4s ease;
+}
+.sts-cinematic-card.live .sts-foot {
+  opacity: 1;
+}
+
+.sts-stats-grp {
+  display: flex;
+  gap: 14px;
+}
+
+.sts-st {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.25);
+  font-family: var(--sts-font-mono, monospace);
+}
+.sts-cinematic-card.live .sts-st {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.sts-arr-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  cursor: pointer;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.25);
+}
+.sts-cinematic-card.live .sts-arr-btn {
+  border-color: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.5);
+}
+.sts-cinematic-card.live .sts-arr-btn:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.06);
+  transform: translateX(6px);
+  color: #FFFFFF;
+}
+
+/* --------------------------------------------------------------------------
+   Responsive Layout & Reduced Motion
+   -------------------------------------------------------------------------- */
+@media (max-width: 600px) {
+  .sts-cinematic-card {
+    padding: 1.75rem 1.25rem 1.25rem;
+    min-height: auto;
+  }
+  .sts-title {
+    font-size: 24px;
+  }
+  .sts-nd-ring {
+    width: 46px;
+    height: 46px;
+  }
+  .sts-nd-dot {
+    width: 46px;
+    height: 46px;
+  }
+  .sts-nd-dot svg {
+    width: 18px !important;
+    height: 18px !important;
+  }
+  .sts-trk {
+    top: 24px;
+    left: 24px;
+    right: 24px;
+  }
+  .sts-mets {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    margin-top: 18px;
+    padding-top: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sts-cinematic-card,
+  .sts-cinematic-card * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .sts-title .ch {
+    opacity: 1 !important;
+    transform: none !important;
+    color: #FFFFFF !important;
+  }
+  .sts-mets,
+  .sts-foot {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .sts-nd-dot {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .sts-trk-fill {
+    width: 100% !important;
+  }
+}
