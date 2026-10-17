@@ -85,32 +85,32 @@ export const PerlinFlowField: React.FC = () => {
 
       phases[i] = Math.random();
 
-      // Multi-layer depth tiering (pinpoint airy-disk brilliance)
+      // Multi-layer depth tiering (delicate, faint airy-disk background matching Topics Hub)
       const tier = Math.random();
-      if (tier > 0.86) {
-        // High-velocity foreground filament
-        colors[i3] = 1.0;
-        colors[i3 + 1] = 1.0;
+      if (tier > 0.88) {
+        // High-velocity foreground filament (softened brilliance)
+        colors[i3] = 0.95;
+        colors[i3 + 1] = 0.97;
         colors[i3 + 2] = 1.0;
-        sizes[i] = 0.85 + Math.random() * 0.45;
-        alphas[i] = 0.85 + Math.random() * 0.15;
-        speeds[i] = 0.045 + Math.random() * 0.03;
-      } else if (tier > 0.38) {
-        // Mid-speed ambient stream
-        colors[i3] = 0.82;
-        colors[i3 + 1] = 0.86;
-        colors[i3 + 2] = 0.9;
-        sizes[i] = 0.55 + Math.random() * 0.35;
-        alphas[i] = 0.5 + Math.random() * 0.25;
-        speeds[i] = 0.024 + Math.random() * 0.018;
+        sizes[i] = 0.65 + Math.random() * 0.35;
+        alphas[i] = 0.45 + Math.random() * 0.15;
+        speeds[i] = 0.042 + Math.random() * 0.025;
+      } else if (tier > 0.42) {
+        // Mid-speed ambient stream (whisper-faint)
+        colors[i3] = 0.78;
+        colors[i3 + 1] = 0.82;
+        colors[i3 + 2] = 0.88;
+        sizes[i] = 0.42 + Math.random() * 0.25;
+        alphas[i] = 0.24 + Math.random() * 0.14;
+        speeds[i] = 0.022 + Math.random() * 0.015;
       } else {
-        // Deep cosmic field
-        colors[i3] = 0.48;
-        colors[i3 + 1] = 0.52;
-        colors[i3 + 2] = 0.56;
-        sizes[i] = 0.32 + Math.random() * 0.25;
-        alphas[i] = 0.25 + Math.random() * 0.2;
-        speeds[i] = 0.012 + Math.random() * 0.008;
+        // Deep cosmic field (subtle depth)
+        colors[i3] = 0.42;
+        colors[i3 + 1] = 0.46;
+        colors[i3 + 2] = 0.50;
+        sizes[i] = 0.25 + Math.random() * 0.20;
+        alphas[i] = 0.10 + Math.random() * 0.10;
+        speeds[i] = 0.010 + Math.random() * 0.006;
       }
     }
 
