@@ -17,19 +17,19 @@ interface ConstellationNode {
   baseAlpha: number;
 }
 
-// 8 primary disciplines placed in 3D celestial space (realistic orbital configuration)
+// 8 primary disciplines placed in an expansive, majestic 3D celestial arc framing the viewport
 const PRIMARY_DISCIPLINE_NODES = [
-  { id: 'ai-automation', name: 'AI & Automation', pos: [-5.6, 2.8, 1.6] },
-  { id: 'e-commerce', name: 'E-commerce', pos: [-4.2, -2.6, 2.2] },
-  { id: 'marketing-ads', name: 'Marketing & Ads', pos: [4.6, -3.0, -1.2] },
-  { id: 'web-design', name: 'Web Design', pos: [6.0, 1.8, 0.8] },
-  { id: 'customer-service', name: 'Customer Service', pos: [-2.0, 5.0, -1.4] },
-  { id: 'virtual-assistance', name: 'Virtual Assistance', pos: [3.2, 4.6, 1.4] },
-  { id: 'personal-assistance', name: 'Personal Assistance', pos: [0.6, -5.2, 1.0] },
-  { id: 'pitch-decks', name: 'Pitch Decks', pos: [5.2, -0.6, -2.0] }
+  { id: 'ai-automation', name: 'AI & Automation', pos: [-8.2, 4.6, 2.0] },
+  { id: 'e-commerce', name: 'E-commerce', pos: [-6.8, -3.8, 2.8] },
+  { id: 'marketing-ads', name: 'Marketing & Ads', pos: [6.4, -4.2, -1.8] },
+  { id: 'web-design', name: 'Web Design', pos: [8.8, 3.2, 1.2] },
+  { id: 'customer-service', name: 'Customer Service', pos: [-3.2, 7.2, -1.6] },
+  { id: 'virtual-assistance', name: 'Virtual Assistance', pos: [4.4, 6.8, 1.8] },
+  { id: 'personal-assistance', name: 'Personal Assistance', pos: [0.8, -7.0, 1.4] },
+  { id: 'pitch-decks', name: 'Pitch Decks', pos: [7.6, -0.8, -2.6] }
 ];
 
-// Logical cross-discipline connections (architectural filaments)
+// Logical cross-discipline connections (primary architectural filaments)
 const PRIMARY_CONNECTIONS: [number, number][] = [
   [0, 1], // AI & Automation <-> E-commerce
   [0, 4], // AI & Automation <-> Customer Service
@@ -71,7 +71,7 @@ export const ConstellationMesh: React.FC = () => {
     if (!container) return;
 
     // -------------------------------------------------------------
-    // THREE.JS SCENE & PERSPECTIVE SETUP (Observing from the Outside)
+    // THREE.JS SCENE & PERSPECTIVE (Realistic Deep-Space Observatory)
     // -------------------------------------------------------------
     const width = container.clientWidth;
     const height = container.clientHeight;
@@ -80,7 +80,7 @@ export const ConstellationMesh: React.FC = () => {
     scene.background = new THREE.Color(0x080808);
 
     // Deep-space camera vantage point: observing the constellation cluster from outside
-    const camera = new THREE.PerspectiveCamera(52, width / height, 0.1, 1000);
+    const camera = new THREE.PerspectiveCamera(54, width / height, 0.1, 1000);
     camera.position.set(0, 0, 28);
 
     let renderer: THREE.WebGLRenderer;
@@ -100,13 +100,14 @@ export const ConstellationMesh: React.FC = () => {
     container.appendChild(renderer.domElement);
 
     // -------------------------------------------------------------
-    // CELESTIAL CONSTELLATION GROUP (Oblique 3D Orbital Plane)
+    // CELESTIAL CONSTELLATION GROUP (Expansive 3D Orbital Plane)
+    // Shifted upward so the major celestial arc frames the H1 headline
     // -------------------------------------------------------------
     const constellationGroup = new THREE.Group();
-    constellationGroup.position.set(0, 3.2, 0); // Shift upward to frame the headline cleanly
-    constellationGroup.rotation.x = Math.PI * 0.26; // ~47° oblique celestial tilt
-    constellationGroup.rotation.y = -Math.PI * 0.08;
-    constellationGroup.rotation.z = Math.PI * 0.06;
+    constellationGroup.position.set(0, 3.2, 0);
+    constellationGroup.rotation.x = Math.PI * 0.28; // ~50° celestial inclination
+    constellationGroup.rotation.y = -Math.PI * 0.07;
+    constellationGroup.rotation.z = Math.PI * 0.08;
     scene.add(constellationGroup);
 
     // Mouse tracking vectors (NDC, screen & 3D world space)
@@ -194,9 +195,128 @@ export const ConstellationMesh: React.FC = () => {
     `;
 
     // -------------------------------------------------------------
-    // 2. DISTANT DEEP-SPACE FIELD STARS (Layer 1: Cosmic Backdrop)
+    // 2. CELESTIAL STELLAR STREAM (20,000 Stars - Grand Cosmic Scale)
+    //    Extension of homepage galaxy with authentic astronomical dispersion
     // -------------------------------------------------------------
-    const bgStarCount = 1400;
+    const starCount = 20000;
+    const starGeo = new THREE.BufferGeometry();
+    const starPositions = new Float32Array(starCount * 3);
+    const starColors = new Float32Array(starCount * 3);
+    const starSizes = new Float32Array(starCount);
+    const starAlphas = new Float32Array(starCount);
+    const starTwinkles = new Float32Array(starCount);
+
+    const colorWhite = new THREE.Color(0xffffff);
+    const colorSilver = new THREE.Color(0xd4d4d4);
+    const colorMuted = new THREE.Color(0x94a3b8);
+    const colorDarkSlate = new THREE.Color(0x475569);
+
+    const maxRadius = 24.0;
+    const streamBranches = 3;
+
+    for (let i = 0; i < starCount; i++) {
+      const i3 = i * 3;
+      const isCoreNexus = Math.random() < 0.28;
+      const isHalo = !isCoreNexus && Math.random() < 0.18;
+
+      let r: number;
+      let theta: number;
+      let zDisp: number;
+      let xyDisp: number;
+
+      if (isCoreNexus) {
+        // High density stellar nexus around constellation center
+        r = Math.pow(Math.random(), 1.8) * 6.5;
+        theta = Math.random() * Math.PI * 2;
+        xyDisp = (Math.random() - 0.5) * 0.6;
+        zDisp = (Math.random() - 0.5) * Math.max(0.2, (6.5 - r) * 0.45);
+      } else if (isHalo) {
+        // Broad cosmic envelope
+        r = 5.0 + Math.pow(Math.random(), 1.3) * (maxRadius * 1.25);
+        theta = Math.random() * Math.PI * 2;
+        xyDisp = (Math.random() - 0.5) * 2.2;
+        zDisp = (Math.random() - 0.5) * 3.5 * (1 - r / (maxRadius * 1.35));
+      } else {
+        // Grand celestial orbital streams
+        r = 3.5 + Math.pow(Math.random(), 1.2) * (maxRadius - 3.5);
+        const branchIdx = i % streamBranches;
+        const branchAngle = (branchIdx / streamBranches) * Math.PI * 2;
+        const spinAngle = Math.pow(r / maxRadius, 0.72) * 1.4 * Math.PI * 2;
+        theta = branchAngle + spinAngle;
+
+        const spread = 0.3 + (r / maxRadius) * 1.1;
+        xyDisp = (Math.random() + Math.random() - 1.0) * spread;
+        zDisp = (Math.random() + Math.random() - 1.0) * spread * 0.35;
+      }
+
+      starPositions[i3] = Math.cos(theta) * r + xyDisp;
+      starPositions[i3 + 1] = Math.sin(theta) * r * 0.88 + xyDisp;
+      starPositions[i3 + 2] = zDisp;
+
+      const normR = Math.min(1.0, r / maxRadius);
+      const mixedColor = new THREE.Color();
+      if (normR < 0.2) {
+        mixedColor.lerpColors(colorWhite, colorSilver, normR / 0.2);
+      } else if (normR < 0.6) {
+        mixedColor.lerpColors(colorSilver, colorMuted, (normR - 0.2) / 0.4);
+      } else {
+        mixedColor.lerpColors(colorMuted, colorDarkSlate, (normR - 0.6) / 0.4);
+      }
+
+      starColors[i3] = mixedColor.r;
+      starColors[i3 + 1] = mixedColor.g;
+      starColors[i3 + 2] = mixedColor.b;
+
+      const pRand = Math.random();
+      let pSize: number;
+      let pAlpha: number;
+
+      if (pRand > 0.96) {
+        pSize = 1.3 + Math.random() * 0.7;
+        pAlpha = 0.95;
+      } else if (pRand > 0.82) {
+        pSize = 0.8 + Math.random() * 0.4;
+        pAlpha = 0.75;
+      } else {
+        pSize = 0.3 + Math.random() * 0.38;
+        pAlpha = 0.30 + Math.random() * 0.45;
+      }
+
+      starSizes[i] = pSize;
+      starAlphas[i] = pAlpha;
+      starTwinkles[i] = Math.random();
+    }
+
+    starGeo.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+    starGeo.setAttribute('color', new THREE.BufferAttribute(starColors, 3));
+    starGeo.setAttribute('aSize', new THREE.BufferAttribute(starSizes, 1));
+    starGeo.setAttribute('aAlpha', new THREE.BufferAttribute(starAlphas, 1));
+    starGeo.setAttribute('aTwinkle', new THREE.BufferAttribute(starTwinkles, 1));
+
+    const starMaterial = new THREE.ShaderMaterial({
+      vertexShader: starVertexShader,
+      fragmentShader: starFragmentShader,
+      uniforms: {
+        uTime: { value: 0 },
+        uPixelRatio: { value: pixelRatio },
+        uMouse: { value: new THREE.Vector2(0, 0) },
+        uMouseVel: { value: new THREE.Vector2(0, 0) },
+        uAspect: { value: width / height },
+        uMouseActive: { value: 0.0 }
+      },
+      transparent: true,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+      vertexColors: true
+    });
+
+    const starPoints = new THREE.Points(starGeo, starMaterial);
+    constellationGroup.add(starPoints);
+
+    // -------------------------------------------------------------
+    // 3. DISTANT DEEP-SPACE FIELD STARS (Layer: Infinite Cosmic Depth)
+    // -------------------------------------------------------------
+    const bgStarCount = 2200;
     const bgGeo = new THREE.BufferGeometry();
     const bgPositions = new Float32Array(bgStarCount * 3);
     const bgColors = new Float32Array(bgStarCount * 3);
@@ -204,31 +324,25 @@ export const ConstellationMesh: React.FC = () => {
     const bgAlphas = new Float32Array(bgStarCount);
     const bgTwinkles = new Float32Array(bgStarCount);
 
-    const colorWhite = new THREE.Color(0xffffff);
-    const colorSilver = new THREE.Color(0xd4d4d4);
-    const colorMuted = new THREE.Color(0xa3a3a3);
-    const colorSlate = new THREE.Color(0x525252);
-
     for (let i = 0; i < bgStarCount; i++) {
       const i3 = i * 3;
       const u = Math.random();
       const v = Math.random();
       const phi = Math.acos(2 * v - 1);
       const lam = 2 * Math.PI * u;
-      const rad = 42 + Math.random() * 38;
+      const rad = 45 + Math.random() * 40;
 
       bgPositions[i3] = rad * Math.sin(phi) * Math.cos(lam);
       bgPositions[i3 + 1] = rad * Math.sin(phi) * Math.sin(lam);
-      bgPositions[i3 + 2] = rad * Math.cos(phi) - 10.0; // Pushed deep behind
+      bgPositions[i3 + 2] = rad * Math.cos(phi) - 14.0; // Receded deep into void
 
-      const cRand = Math.random();
-      const c = cRand > 0.75 ? colorWhite : cRand > 0.4 ? colorSilver : colorMuted;
+      const c = Math.random() > 0.6 ? colorSilver : colorMuted;
       bgColors[i3] = c.r;
       bgColors[i3 + 1] = c.g;
       bgColors[i3 + 2] = c.b;
 
-      bgSizes[i] = 0.30 + Math.random() * 0.5;
-      bgAlphas[i] = 0.20 + Math.random() * 0.50;
+      bgSizes[i] = 0.25 + Math.random() * 0.45;
+      bgAlphas[i] = 0.18 + Math.random() * 0.45;
       bgTwinkles[i] = Math.random();
     }
 
@@ -259,9 +373,9 @@ export const ConstellationMesh: React.FC = () => {
     scene.add(bgPoints);
 
     // -------------------------------------------------------------
-    // 3. INTERSTELLAR COSMIC DUST PARTICLES (Layer 2)
+    // 4. INTERSTELLAR COSMIC DUST CLOUDS (Volumetric Nebular Layers)
     // -------------------------------------------------------------
-    const dustCount = 850;
+    const dustCount = 1200;
     const dustGeo = new THREE.BufferGeometry();
     const dustPositions = new Float32Array(dustCount * 3);
     const dustColors = new Float32Array(dustCount * 3);
@@ -270,21 +384,21 @@ export const ConstellationMesh: React.FC = () => {
 
     for (let i = 0; i < dustCount; i++) {
       const i3 = i * 3;
-      const rad = Math.pow(Math.random(), 0.6) * 22.0;
+      const rad = Math.pow(Math.random(), 0.65) * 26.0;
       const theta = Math.random() * Math.PI * 2;
-      const zDisp = (Math.random() - 0.5) * 8.0;
+      const zDisp = (Math.random() - 0.5) * 9.0;
 
       dustPositions[i3] = Math.cos(theta) * rad;
-      dustPositions[i3 + 1] = Math.sin(theta) * rad * 0.65;
+      dustPositions[i3 + 1] = Math.sin(theta) * rad * 0.75;
       dustPositions[i3 + 2] = zDisp;
 
-      const c = Math.random() > 0.5 ? colorSilver : colorSlate;
+      const c = Math.random() > 0.5 ? colorSilver : colorDarkSlate;
       dustColors[i3] = c.r;
       dustColors[i3 + 1] = c.g;
       dustColors[i3 + 2] = c.b;
 
-      dustSizes[i] = 2.4 + Math.random() * 3.6;
-      dustAlphas[i] = 0.08 + Math.random() * 0.16;
+      dustSizes[i] = 2.6 + Math.random() * 4.2;
+      dustAlphas[i] = 0.07 + Math.random() * 0.16;
     }
 
     dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPositions, 3));
@@ -336,12 +450,12 @@ export const ConstellationMesh: React.FC = () => {
     constellationGroup.add(dustPoints);
 
     // -------------------------------------------------------------
-    // 4. CONSTELLATION NODES (8 Primary Disciplines + 54 Cluster Stars)
+    // 5. 8 MAJOR DISCIPLINE STELLAR SYSTEMS & 72 COMPANION STARS
     // -------------------------------------------------------------
-    const scaleFactor = isMobile ? 0.75 : 1.0;
+    const scaleFactor = isMobile ? 0.72 : 1.0;
     const allNodes: ConstellationNode[] = [];
 
-    // Add 8 Primary Disciplines
+    // Add 8 Primary Disciplines (Stationed across the wide celestial arc)
     PRIMARY_DISCIPLINE_NODES.forEach((p) => {
       allNodes.push({
         id: p.id,
@@ -356,20 +470,19 @@ export const ConstellationMesh: React.FC = () => {
         vy: 0,
         vz: 0,
         isPrimary: true,
-        baseAlpha: 0.95
+        baseAlpha: 1.0
       });
     });
 
-    // Add 54 Secondary Companion Stars to populate the constellation cluster
-    const secondaryCount = 54;
+    // Add 72 Secondary Companion Stars to populate the constellation cluster web
+    const secondaryCount = 72;
     for (let i = 0; i < secondaryCount; i++) {
-      // Clustered in the orbital space between and around primary disciplines
       const parentPrimary = allNodes[i % 8];
       const angle = Math.random() * Math.PI * 2;
-      const dist = 1.4 + Math.random() * 3.4;
+      const dist = 1.6 + Math.random() * 4.2;
       const x = parentPrimary.ox + Math.cos(angle) * dist;
       const y = parentPrimary.oy + Math.sin(angle) * dist * 0.85;
-      const z = parentPrimary.oz + (Math.random() - 0.5) * 2.8;
+      const z = parentPrimary.oz + (Math.random() - 0.5) * 3.2;
 
       allNodes.push({
         id: `secondary-${i}`,
@@ -384,7 +497,7 @@ export const ConstellationMesh: React.FC = () => {
         vy: 0,
         vz: 0,
         isPrimary: false,
-        baseAlpha: 0.45 + Math.random() * 0.35
+        baseAlpha: 0.40 + Math.random() * 0.40
       });
     }
 
@@ -408,7 +521,7 @@ export const ConstellationMesh: React.FC = () => {
       nodeColors[i * 3 + 1] = c.g;
       nodeColors[i * 3 + 2] = c.b;
 
-      nodeSizes[i] = node.isPrimary ? 2.4 : 1.1 + Math.random() * 0.5;
+      nodeSizes[i] = node.isPrimary ? 2.8 : 1.2 + Math.random() * 0.6;
       nodeAlphas[i] = node.baseAlpha;
       nodeTwinkles[i] = Math.random();
     }
@@ -441,7 +554,7 @@ export const ConstellationMesh: React.FC = () => {
     constellationGroup.add(nodePoints);
 
     // -------------------------------------------------------------
-    // 5. LUMINOUS DIFFRACTION HALOS & RINGS (For 8 Major Disciplines)
+    // 6. DIFFRACTION HALOS & ORBITAL BEACONS (8 Major Disciplines)
     // -------------------------------------------------------------
     const createHaloTexture = () => {
       const cvs = document.createElement('canvas');
@@ -451,9 +564,9 @@ export const ConstellationMesh: React.FC = () => {
       if (ctx) {
         const grad = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
         grad.addColorStop(0, 'rgba(255, 255, 255, 1)');
-        grad.addColorStop(0.18, 'rgba(255, 255, 255, 0.7)');
-        grad.addColorStop(0.45, 'rgba(220, 220, 220, 0.22)');
-        grad.addColorStop(0.80, 'rgba(160, 160, 160, 0.05)');
+        grad.addColorStop(0.18, 'rgba(255, 255, 255, 0.75)');
+        grad.addColorStop(0.45, 'rgba(230, 230, 230, 0.25)');
+        grad.addColorStop(0.80, 'rgba(180, 180, 180, 0.06)');
         grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
         ctx.fillStyle = grad;
         ctx.fillRect(0, 0, 128, 128);
@@ -466,23 +579,23 @@ export const ConstellationMesh: React.FC = () => {
       map: haloTexture,
       transparent: true,
       blending: THREE.AdditiveBlending,
-      opacity: 0.85
+      opacity: 0.88
     });
 
     const primaryGlowSprites: THREE.Sprite[] = [];
     const primaryRings: THREE.Mesh[] = [];
-    const ringGeo = new THREE.RingGeometry(0.48, 0.51, 32);
+    const ringGeo = new THREE.RingGeometry(0.52, 0.55, 32);
     const ringMat = new THREE.MeshBasicMaterial({
       color: 0xffffff,
       transparent: true,
-      opacity: 0.22,
+      opacity: 0.24,
       side: THREE.DoubleSide
     });
 
     for (let i = 0; i < 8; i++) {
       const sprite = new THREE.Sprite(haloMat);
       sprite.position.set(allNodes[i].x, allNodes[i].y, allNodes[i].z);
-      sprite.scale.set(2.4, 2.4, 2.4);
+      sprite.scale.set(2.6, 2.6, 2.6);
       constellationGroup.add(sprite);
       primaryGlowSprites.push(sprite);
 
@@ -493,9 +606,9 @@ export const ConstellationMesh: React.FC = () => {
     }
 
     // -------------------------------------------------------------
-    // 6. INTERACTIVE CONSTELLATION FILAMENTS (Static & Laser Lines)
+    // 7. CONSTELLATION FILAMENTS (Primary Lines & Dynamic Laser Lines)
     // -------------------------------------------------------------
-    const maxLines = 180;
+    const maxLines = 240;
     const lineGeo = new THREE.BufferGeometry();
     const linePositions = new Float32Array(maxLines * 6);
     const lineColors = new Float32Array(maxLines * 6);
@@ -515,7 +628,7 @@ export const ConstellationMesh: React.FC = () => {
     constellationGroup.add(lineSegments);
 
     // -------------------------------------------------------------
-    // 7. INTERACTION & SCROLL LISTENERS (Homepage Physics)
+    // 8. INTERACTION & SCROLL LISTENERS (Homepage Physics)
     // -------------------------------------------------------------
     const raycaster = new THREE.Raycaster();
     const planeZ = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
@@ -565,6 +678,8 @@ export const ConstellationMesh: React.FC = () => {
       const pr = Math.min(window.devicePixelRatio || 1, 2);
       renderer.setPixelRatio(pr);
 
+      starMaterial.uniforms.uPixelRatio.value = pr;
+      starMaterial.uniforms.uAspect.value = aspect;
       bgMaterial.uniforms.uPixelRatio.value = pr;
       bgMaterial.uniforms.uAspect.value = aspect;
       dustMaterial.uniforms.uPixelRatio.value = pr;
@@ -578,7 +693,7 @@ export const ConstellationMesh: React.FC = () => {
     window.addEventListener('resize', handleResize);
 
     // -------------------------------------------------------------
-    // 8. ANIMATION LOOP: VORTEX DISTORTION & DEEP-SPACE PULL-BACK
+    // 9. ANIMATION LOOP: VORTEX DISTORTION & DEEP-SPACE PULL-BACK
     // -------------------------------------------------------------
     const clock = new THREE.Clock();
     let frameId: number;
@@ -590,6 +705,11 @@ export const ConstellationMesh: React.FC = () => {
       const elapsed = clock.getElapsedTime();
 
       // Pass interaction uniforms
+      starMaterial.uniforms.uTime.value = elapsed;
+      starMaterial.uniforms.uMouse.value.copy(mouseNDC);
+      starMaterial.uniforms.uMouseVel.value.copy(mouseVel);
+      starMaterial.uniforms.uMouseActive.value = isMouseActive ? 1.0 : 0.0;
+
       bgMaterial.uniforms.uTime.value = elapsed;
       nodeMaterial.uniforms.uTime.value = elapsed;
       nodeMaterial.uniforms.uMouse.value.copy(mouseNDC);
@@ -625,10 +745,10 @@ export const ConstellationMesh: React.FC = () => {
       for (let i = 0; i < totalNodeCount; i++) {
         const node = allNodes[i];
 
-        // Celestial orbital drift
-        const driftX = Math.sin(elapsed * 0.4 + i * 1.5) * 0.12;
-        const driftY = Math.cos(elapsed * 0.35 + i * 1.2) * 0.12;
-        const driftZ = Math.sin(elapsed * 0.3 + i * 2.0) * 0.08;
+        // Organic celestial orbital drift
+        const driftX = Math.sin(elapsed * 0.38 + i * 1.5) * 0.14;
+        const driftY = Math.cos(elapsed * 0.32 + i * 1.2) * 0.14;
+        const driftZ = Math.sin(elapsed * 0.28 + i * 2.0) * 0.09;
         const targetX = node.ox + driftX;
         const targetY = node.oy + driftY;
         const targetZ = node.oz + driftZ;
@@ -639,8 +759,8 @@ export const ConstellationMesh: React.FC = () => {
           const dy = mouseWorld.y - node.y;
           const dCursor = Math.sqrt(dx * dx + dy * dy);
 
-          if (dCursor < 7.0 && dCursor > 0.1) {
-            const force = (1.0 - dCursor / 7.0) * 0.008;
+          if (dCursor < 7.5 && dCursor > 0.1) {
+            const force = (1.0 - dCursor / 7.5) * 0.008;
             node.vx += dx * force;
             node.vy += dy * force;
           }
@@ -662,19 +782,19 @@ export const ConstellationMesh: React.FC = () => {
         if (i < 8) {
           primaryGlowSprites[i].position.set(node.x, node.y, node.z);
           primaryRings[i].position.set(node.x, node.y, node.z);
-          primaryRings[i].rotation.z = elapsed * 0.25 + i;
+          primaryRings[i].rotation.z = elapsed * 0.22 + i;
 
           // Brighten primary nodes when cursor is nearby
           const dToCursor = Math.hypot(mouseWorld.x - node.x, mouseWorld.y - node.y);
-          if (isMouseActive && dToCursor < 5.0) {
-            const boost = (1.0 - dToCursor / 5.0);
-            primaryGlowSprites[i].scale.set(2.4 + boost * 0.8, 2.4 + boost * 0.8, 1);
-            primaryGlowSprites[i].material.opacity = 0.85 + boost * 0.15;
-            (primaryRings[i].material as THREE.MeshBasicMaterial).opacity = 0.22 + boost * 0.35;
+          if (isMouseActive && dToCursor < 5.5) {
+            const boost = (1.0 - dToCursor / 5.5);
+            primaryGlowSprites[i].scale.set(2.6 + boost * 0.8, 2.6 + boost * 0.8, 1);
+            primaryGlowSprites[i].material.opacity = 0.88 + boost * 0.12;
+            (primaryRings[i].material as THREE.MeshBasicMaterial).opacity = 0.24 + boost * 0.35;
           } else {
-            primaryGlowSprites[i].scale.set(2.4, 2.4, 1);
-            primaryGlowSprites[i].material.opacity = 0.85;
-            (primaryRings[i].material as THREE.MeshBasicMaterial).opacity = 0.22;
+            primaryGlowSprites[i].scale.set(2.6, 2.6, 1);
+            primaryGlowSprites[i].material.opacity = 0.88;
+            (primaryRings[i].material as THREE.MeshBasicMaterial).opacity = 0.24;
           }
         }
 
@@ -684,8 +804,8 @@ export const ConstellationMesh: React.FC = () => {
         // ---------------------------------------------------------
         if (isMouseActive && lineIndex < maxLines) {
           const dToCursor = Math.hypot(mouseWorld.x - node.x, mouseWorld.y - node.y);
-          if (dToCursor < 6.2) {
-            const alpha = (1.0 - dToCursor / 6.2) * 0.70;
+          if (dToCursor < 6.5) {
+            const alpha = (1.0 - dToCursor / 6.5) * 0.75;
             const ptr = lineIndex * 6;
 
             lPosArr[ptr] = mouseWorld.x;
@@ -701,9 +821,9 @@ export const ConstellationMesh: React.FC = () => {
             lColArr[ptr + 1] = 1.0 * alpha;
             lColArr[ptr + 2] = 1.0 * alpha;
 
-            lColArr[ptr + 3] = 0.75 * alpha;
-            lColArr[ptr + 4] = 0.75 * alpha;
-            lColArr[ptr + 5] = 0.75 * alpha;
+            lColArr[ptr + 3] = 0.78 * alpha;
+            lColArr[ptr + 4] = 0.78 * alpha;
+            lColArr[ptr + 5] = 0.78 * alpha;
 
             lineIndex++;
           }
@@ -731,8 +851,8 @@ export const ConstellationMesh: React.FC = () => {
         const midX = (nodeA.x + nodeB.x) * 0.5;
         const midY = (nodeA.y + nodeB.y) * 0.5;
         const dMid = Math.hypot(mouseWorld.x - midX, mouseWorld.y - midY);
-        const isNear = isMouseActive && dMid < 4.5;
-        const alpha = isNear ? 0.90 : 0.32;
+        const isNear = isMouseActive && dMid < 4.8;
+        const alpha = isNear ? 0.92 : 0.35;
 
         for (let j = 0; j < 6; j++) {
           lColArr[ptr + j] = alpha;
@@ -747,12 +867,11 @@ export const ConstellationMesh: React.FC = () => {
       for (let i = 8; i < totalNodeCount; i += 2) {
         if (lineIndex >= maxLines) break;
         const nodeA = allNodes[i];
-        // Connect to its parent primary discipline
         const parentPrimary = allNodes[i % 8];
         const dist = Math.hypot(nodeA.x - parentPrimary.x, nodeA.y - parentPrimary.y);
 
-        if (dist < 4.2) {
-          const alpha = (1.0 - dist / 4.2) * 0.18;
+        if (dist < 4.5) {
+          const alpha = (1.0 - dist / 4.5) * 0.20;
           const ptr = lineIndex * 6;
 
           lPosArr[ptr] = nodeA.x;
@@ -799,6 +918,8 @@ export const ConstellationMesh: React.FC = () => {
         container.removeChild(renderer.domElement);
       }
 
+      starGeo.dispose();
+      starMaterial.dispose();
       bgGeo.dispose();
       bgMaterial.dispose();
       dustGeo.dispose();

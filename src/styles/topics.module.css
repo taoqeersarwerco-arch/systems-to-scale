@@ -65,6 +65,66 @@
   );
 }
 
+/* Observatory Telemetry HUD Overlay */
+.observatoryHudTop {
+  position: absolute;
+  top: 84px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--sts-font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.15em;
+  color: rgba(255, 255, 255, 0.35);
+  text-transform: uppercase;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.observatoryHudDivider {
+  color: rgba(255, 255, 255, 0.15);
+}
+
+.observatoryReticleTl,
+.observatoryReticleTr,
+.observatoryReticleBl,
+.observatoryReticleBr {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-color: rgba(255, 255, 255, 0.12);
+  border-style: solid;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.observatoryReticleTl {
+  top: 84px;
+  left: 32px;
+  border-width: 1px 0 0 1px;
+}
+
+.observatoryReticleTr {
+  top: 84px;
+  right: 32px;
+  border-width: 1px 1px 0 0;
+}
+
+.observatoryReticleBl {
+  bottom: 32px;
+  left: 32px;
+  border-width: 0 0 1px 1px;
+}
+
+.observatoryReticleBr {
+  bottom: 32px;
+  right: 32px;
+  border-width: 0 1px 1px 0;
+}
+
 .heroContentOverlay {
   position: relative;
   z-index: 10;

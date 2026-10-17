@@ -1,11 +1,12 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ChevronDown, Cpu, ChevronRight } from 'lucide-react';
 import { TOPICS } from '../data/topics';
+import { TOPIC_CINEMATIC_LIST } from '../data/topicCinematicList';
 import { ConstellationMesh } from '../components/topics/ConstellationMesh';
-import { TopicCard } from '../components/topics/TopicCard';
+import { TopicCinematicCard } from '../components/ui/TopicCinematicCard';
 import { MethodCard } from '../components/topics/MethodCard';
 import { TopicsNewsletter } from '../components/topics/TopicsNewsletter';
 import styles from '../styles/topics.module.css';
@@ -15,6 +16,7 @@ gsap.registerPlugin(ScrollTrigger);
 export const TopicsHubPage: React.FC = () => {
   const gridRef = useRef<HTMLDivElement>(null);
   const methodRef = useRef<HTMLDivElement>(null);
+  const [activeTopicSlug, setActiveTopicSlug] = useState<string | null>(null);
 
   // Set SEO metadata and JSON-LD structured data
   useEffect(() => {
@@ -186,6 +188,21 @@ export const TopicsHubPage: React.FC = () => {
         {/* Soft atmospheric reading sanctuary for text legibility */}
         <div className={styles.readingPocket} />
 
+        {/* Observatory Reticle Corner Brackets */}
+        <div className={styles.observatoryReticleTl} aria-hidden="true" />
+        <div className={styles.observatoryReticleTr} aria-hidden="true" />
+        <div className={styles.observatoryReticleBl} aria-hidden="true" />
+        <div className={styles.observatoryReticleBr} aria-hidden="true" />
+
+        {/* Observatory Telemetry Bar */}
+        <div className={styles.observatoryHudTop} aria-hidden="true">
+          <span>SYS ARCHIVE // CELESTIAL MESH</span>
+          <span className={styles.observatoryHudDivider}>/</span>
+          <span>STREAM: 24,000+ STELLAR NODES</span>
+          <span className={styles.observatoryHudDivider}>/</span>
+          <span>RA 00h 08m // DEC +03° 12′</span>
+        </div>
+
         {/* Content Overlay Centred Vertically Over Mesh */}
         <div className={styles.heroContentOverlay}>
           <div className={styles.heroEyebrow}>
@@ -223,9 +240,21 @@ export const TopicsHubPage: React.FC = () => {
 
       {/* SECTION 3: The 8 Topic Panels */}
       <section className={styles.panelsSection} id="topics-grid">
-        <div ref={gridRef} className={styles.topicsGrid}>
-          {TOPICS.map((topic) => (
-            <TopicCard key={topic.slug} topic={topic} />
+        <div
+          ref={gridRef}
+          className={styles.topicsGrid}
+          onMouseLeave={() => setActiveTopicSlug(null)}
+        >
+          {TOPIC_CINEMATIC_LIST.map((topicData) => (
+            <TopicCinematicCard
+              key={topicData.slug}
+              data={topicData}
+              isRevealed={activeTopicSlug === topicData.slug}
+              onActivate={() => setActiveTopicSlug(topicData.slug)}
+              onDeactivate={() => {
+                setActiveTopicSlug((current) => (current === topicData.slug ? null : current));
+              }}
+            />
           ))}
         </div>
       </section>

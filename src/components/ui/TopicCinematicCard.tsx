@@ -25,6 +25,10 @@ export interface TopicCinematicData {
   readTime: string;
   statusStandby?: string;
   statusActive?: string;
+  badge?: string;
+  scopeParagraph?: string;
+  verifiedFact?: string;
+  mechanismPills?: string[];
   nodes: PipelineNode[];
   metrics: MetricItem[];
 }
@@ -402,6 +406,16 @@ export const TopicCinematicCard: React.FC<TopicCinematicCardProps> = ({
     };
   }, [clearAllTimers]);
 
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const card = cardRef.current;
+    if (!card) return;
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    card.style.setProperty('--spotlight-x', `${x}px`);
+    card.style.setProperty('--spotlight-y', `${y}px`);
+  }, []);
+
   return (
     <div
       ref={cardRef}
@@ -412,6 +426,7 @@ export const TopicCinematicCard: React.FC<TopicCinematicCardProps> = ({
       onKeyDown={handleKeyDown}
       onMouseEnter={onActivate}
       onMouseLeave={onDeactivate}
+      onMouseMove={handleMouseMove}
       className={`sts-cinematic-card ${isRevealed ? 'live' : 'breathing'}`}
     >
       {/* Background Canvas for Particle Physics */}
@@ -437,11 +452,16 @@ export const TopicCinematicCard: React.FC<TopicCinematicCardProps> = ({
       {/* CARD CONTENT LAYER */}
       <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', height: '100%' }}>
         {/* Top Status Header */}
-        <div className="sts-status">
-          <div className="sts-status-dot" />
-          <span ref={statusRef} className="sts-status-text" aria-live="polite">
-            {data.statusStandby || 'STANDBY'}
-          </span>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+          <div className="sts-status" style={{ margin: 0 }}>
+            <div className="sts-status-dot" />
+            <span ref={statusRef} className="sts-status-text" aria-live="polite">
+              {data.statusStandby || 'STANDBY'}
+            </span>
+          </div>
+          {data.badge && (
+            <span className="sts-card-badge">{data.badge}</span>
+          )}
         </div>
 
         {/* Title Wrap: Word-Safe Kinetic Character Reveal */}
@@ -474,7 +494,15 @@ export const TopicCinematicCard: React.FC<TopicCinematicCardProps> = ({
         </div>
 
         {/* Subtitle Hook */}
-        <p className="sts-sub">{data.hook}</p>
+        <p className="sts-sub">{data.scopeParagraph || data.hook}</p>
+
+        {/* Verified Fact Callout */}
+        {data.verifiedFact && (
+          <div className="sts-card-fact">
+            <strong>VERIFIED BENCHMARK</strong>
+            {data.verifiedFact}
+          </div>
+        )}
 
         {/* 5-Node Kinetic Pipeline */}
         <div className="sts-pipeline">
@@ -523,6 +551,17 @@ export const TopicCinematicCard: React.FC<TopicCinematicCardProps> = ({
             </div>
           ))}
         </div>
+
+        {/* Mechanism Pills */}
+        {data.mechanismPills && data.mechanismPills.length > 0 && (
+          <div className="sts-card-pills">
+            {data.mechanismPills.map((pill, idx) => (
+              <span key={idx} className="sts-card-pill">
+                {pill}
+              </span>
+            ))}
+          </div>
+        )}
 
         {/* Footer Bar */}
         <div className="sts-foot">
