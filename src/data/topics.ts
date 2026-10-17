@@ -5,6 +5,9 @@ export interface TopicData {
   hook: string;
   pillarSlug: string;
   scopeParagraph: string;
+  mechanismPills: string[];
+  articleCount: number;
+  verifiedFact?: string;
   accent: 'brass' | 'steel';
   simType: 'pipeline' | 'auction' | 'render' | 'transaction' | 'tickets' | 'handoff' | 'deck' | 'calendar';
 }
@@ -14,9 +17,12 @@ export const TOPICS: TopicData[] = [
     slug: 'ai-automation',
     name: 'AI & Automation',
     badge: 'SYS-01',
-    hook: 'How automation pipelines actually work',
+    hook: 'How automation pipelines execute, fault, retry, and recover without human intervention.',
     pillarSlug: 'automation-pipelines-explained',
     scopeParagraph: 'Automation pipelines are distributed state machines executing across untrusted networks. We dissect worker pools, idempotency keys, dead-letter queues, and how retry loops prevent cascade failures without flooding upstream APIs.',
+    mechanismPills: ['Pipelines', 'Retry & backoff', 'Idempotency', 'Webhooks', 'Dead-letter queues'],
+    articleCount: 0,
+    verifiedFact: 'McKinsey estimates AI and automation can handle 60–70% of current work activities across business functions, yet the median enterprise deflection rate sits at just 41.2% — the gap is the mechanism.',
     accent: 'brass',
     simType: 'pipeline'
   },
@@ -24,9 +30,12 @@ export const TOPICS: TopicData[] = [
     slug: 'marketing-ads',
     name: 'Marketing & Ads',
     badge: 'MKT-02',
-    hook: 'How a real-time ad auction works',
+    hook: 'How ad auctions settle in milliseconds — bidding, attribution, and consent-mode tracking.',
     pillarSlug: 'how-ad-auctions-work',
-    scopeParagraph: 'Real-time programmatic ad auctions settle within a strict 100ms budget between supply-side platforms, demand-side algorithms, and ad exchanges. We analyze Vickrey second-price auctions, Consent Mode v2, and server-side tracking pipelines.',
+    scopeParagraph: 'Real-time programmatic ad auctions settle within a strict 80–120ms budget between supply-side platforms, demand-side algorithms, and ad exchanges. We analyse Vickrey second-price auctions, Consent Mode v2, and server-side tracking pipelines.',
+    mechanismPills: ['RTB auctions', 'Programmatic', 'Attribution', 'Consent Mode', 'Server-side tracking'],
+    articleCount: 0,
+    verifiedFact: "The OpenRTB spec's tmax field defines the exchange timeout per-auction. Google's Authorized Buyers imposes 100ms. DSP bid calculation alone consumes roughly 50ms of that budget.",
     accent: 'steel',
     simType: 'auction'
   },
@@ -34,9 +43,12 @@ export const TOPICS: TopicData[] = [
     slug: 'web-design',
     name: 'Web Design',
     badge: 'WEB-03',
-    hook: 'How a browser renders a page',
+    hook: 'How a browser turns your HTML into pixels — the rendering path from parse to paint.',
     pillarSlug: 'how-browsers-render-pages',
-    scopeParagraph: 'Modern web rendering bridges raw bytes to GPU rasterization. We break down the critical rendering path, layout thrashing, DOM and CSSOM compilation, and how Core Web Vitals (LCP, INP, CLS) map directly to rendering physics.',
+    scopeParagraph: 'Modern web rendering bridges raw bytes to GPU rasterisation. We break down the critical rendering path, layout thrashing, DOM and CSSOM compilation, and how Core Web Vitals (LCP, INP, CLS) map directly to rendering physics.',
+    mechanismPills: ['Rendering path', 'Core Web Vitals', 'Layout & paint', 'Responsive', 'Accessibility'],
+    articleCount: 0,
+    verifiedFact: '2026 CWV thresholds remain LCP ≤ 2.5s, INP ≤ 200ms, CLS ≤ 0.1 at the 75th percentile. As of January 2026, 55.7% of web origins globally pass all three. INP replaced FID in March 2024.',
     accent: 'steel',
     simType: 'render'
   },
@@ -44,9 +56,12 @@ export const TOPICS: TopicData[] = [
     slug: 'e-commerce',
     name: 'E-commerce',
     badge: 'ECM-04',
-    hook: 'How an online checkout and payment flow works',
+    hook: 'How a checkout processes a payment — authorization, capture, 3-D Secure, and cart recovery.',
     pillarSlug: 'how-online-checkout-works',
-    scopeParagraph: 'Online payments coordinate merchants, gateways, acquiring banks, card networks, and issuing banks. We dissect the separation of authorization and capture, PSD2 3-D Secure risk engines, and idempotent distributed state machines.',
+    scopeParagraph: 'Online payments coordinate merchants, gateways, acquiring banks, card networks, and issuers in a single transaction. We trace authorization holds, 3-D Secure challenges, idempotent capture, and why carts abandon at the payment step.',
+    mechanismPills: ['Checkout flow', 'Auth & capture', '3-D Secure', 'Idempotency', 'Cart abandonment'],
+    articleCount: 0,
+    verifiedFact: 'Standard card authorization holds last 5–7 days for Visa and 7 days for Mastercard on online payments. Extended pre-authorization can stretch to 30 days but incurs higher scheme fees.',
     accent: 'brass',
     simType: 'transaction'
   },
@@ -54,9 +69,12 @@ export const TOPICS: TopicData[] = [
     slug: 'customer-service',
     name: 'Customer Service',
     badge: 'CRM-05',
-    hook: 'How ticket routing works in support',
+    hook: 'How support tickets route through queues, escalate by SLA, and get deflected by bots.',
     pillarSlug: 'how-ticket-routing-works',
-    scopeParagraph: 'Enterprise support helpdesks are real-time priority queues balancing contract SLAs, agent skill matrices, and load shedding. We explore escalation triggers, omnichannel identity reconciliation, and chatbot deflection boundaries.',
+    scopeParagraph: 'Enterprise support helpdesks are real-time priority queues balancing contract SLAs, agent skill routing, and escalation paths. We examine omnichannel thread merging, chatbot deflection mechanics, and why the median AI deflection rate is lower than vendors claim.',
+    mechanismPills: ['Ticket routing', 'SLA queues', 'Escalation', 'Omnichannel', 'Chatbot deflection'],
+    articleCount: 0,
+    verifiedFact: 'The median AI chatbot deflection rate sits at 41.2% in 2026, with true self-service resolution at only 14%. The gap between headline deflection and genuine resolution is the mechanism most teams misunderstand.',
     accent: 'steel',
     simType: 'tickets'
   },
@@ -64,9 +82,11 @@ export const TOPICS: TopicData[] = [
     slug: 'virtual-assistance',
     name: 'Virtual Assistance',
     badge: 'OPS-06',
-    hook: 'How task delegation works',
+    hook: 'How tasks hand off cleanly between people across time zones without losing context.',
     pillarSlug: 'how-task-delegation-works',
-    scopeParagraph: 'High-leverage delegation is an information transfer protocol. We examine context preservation across time zones, standard operating procedures as executable state machines, and graduated permission models for operations teams.',
+    scopeParagraph: 'High-leverage delegation is an information transfer protocol. We examine context packaging, SOP design, async handoff patterns across time zones, and the onboarding sequence that determines whether a VA relationship compounds or collapses.',
+    mechanismPills: ['Task delegation', 'SOPs', 'Async handoff', 'Onboarding', 'Context transfer'],
+    articleCount: 0,
     accent: 'brass',
     simType: 'handoff'
   },
@@ -74,9 +94,11 @@ export const TOPICS: TopicData[] = [
     slug: 'pitch-decks',
     name: 'Pitch Decks',
     badge: 'COM-07',
-    hook: 'How a pitch deck communicates',
+    hook: "How a deck's narrative structure persuades — and why format conversion destroys fidelity.",
     pillarSlug: 'how-pitch-decks-work',
-    scopeParagraph: 'Pitch decks are cognitive instruments engineered to survive 2-minute executive skim passes. We deconstruct narrative pacing, visual cognitive load, honest data visualization architectures, and vector-to-raster slide format fidelity.',
+    scopeParagraph: 'A pitch deck is a structured persuasion machine. We dissect the 10-slide narrative arc, how format conversion between PowerPoint, PDF, and Slides loses fidelity, data visualisation that survives projection, and the structural differences between investor and sales decks.',
+    mechanismPills: ['Narrative structure', 'Slide framework', 'Data viz', 'Format conversion', 'Investor vs sales'],
+    articleCount: 0,
     accent: 'brass',
     simType: 'deck'
   },
@@ -84,9 +106,11 @@ export const TOPICS: TopicData[] = [
     slug: 'personal-assistance',
     name: 'Personal Assistance',
     badge: 'EXE-08',
-    hook: 'How calendar scheduling and conflict resolution works',
+    hook: 'How calendar scheduling resolves conflicts and how email triage reaches inbox zero.',
     pillarSlug: 'how-calendar-scheduling-works',
-    scopeParagraph: 'Executive scheduling is a multi-variable constraint satisfaction problem. We explore precedence weighting, cognitive rhythm allocation, automated conflict resolution protocols, and zero-inbox triage algorithms.',
+    scopeParagraph: 'Calendar scheduling is a constraint-satisfaction problem. We trace conflict resolution algorithms, email triage workflows, task prioritisation frameworks, and the coordination mechanics of multi-leg travel planning.',
+    mechanismPills: ['Scheduling', 'Conflict resolution', 'Email triage', 'Travel coordination', 'Prioritisation'],
+    articleCount: 0,
     accent: 'steel',
     simType: 'calendar'
   }
