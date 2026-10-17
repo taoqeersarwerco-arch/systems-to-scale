@@ -459,9 +459,6 @@ export const TopicCinematicCard: React.FC<TopicCinematicCardProps> = ({
               {data.statusStandby || 'STANDBY'}
             </span>
           </div>
-          {data.badge && (
-            <span className="sts-card-badge">{data.badge}</span>
-          )}
         </div>
 
         {/* Title Wrap: Word-Safe Kinetic Character Reveal */}

@@ -19,9 +19,6 @@ export const TopicCard: React.FC<TopicCardProps> = ({ topic }) => {
         {/* Topic Name */}
         <h2 className={styles.topicCardName}>
           <span>{topic.name}</span>
-          <span className={styles.topicBadge}>
-            {topic.badge}
-          </span>
         </h2>
 
         {/* Scope Paragraph */}
