@@ -2,26 +2,55 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ALL_ARTICLES, ArticleEntry } from '../data/slug-registry';
 import { TOPICS } from '../data/topics';
-import { Search, ArrowRight, Layers, Radio, X, Clock, Sparkles, ChevronDown } from 'lucide-react';
+import {
+  Search,
+  ArrowRight,
+  Layers,
+  Radio,
+  X,
+  Clock,
+  Sparkles,
+  ChevronDown,
+  Zap,
+  TrendingUp,
+  Layout,
+  ShoppingBag,
+  MessageSquare,
+  Bot,
+  BarChart3,
+  Compass
+} from 'lucide-react';
 import { CosmicWeb } from '../components/articles/CosmicWeb';
 import styles from '../styles/articles.module.css';
 
-// Topic icon mapping for the horizontal category rail
-const TOPIC_ICONS: Record<string, string> = {
-  'all': '✦',
-  'ai-automation': '⚡',
-  'marketing-ads': '📈',
-  'web-design': '🎨',
-  'e-commerce': '🛒',
-  'customer-service': '💬',
-  'virtual-assistance': '🤖',
-  'pitch-decks': '📊',
-  'personal-assistance': '🧭',
+// Pure monochrome topic vector icon mapping
+const renderTopicIcon = (slug: string) => {
+  switch (slug) {
+    case 'all':
+      return <Sparkles size={12} className={styles.pillVectorIcon} />;
+    case 'ai-automation':
+      return <Zap size={12} className={styles.pillVectorIcon} />;
+    case 'marketing-ads':
+      return <TrendingUp size={12} className={styles.pillVectorIcon} />;
+    case 'web-design':
+      return <Layout size={12} className={styles.pillVectorIcon} />;
+    case 'e-commerce':
+      return <ShoppingBag size={12} className={styles.pillVectorIcon} />;
+    case 'customer-service':
+      return <MessageSquare size={12} className={styles.pillVectorIcon} />;
+    case 'virtual-assistance':
+      return <Bot size={12} className={styles.pillVectorIcon} />;
+    case 'pitch-decks':
+      return <BarChart3 size={12} className={styles.pillVectorIcon} />;
+    case 'personal-assistance':
+      return <Compass size={12} className={styles.pillVectorIcon} />;
+    default:
+      return <Layers size={12} className={styles.pillVectorIcon} />;
+  }
 };
 
 export const ArticlesPage: React.FC = () => {
   const [selectedTopic, setSelectedTopic] = useState<string>('all');
-  const [statusFilter, setStatusFilter] = useState<'all' | 'published' | 'planned'>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -58,7 +87,6 @@ export const ArticlesPage: React.FC = () => {
 
   const filteredArticles = ALL_ARTICLES.filter((article: ArticleEntry) => {
     const matchesTopic = selectedTopic === 'all' || article.topicSlug === selectedTopic;
-    const matchesStatus = statusFilter === 'all' || article.status === statusFilter;
     const q = searchQuery.toLowerCase().trim();
     const matchesSearch =
       q === '' ||
@@ -67,15 +95,14 @@ export const ArticlesPage: React.FC = () => {
       (article.beginnerStandfirst && article.beginnerStandfirst.toLowerCase().includes(q)) ||
       article.standfirst.toLowerCase().includes(q) ||
       (article.focusQuestion && article.focusQuestion.toLowerCase().includes(q));
-    return matchesTopic && matchesStatus && matchesSearch;
+    return matchesTopic && matchesSearch;
   });
 
-  const isFiltered = searchQuery !== '' || selectedTopic !== 'all' || statusFilter !== 'all';
+  const isFiltered = searchQuery !== '' || selectedTopic !== 'all';
 
   const handleResetFilters = () => {
     setSearchQuery('');
     setSelectedTopic('all');
-    setStatusFilter('all');
   };
 
   const handleScrollToDeck = (e: React.MouseEvent) => {
@@ -139,18 +166,18 @@ export const ArticlesPage: React.FC = () => {
       </section>
 
       {/* =========================================================================
-          COMMAND DECK: Cinematic Double-Bezel Floating HUD (PRODUCTIVE & ZERO-WRAP)
+          COMMAND DECK: Cinematic Monochrome Command Console
           ========================================================================= */}
       <section className={styles.commandDeckSection} id="command-deck">
         <div className={styles.commandChassis}>
           {/* Subtle 4-Corner Reticle Hardware Accents */}
-          <div className={styles.chassisReticleTl} />
-          <div className={styles.chassisReticleTr} />
-          <div className={styles.chassisReticleBl} />
-          <div className={styles.chassisReticleBr} />
+          <div className={styles.chassisReticleTl} aria-hidden="true" />
+          <div className={styles.chassisReticleTr} aria-hidden="true" />
+          <div className={styles.chassisReticleBl} aria-hidden="true" />
+          <div className={styles.chassisReticleBr} aria-hidden="true" />
 
-          {/* Top Row: Search Input + Floating Status Segment */}
-          <div className={styles.commandRowTop}>
+          {/* Full-Width Cinematic Search Bar */}
+          <div className={styles.searchRow}>
             <div className={styles.searchContainer}>
               <Search size={15} className={styles.searchIcon} />
               <input
@@ -164,7 +191,7 @@ export const ArticlesPage: React.FC = () => {
               <div className={styles.searchActions}>
                 {searchQuery && (
                   <span className={styles.searchMatchPill}>
-                    Matching Articles
+                    Matching
                   </span>
                 )}
                 {searchQuery && (
@@ -180,34 +207,9 @@ export const ArticlesPage: React.FC = () => {
                 <span className={styles.searchKbd} title="Press / to search">/</span>
               </div>
             </div>
-
-            {/* Engineered Status Toggle Switcher */}
-            <div className={styles.statusSegment}>
-              <button
-                type="button"
-                onClick={() => setStatusFilter('all')}
-                className={`${styles.statusToggleBtn} ${statusFilter === 'all' ? styles.statusToggleBtnActive : ''}`}
-              >
-                All Articles
-              </button>
-              <button
-                type="button"
-                onClick={() => setStatusFilter('published')}
-                className={`${styles.statusToggleBtn} ${statusFilter === 'published' ? styles.statusToggleBtnActive : ''}`}
-              >
-                Ready to Read
-              </button>
-              <button
-                type="button"
-                onClick={() => setStatusFilter('planned')}
-                className={`${styles.statusToggleBtn} ${statusFilter === 'planned' ? styles.statusToggleBtnActive : ''}`}
-              >
-                Roadmap
-              </button>
-            </div>
           </div>
 
-          {/* Middle: Horizontal Category Rail (Zero Wrap, Pure Fluid Track) */}
+          {/* Horizontal Topics Rail (Zero Wrap, Pure Fluid Track with Monochrome Vector Icons) */}
           <div className={styles.domainRailWrapper}>
             <div className={styles.domainRailTrack}>
               <button
@@ -215,13 +217,12 @@ export const ArticlesPage: React.FC = () => {
                 onClick={() => setSelectedTopic('all')}
                 className={`${styles.domainPill} ${selectedTopic === 'all' ? styles.domainPillActive : ''}`}
               >
-                <span className={styles.pillIcon}>{TOPIC_ICONS['all']}</span>
+                <span className={styles.pillIcon}>{renderTopicIcon('all')}</span>
                 <span>ALL</span>
               </button>
 
               {TOPICS.map((t) => {
                 const isActive = selectedTopic === t.slug;
-                const icon = TOPIC_ICONS[t.slug] || '✦';
                 return (
                   <button
                     key={t.slug}
@@ -229,35 +230,25 @@ export const ArticlesPage: React.FC = () => {
                     onClick={() => setSelectedTopic(t.slug)}
                     className={`${styles.domainPill} ${isActive ? styles.domainPillActive : ''}`}
                   >
-                    <span className={styles.pillIcon}>{icon}</span>
+                    <span className={styles.pillIcon}>{renderTopicIcon(t.slug)}</span>
                     <span>{t.name.toUpperCase()}</span>
                   </button>
                 );
               })}
 
-              {/* Instant Filter Reset (Productivity Feature) */}
+              {/* Instant Filter Reset */}
               {isFiltered && (
                 <button
                   type="button"
                   onClick={handleResetFilters}
                   className={styles.resetFiltersBtn}
-                  title="Reset all active filters"
+                  title="Reset active filters"
                 >
                   <span>RESET FILTERS</span>
                   <X size={11} />
                 </button>
               )}
             </div>
-          </div>
-
-          {/* Bottom Context Rail: Reader-Centric Promise */}
-          <div className={styles.readoutBar}>
-            <span className={styles.readoutCount}>
-              {isFiltered ? 'FILTERED ARCHIVE' : 'PRODUCTION SYSTEMS ARCHIVE'}
-            </span>
-            <span className={styles.readoutTagline}>
-              CLEAR EXPLANATIONS OF REAL PRODUCTION SYSTEMS · ZERO UNEXPLAINED JARGON
-            </span>
           </div>
         </div>
       </section>
