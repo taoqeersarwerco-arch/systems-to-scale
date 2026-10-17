@@ -54,7 +54,7 @@
   overflow: hidden;
 }
 
-/* Translucent reading pocket guaranteeing prominent background visibility behind title */
+/* Soft central reading pocket guaranteeing crisp text readability (Exact Match to Topics Hub) */
 .readingPocket {
   position: absolute;
   inset: 0;
@@ -62,8 +62,8 @@
   pointer-events: none;
   background: radial-gradient(
     ellipse 76% 60% at 50% 50%,
-    rgba(8, 8, 8, 0.45) 0%,
-    rgba(8, 8, 8, 0.20) 50%,
+    rgba(8, 8, 8, 0.88) 0%,
+    rgba(8, 8, 8, 0.65) 50%,
     rgba(8, 8, 8, 0) 100%
   );
 }
