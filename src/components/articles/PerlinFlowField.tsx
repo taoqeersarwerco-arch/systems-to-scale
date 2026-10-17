@@ -1,398 +1,382 @@
-import React, { useEffect, useRef, useState } from 'react';
-import * as THREE from 'three';
+import React, { useEffect, useRef } from 'react';
 
-export const PerlinFlowField: React.FC = () => {
-  const mountRef = useRef<HTMLDivElement>(null);
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+interface PerlinFlowFieldProps {
+  trailMode?: boolean;
+  warpMode?: boolean;
+  pulseMode?: boolean;
+}
+
+export const PerlinFlowField: React.FC<PerlinFlowFieldProps> = ({
+  trailMode = true,
+  warpMode = false,
+  pulseMode = false,
+}) => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Store modes in refs to avoid recreating animation loop on toggle
+  const trailModeRef = useRef(trailMode);
+  const warpModeRef = useRef(warpMode);
+  const pulseModeRef = useRef(pulseMode);
 
   useEffect(() => {
-    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setPrefersReducedMotion(motionQuery.matches);
-    const motionHandler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
-    motionQuery.addEventListener('change', motionHandler);
+    trailModeRef.current = trailMode;
+  }, [trailMode]);
+
+  useEffect(() => {
+    warpModeRef.current = warpMode;
+  }, [warpMode]);
+
+  useEffect(() => {
+    pulseModeRef.current = pulseMode;
+  }, [pulseMode]);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const container = containerRef.current;
+    if (!canvas || !container) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let animationId: number;
+    let W = container.clientWidth || window.innerWidth;
+    let H = container.clientHeight || 1450;
+
+    let mx = -9999;
+    let my = -9999;
+    let time = 0;
+    let pulseTime = 0;
+    let scrollY = 0;
+    let scrollVelocity = 0;
+    let lastScrollY = window.scrollY;
+
+    // -------------------------------------------------------------------------
+    // 4 Layer Multi-Tier Aerodynamic Configuration
+    // -------------------------------------------------------------------------
+    const LAYER_COUNT = 4;
+    const COUNTS = [600, 400, 200, 80]; // 1,280 particles total
+    const SPEEDS = [0.45, 0.75, 1.25, 2.1];
+    const SIZES = [0.9, 1.3, 1.9, 2.9];
+    const ALPHAS = [0.12, 0.22, 0.38, 0.65];
+    const TRAIL_FADE = [0.03, 0.04, 0.05, 0.06];
+
+    interface Particle {
+      x: number;
+      y: number;
+      px: number;
+      py: number;
+      hasPrev: boolean;
+      speed: number;
+      size: number;
+      alpha: number;
+      layer: number;
+      life: number;
+      maxLife: number;
+    }
+
+    let particles: Particle[] = [];
+
+    // -------------------------------------------------------------------------
+    // True 2D Perlin Noise & 4-Octave Fractional Brownian Motion (fBm)
+    // -------------------------------------------------------------------------
+    const perm = new Uint8Array(512);
+    const grad = [
+      [1, 1],
+      [-1, 1],
+      [1, -1],
+      [-1, -1],
+      [1, 0],
+      [-1, 0],
+      [0, 1],
+      [0, -1],
+    ];
+
+    function initPerm() {
+      const p = new Uint8Array(256);
+      for (let i = 0; i < 256; i++) p[i] = i;
+      for (let i = 255; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const t = p[i];
+        p[i] = p[j];
+        p[j] = t;
+      }
+      for (let i = 0; i < 512; i++) perm[i] = p[i & 255];
+    }
+
+    function fade(t: number) {
+      return t * t * t * (t * (t * 6 - 15) + 10);
+    }
+    function lerp(a: number, b: number, t: number) {
+      return a + t * (b - a);
+    }
+    function dot(g: number[], x: number, y: number) {
+      return g[0] * x + g[1] * y;
+    }
+
+    function perlin(x: number, y: number) {
+      const xi = Math.floor(x) & 255;
+      const yi = Math.floor(y) & 255;
+      const xf = x - Math.floor(x);
+      const yf = y - Math.floor(y);
+      const u = fade(xf);
+      const v = fade(yf);
+      const aa = perm[perm[xi] + yi];
+      const ab = perm[perm[xi] + yi + 1];
+      const ba = perm[perm[xi + 1] + yi];
+      const bb = perm[perm[xi + 1] + yi + 1];
+      const g0 = grad[aa % 8];
+      const g1 = grad[ba % 8];
+      const g2 = grad[ab % 8];
+      const g3 = grad[bb % 8];
+      const n0 = dot(g0, xf, yf);
+      const n1 = dot(g1, xf - 1, yf);
+      const n2 = dot(g2, xf, yf - 1);
+      const n3 = dot(g3, xf - 1, yf - 1);
+      return lerp(lerp(n0, n1, u), lerp(n2, n3, u), v);
+    }
+
+    function fbm(x: number, y: number, oct: number) {
+      let val = 0;
+      let amp = 1;
+      let freq = 1;
+      let max = 0;
+      for (let i = 0; i < oct; i++) {
+        val += perlin(x * freq, y * freq) * amp;
+        max += amp;
+        amp *= 0.5;
+        freq *= 2;
+      }
+      return val / max;
+    }
+
+    function resize() {
+      if (!container || !canvas || !ctx) return;
+      W = container.clientWidth || window.innerWidth;
+      H = container.clientHeight || 1450;
+
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = W * dpr;
+      canvas.height = H * dpr;
+      canvas.style.width = `${W}px`;
+      canvas.style.height = `${H}px`;
+      ctx.scale(dpr, dpr);
+
+      ctx.fillStyle = '#080808';
+      ctx.fillRect(0, 0, W, H);
+    }
+
+    function spawnParticles() {
+      particles = [];
+      for (let layer = 0; layer < LAYER_COUNT; layer++) {
+        for (let i = 0; i < COUNTS[layer]; i++) {
+          particles.push({
+            x: Math.random() * W,
+            y: Math.random() * H,
+            px: 0,
+            py: 0,
+            hasPrev: false,
+            speed: SPEEDS[layer] * (0.7 + Math.random() * 0.6),
+            size: SIZES[layer] * (0.8 + Math.random() * 0.4),
+            alpha: ALPHAS[layer] * (0.6 + Math.random() * 0.8),
+            layer: layer,
+            life: 0.5 + Math.random() * 0.5,
+            maxLife: 0.5 + Math.random() * 0.5,
+          });
+        }
+      }
+    }
+
+    function getAngle(px: number, py: number, t: number) {
+      const nx = px * 0.0028;
+      const ny = py * 0.0028;
+      const n1 = fbm(nx + t * 0.15, ny + t * 0.12, 4);
+      const n2 = fbm(nx + 100 + t * 0.08, ny + 100 + t * 0.1, 3);
+      let angle = n1 * Math.PI * 3;
+
+      if (warpModeRef.current) {
+        const n3 = fbm(nx * 2 + t * 0.3, ny * 2 - t * 0.2, 2);
+        angle += n3 * Math.PI * 2;
+      }
+
+      if (pulseModeRef.current) {
+        const cx = W / 2;
+        const cy = 400; // Centered near the hero focal point
+        const dx = px - cx;
+        const dy = py - cy;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const wave = Math.sin(dist * 0.02 - pulseTime * 3) * 0.8;
+        angle += wave;
+      }
+
+      // Cursor vortex and repulsion
+      const dx = px - mx;
+      const dy = py - my;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 190 && dist > 0.001) {
+        let force = 1 - dist / 190;
+        force = force * force * force;
+        const repelAngle = Math.atan2(dy, dx);
+        const curl = repelAngle + Math.PI * 0.5 + n2 * Math.PI;
+        angle = angle * (1 - force) + curl * force;
+      }
+
+      return angle;
+    }
+
+    // -------------------------------------------------------------------------
+    // Animation Loop: Aerodynamic Streamlines + Fading History
+    // -------------------------------------------------------------------------
+    function draw() {
+      animationId = requestAnimationFrame(draw);
+
+      if (trailModeRef.current) {
+        // Physical ghost trail sweep matching #080808 ground
+        ctx!.fillStyle = 'rgba(8, 8, 8, 0.048)';
+        ctx!.fillRect(0, 0, W, H);
+      } else {
+        ctx!.fillStyle = '#080808';
+        ctx!.fillRect(0, 0, W, H);
+      }
+
+      time += 0.0038;
+      if (pulseModeRef.current) pulseTime += 0.016;
+
+      // Scroll momentum decay
+      scrollVelocity *= 0.92;
+
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        const angle = getAngle(p.x, p.y, time);
+
+        let vx = Math.cos(angle) * p.speed;
+        let vy = Math.sin(angle) * p.speed + scrollVelocity * 0.08;
+
+        const dx = p.x - mx;
+        const dy = p.y - my;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 140 && dist > 0.001) {
+          const push = (1 - dist / 140) * 2.8;
+          vx += (dx / dist) * push;
+          vy += (dy / dist) * push;
+        }
+
+        p.px = p.x;
+        p.py = p.y;
+        p.x += vx;
+        p.y += vy;
+        p.life -= 0.001 + TRAIL_FADE[p.layer] * 0.018;
+
+        if (p.x < -30 || p.x > W + 30 || p.y < -30 || p.y > H + 30 || p.life <= 0) {
+          const edge = Math.floor(Math.random() * 4);
+          if (edge === 0) {
+            p.x = Math.random() * W;
+            p.y = -5;
+          } else if (edge === 1) {
+            p.x = W + 5;
+            p.y = Math.random() * H;
+          } else if (edge === 2) {
+            p.x = Math.random() * W;
+            p.y = H + 5;
+          } else {
+            p.x = -5;
+            p.y = Math.random() * H;
+          }
+          p.life = p.maxLife;
+          p.hasPrev = false;
+          continue;
+        }
+
+        let a = p.alpha * Math.min((p.life / p.maxLife) * 3, 1);
+        a = Math.min(a, p.alpha);
+
+        // Draw aerodynamic filament streamline
+        if (trailModeRef.current && p.hasPrev) {
+          ctx!.beginPath();
+          ctx!.moveTo(p.px, p.py);
+          ctx!.lineTo(p.x, p.y);
+          ctx!.strokeStyle = `rgba(240, 238, 233, ${a})`;
+          ctx!.lineWidth = p.size * 0.72;
+          ctx!.stroke();
+        }
+
+        // Glowing particle head
+        ctx!.beginPath();
+        ctx!.arc(p.x, p.y, p.size * 0.48, 0, Math.PI * 2);
+        ctx!.fillStyle = `rgba(255, 255, 255, ${Math.min(1.0, a * 1.3)})`;
+        ctx!.fill();
+        p.hasPrev = true;
+      }
+
+      // Soft center-focused depth spotlight (ensures text readability in the hero)
+      const grd = ctx!.createRadialGradient(W / 2, 380, 160, W / 2, 380, W * 0.65);
+      grd.addColorStop(0, 'rgba(8, 8, 8, 0)');
+      grd.addColorStop(1, 'rgba(8, 8, 8, 0.45)');
+      ctx!.fillStyle = grd;
+      ctx!.fillRect(0, 0, W, H);
+    }
+
+    // -------------------------------------------------------------------------
+    // Event Listeners: Crosshair Cursor & Scroll Momentum
+    // -------------------------------------------------------------------------
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!container) return;
+      const rect = container.getBoundingClientRect();
+      mx = e.clientX - rect.left;
+      my = e.clientY - rect.top;
+    };
+
+    const handleMouseLeave = () => {
+      mx = -9999;
+      my = -9999;
+    };
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      scrollVelocity = Math.max(-15, Math.min(15, currentScrollY - lastScrollY));
+      lastScrollY = currentScrollY;
+      scrollY = currentScrollY;
+    };
+
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    window.addEventListener('mouseleave', handleMouseLeave);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', resize);
+
+    initPerm();
+    resize();
+    spawnParticles();
+    draw();
 
     return () => {
-      motionQuery.removeEventListener('change', motionHandler);
+      cancelAnimationFrame(animationId);
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseleave', handleMouseLeave);
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', resize);
     };
   }, []);
 
-  useEffect(() => {
-    if (prefersReducedMotion) return;
-    const container = mountRef.current;
-    if (!container) return;
-
-    // -------------------------------------------------------------------------
-    // Scene & Perspective Camera Setup
-    // -------------------------------------------------------------------------
-    let width = container.clientWidth || window.innerWidth;
-    let height = container.clientHeight || 1400;
-
-    const scene = new THREE.Scene();
-
-    const camera = new THREE.PerspectiveCamera(54, width / height, 0.1, 100);
-    camera.position.set(0, 0, 24);
-
-    let renderer: THREE.WebGLRenderer;
-    try {
-      renderer = new THREE.WebGLRenderer({
-        antialias: true,
-        alpha: true,
-        powerPreference: 'high-performance'
-      });
-    } catch {
-      return;
-    }
-
-    renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.setClearColor(0x000000, 0); // Transparent so dark ground glows through
-    container.appendChild(renderer.domElement);
-
-    // -------------------------------------------------------------------------
-    // Interaction Vectors (NDC, velocity momentum, parallax)
-    // -------------------------------------------------------------------------
-    const mouseNDC = new THREE.Vector2(0, 0);
-    const mouseVel = new THREE.Vector2(0, 0);
-    let targetMouseX = 0;
-    let targetMouseY = 0;
-    let currentMouseX = 0;
-    let currentMouseY = 0;
-    let isMouseActive = false;
-    let lastMouseTime = performance.now();
-    let lastMouseX = 0;
-    let lastMouseY = 0;
-
-    // -------------------------------------------------------------------------
-    // 16,000 Airy-Disk Particles with Extended Vertical Coverage
-    // -------------------------------------------------------------------------
-    const PARTICLE_COUNT = 16000;
-    const positions = new Float32Array(PARTICLE_COUNT * 3);
-    const colors = new Float32Array(PARTICLE_COUNT * 3);
-    const sizes = new Float32Array(PARTICLE_COUNT);
-    const alphas = new Float32Array(PARTICLE_COUNT);
-    const speeds = new Float32Array(PARTICLE_COUNT);
-    const phases = new Float32Array(PARTICLE_COUNT);
-
-    const BOUNDS_X = 26;
-    const BOUNDS_Y = 26;
-    const BOUNDS_Z = 16;
-
-    for (let i = 0; i < PARTICLE_COUNT; i++) {
-      const i3 = i * 3;
-      positions[i3] = (Math.random() - 0.5) * BOUNDS_X * 2;
-      positions[i3 + 1] = (Math.random() - 0.45) * BOUNDS_Y * 2;
-      positions[i3 + 2] = (Math.random() - 0.5) * BOUNDS_Z * 2;
-
-      phases[i] = Math.random();
-
-      // Multi-layer depth tiering (pinpoint airy-disk brilliance)
-      const tier = Math.random();
-      if (tier > 0.86) {
-        // High-velocity foreground filament
-        colors[i3] = 1.0;
-        colors[i3 + 1] = 1.0;
-        colors[i3 + 2] = 1.0;
-        sizes[i] = 0.85 + Math.random() * 0.45;
-        alphas[i] = 0.85 + Math.random() * 0.15;
-        speeds[i] = 0.045 + Math.random() * 0.03;
-      } else if (tier > 0.38) {
-        // Mid-speed ambient stream
-        colors[i3] = 0.82;
-        colors[i3 + 1] = 0.86;
-        colors[i3 + 2] = 0.9;
-        sizes[i] = 0.55 + Math.random() * 0.35;
-        alphas[i] = 0.5 + Math.random() * 0.25;
-        speeds[i] = 0.024 + Math.random() * 0.018;
-      } else {
-        // Deep cosmic field
-        colors[i3] = 0.48;
-        colors[i3 + 1] = 0.52;
-        colors[i3 + 2] = 0.56;
-        sizes[i] = 0.32 + Math.random() * 0.25;
-        alphas[i] = 0.25 + Math.random() * 0.2;
-        speeds[i] = 0.012 + Math.random() * 0.008;
-      }
-    }
-
-    const geometry = new THREE.BufferGeometry();
-    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-    geometry.setAttribute('aSize', new THREE.BufferAttribute(sizes, 1));
-    geometry.setAttribute('aAlpha', new THREE.BufferAttribute(alphas, 1));
-    geometry.setAttribute('aSpeed', new THREE.BufferAttribute(speeds, 1));
-    geometry.setAttribute('aPhase', new THREE.BufferAttribute(phases, 1));
-
-    // -------------------------------------------------------------------------
-    // GPU Vertex & Fragment Shaders with Real-Time Gravitational Wave Warp
-    // -------------------------------------------------------------------------
-    const vertexShader = `
-      attribute float aSize;
-      attribute float aAlpha;
-      attribute float aSpeed;
-      attribute float aPhase;
-      varying vec3 vColor;
-      varying float vAlpha;
-
-      uniform float uTime;
-      uniform float uPixelRatio;
-      uniform vec2 uMouse;
-      uniform vec2 uMouseVel;
-      uniform float uAspect;
-      uniform float uMouseActive;
-      uniform float uScroll;
-
-      void main() {
-        vColor = color;
-
-        // Subtle organic luminous twinkle
-        float twinkle = sin(uTime * 1.8 + aPhase * 6.28318) * 0.18 + 0.82;
-        vAlpha = aAlpha * twinkle;
-
-        vec3 pos = position;
-
-        // Continuous seamless downward flow drift
-        pos.y = mod(pos.y - uTime * aSpeed * 2.0 + 26.0, 52.0) - 26.0;
-
-        // Fluid vector curl drift using harmonic trigonometry
-        float theta = sin(pos.x * 0.08 + uTime * 0.45) * cos(pos.y * 0.07 + uTime * 0.35) * 3.14159;
-        float phi = cos(pos.z * 0.09 + uTime * 0.25) * 3.14159;
-
-        pos.x += cos(theta) * sin(phi) * 1.2;
-        pos.z += cos(phi) * 0.8;
-
-        vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
-        vec4 clipPos = projectionMatrix * mvPosition;
-        vec2 ndcPos = clipPos.xy / clipPos.w;
-
-        // Dynamic cursor-following distortion & gravitational wave warp
-        if (uMouseActive > 0.5) {
-          vec2 diff = ndcPos - uMouse;
-          diff.x *= uAspect;
-          float dist = length(diff);
-          float radius = 0.52; // Generous screen-space interaction radius
-
-          if (dist < radius && dist > 0.001) {
-            float factor = (1.0 - dist / radius);
-            float smoothFactor = smoothstep(0.0, 1.0, factor);
-
-            // Fluid warp: radial repulsion + tangential vortex swirl + mouse momentum
-            vec2 normDiff = normalize(diff);
-            vec2 tangent = vec2(-normDiff.y, normDiff.x);
-            vec2 velInfluence = uMouseVel * 0.012;
-
-            vec2 warp = (normDiff * 0.24 + tangent * 0.15 + velInfluence) * smoothFactor * smoothFactor;
-            warp.x /= uAspect;
-
-            clipPos.xy += warp * clipPos.w;
-
-            // Energize / ionize stars near cursor (luminous bloom on hover)
-            vAlpha = min(1.0, vAlpha + smoothFactor * 0.65);
-          }
-        }
-
-        gl_Position = clipPos;
-        gl_PointSize = max(1.0, aSize * (180.0 / -mvPosition.z) * uPixelRatio);
-      }
-    `;
-
-    const fragmentShader = `
-      varying vec3 vColor;
-      varying float vAlpha;
-
-      void main() {
-        float dist = length(gl_PointCoord - vec2(0.5));
-        if (dist > 0.5) discard;
-
-        // Pinpoint Airy-disk stellar core + soft diffraction glow
-        float core = exp(-dist * 16.0);
-        float halo = exp(-dist * 4.0) * 0.38;
-        float intensity = core + halo;
-
-        gl_FragColor = vec4(vColor, vAlpha * intensity);
-      }
-    `;
-
-    const material = new THREE.ShaderMaterial({
-      vertexShader,
-      fragmentShader,
-      uniforms: {
-        uTime: { value: 0 },
-        uPixelRatio: { value: Math.min(window.devicePixelRatio, 2) },
-        uMouse: { value: new THREE.Vector2(0, 0) },
-        uMouseVel: { value: new THREE.Vector2(0, 0) },
-        uAspect: { value: width / height },
-        uMouseActive: { value: 0.0 },
-        uScroll: { value: 0.0 }
-      },
-      transparent: true,
-      blending: THREE.AdditiveBlending,
-      depthWrite: false,
-      vertexColors: true
-    });
-
-    const particleSystem = new THREE.Points(geometry, material);
-    scene.add(particleSystem);
-
-    // -------------------------------------------------------------------------
-    // Event Handlers
-    // -------------------------------------------------------------------------
-    const onMouseMove = (e: MouseEvent) => {
-      const now = performance.now();
-      const dt = Math.max(1, now - lastMouseTime) / 1000;
-      lastMouseTime = now;
-
-      const currentX = (e.clientX / window.innerWidth) * 2 - 1;
-      const currentY = -(e.clientY / window.innerHeight) * 2 + 1;
-
-      // Calculate velocity for natural momentum displacement
-      mouseVel.x = (currentX - lastMouseX) / dt;
-      mouseVel.y = (currentY - lastMouseY) / dt;
-      mouseVel.clampLength(0, 8.0);
-
-      lastMouseX = currentX;
-      lastMouseY = currentY;
-
-      mouseNDC.set(currentX, currentY);
-      isMouseActive = true;
-
-      // Subtle 3D parallax tilt targets
-      targetMouseX = currentX * 0.12;
-      targetMouseY = currentY * 0.08;
-    };
-
-    const onMouseLeave = () => {
-      isMouseActive = false;
-      targetMouseX = 0;
-      targetMouseY = 0;
-    };
-
-    let targetScroll = 0;
-    let currentScroll = 0;
-
-    const onScroll = () => {
-      targetScroll = window.scrollY;
-    };
-
-    window.addEventListener('mousemove', onMouseMove, { passive: true });
-    window.addEventListener('mouseleave', onMouseLeave);
-    window.addEventListener('scroll', onScroll, { passive: true });
-
-    const onResize = () => {
-      if (!container) return;
-      width = container.clientWidth || window.innerWidth;
-      height = container.clientHeight || 1400;
-      camera.aspect = width / height;
-      camera.updateProjectionMatrix();
-      renderer.setSize(width, height);
-
-      const pr = Math.min(window.devicePixelRatio, 2);
-      renderer.setPixelRatio(pr);
-      material.uniforms.uPixelRatio.value = pr;
-      material.uniforms.uAspect.value = width / height;
-    };
-
-    window.addEventListener('resize', onResize);
-
-    // -------------------------------------------------------------------------
-    // Visibility Observer
-    // -------------------------------------------------------------------------
-    let isVisible = true;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          isVisible = entry.isIntersecting;
-        });
-      },
-      { threshold: 0.01 }
-    );
-    observer.observe(container);
-
-    // -------------------------------------------------------------------------
-    // Animation Loop: 3D Parallax, Vector Distortion & Scroll Pull-Back
-    // -------------------------------------------------------------------------
-    const clock = new THREE.Clock();
-    let animationId: number;
-
-    const animate = () => {
-      animationId = requestAnimationFrame(animate);
-      if (!isVisible) return;
-
-      const elapsed = clock.getElapsedTime();
-
-      // Pass interaction uniforms
-      material.uniforms.uTime.value = elapsed;
-      material.uniforms.uMouse.value.copy(mouseNDC);
-      material.uniforms.uMouseVel.value.copy(mouseVel);
-      material.uniforms.uMouseActive.value = isMouseActive ? 1.0 : 0.0;
-      material.uniforms.uScroll.value = currentScroll;
-
-      // Mouse momentum decay
-      mouseVel.multiplyScalar(0.92);
-
-      // Smooth 3D mouse parallax rotation
-      currentMouseX += (targetMouseX - currentMouseX) * 0.035;
-      currentMouseY += (targetMouseY - currentMouseY) * 0.035;
-      scene.rotation.y = currentMouseX;
-      scene.rotation.x = currentMouseY;
-
-      // Realistic deep-space scroll pull-back (observed from the outside)
-      currentScroll += (targetScroll - currentScroll) * 0.055;
-      camera.position.z = 24 + currentScroll * 0.0065;
-      camera.position.y = -currentScroll * 0.0035;
-
-      // Celestial slow drift
-      particleSystem.rotation.z = elapsed * 0.012;
-
-      renderer.render(scene, camera);
-    };
-
-    animate();
-
-    // -------------------------------------------------------------------------
-    // Cleanup
-    // -------------------------------------------------------------------------
-    return () => {
-      cancelAnimationFrame(animationId);
-      observer.disconnect();
-      window.removeEventListener('mousemove', onMouseMove);
-      window.removeEventListener('mouseleave', onMouseLeave);
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onResize);
-
-      geometry.dispose();
-      material.dispose();
-      renderer.dispose();
-
-      if (container.contains(renderer.domElement)) {
-        container.removeChild(renderer.domElement);
-      }
-    };
-  }, [prefersReducedMotion]);
-
-  if (prefersReducedMotion) {
-    return (
-      <div
-        style={{
-          width: '100%',
-          height: '100%',
-          backgroundColor: '#080808',
-          backgroundImage: 'radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 80%)'
-        }}
-      />
-    );
-  }
-
   return (
     <div
-      ref={mountRef}
+      ref={containerRef}
       style={{
         position: 'absolute',
         top: 0,
         left: 0,
         width: '100%',
         height: '100%',
-        pointerEvents: 'none'
+        overflow: 'hidden',
       }}
-    />
+    >
+      <canvas
+        ref={canvasRef}
+        style={{
+          display: 'block',
+          width: '100%',
+          height: '100%',
+        }}
+      />
+    </div>
   );
 };
