@@ -13,6 +13,8 @@ export interface ArticleEntry {
   focusQuestion: string;
   publishDate?: string;
   ghostLinks: string[];
+  readingTime?: string;
+  beginnerStandfirst?: string;
 }
 
 export const SLUG_REGISTRY: Record<string, ArticleEntry> = {
@@ -28,8 +30,10 @@ export const SLUG_REGISTRY: Record<string, ArticleEntry> = {
     focusKeyword: 'automation pipeline',
     status: 'published',
     standfirst: 'The mechanical architecture of modern execution runners: DAG resolution, worker pools, and fault isolation.',
+    beginnerStandfirst: 'How automated workflows trigger, execute tasks in exact sequence, handle sudden errors, and never lose your data.',
     focusQuestion: 'What happens inside an automation runner between the trigger firing and the final step completing?',
     publishDate: 'Oct 12, 2026',
+    readingTime: '9 min read',
     ghostLinks: ['retry-and-backoff', 'idempotency-keys', 'webhooks-vs-polling', 'dead-letter-queues', 'how-ticket-routing-works', 'how-online-checkout-works']
   },
   'retry-and-backoff': {
@@ -41,8 +45,10 @@ export const SLUG_REGISTRY: Record<string, ArticleEntry> = {
     focusKeyword: 'exponential backoff',
     status: 'published',
     standfirst: 'Why immediate retries cause thundering herds, and the math behind exponential backoff with full jitter.',
+    beginnerStandfirst: 'Why retrying failed actions instantly crashes servers, and the smart delay algorithm that keeps automations running.',
     focusQuestion: 'Why does retrying immediately after an API failure make the outage worse?',
     publishDate: 'Oct 14, 2026',
+    readingTime: '6 min read',
     ghostLinks: ['automation-pipelines-explained', 'idempotency-keys', 'dead-letter-queues']
   },
   'idempotency-keys': {
@@ -54,7 +60,9 @@ export const SLUG_REGISTRY: Record<string, ArticleEntry> = {
     focusKeyword: 'idempotency key',
     status: 'planned',
     standfirst: 'Guaranteeing exactly-once execution semantics over at-least-once distributed networks.',
+    beginnerStandfirst: 'How apps ensure clicking "Submit" or "Pay" multiple times on a slow connection will only ever process once.',
     focusQuestion: 'How does a payment API know not to charge a credit card twice when the network drops?',
+    readingTime: '7 min read',
     ghostLinks: ['automation-pipelines-explained', 'retry-and-backoff', 'webhooks-vs-polling']
   },
   'webhooks-vs-polling': {
@@ -66,7 +74,9 @@ export const SLUG_REGISTRY: Record<string, ArticleEntry> = {
     focusKeyword: 'webhooks vs polling',
     status: 'planned',
     standfirst: 'The trade-off between real-time push events and fault-tolerant pull state synchronization.',
+    beginnerStandfirst: 'How apps talk to each other in real-time: instantaneous push alerts vs constant scheduled checking.',
     focusQuestion: 'When is a polling loop actually more reliable than a webhook endpoint?',
+    readingTime: '6 min read',
     ghostLinks: ['automation-pipelines-explained', 'idempotency-keys']
   },
   'dead-letter-queues': {
@@ -78,7 +88,9 @@ export const SLUG_REGISTRY: Record<string, ArticleEntry> = {
     focusKeyword: 'dead-letter queue',
     status: 'planned',
     standfirst: 'Quarantining poison-pill payloads without halting high-throughput pipeline execution.',
+    beginnerStandfirst: 'What happens when bad data crashes a task: how systems isolate broken records without stopping the entire business.',
     focusQuestion: 'Where do failed automation payloads go when all retries are exhausted?',
+    readingTime: '8 min read',
     ghostLinks: ['automation-pipelines-explained', 'retry-and-backoff']
   },
 
@@ -94,8 +106,10 @@ export const SLUG_REGISTRY: Record<string, ArticleEntry> = {
     focusKeyword: 'real-time ad auction',
     status: 'published',
     standfirst: 'Inside the 100-millisecond window where DSPs, SSPs, and ad exchanges settle ad impressions.',
+    beginnerStandfirst: 'Inside the split-second 100-millisecond window where advertisers automatically bid and display ads as a page loads.',
     focusQuestion: 'How does an ad server evaluate bids, calculate quality score, and render a banner in under 100ms?',
     publishDate: 'Oct 15, 2026',
+    readingTime: '10 min read',
     ghostLinks: ['real-time-bidding-explained', 'attribution-models', 'consent-mode-conversion-tracking', 'server-side-tracking', 'how-online-checkout-works', 'how-browsers-render-pages']
   },
   'real-time-bidding-explained': {
@@ -159,8 +173,10 @@ export const SLUG_REGISTRY: Record<string, ArticleEntry> = {
     focusKeyword: 'browser rendering',
     status: 'published',
     standfirst: 'From raw HTML bytes through tokenization, DOM/CSSOM tree construction, layout, paint, and GPU compositing.',
+    beginnerStandfirst: 'The step-by-step journey of how a browser turns raw text and code into a fast, fluid visual page.',
     focusQuestion: 'What exact steps transform a raw string of HTML and CSS into pixels on a screen?',
     publishDate: 'Oct 10, 2026',
+    readingTime: '11 min read',
     ghostLinks: ['core-web-vitals-explained', 'critical-rendering-path', 'responsive-layout-explained', 'web-accessibility-wcag', 'how-online-checkout-works', 'how-ad-auctions-work']
   },
   'core-web-vitals-explained': {
@@ -224,8 +240,10 @@ export const SLUG_REGISTRY: Record<string, ArticleEntry> = {
     focusKeyword: 'online checkout flow',
     status: 'published',
     standfirst: 'The multi-party transaction dance between merchant, payment gateway, acquiring bank, card network, and issuing bank.',
+    beginnerStandfirst: 'What happens in the seconds between clicking "Pay Now" and the confirmation screen: cards, banks, fraud checks, and money movement.',
     focusQuestion: 'What journey does your credit card number take between clicking Pay and receiving a confirmation receipt?',
     publishDate: 'Oct 08, 2026',
+    readingTime: '9 min read',
     ghostLinks: ['authorization-vs-capture', '3d-secure-sca', 'payment-idempotency', 'cart-abandonment', 'how-ad-auctions-work', 'automation-pipelines-explained']
   },
   'authorization-vs-capture': {

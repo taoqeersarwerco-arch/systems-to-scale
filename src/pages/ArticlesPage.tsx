@@ -2,9 +2,22 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ALL_ARTICLES, ArticleEntry } from '../data/slug-registry';
 import { TOPICS } from '../data/topics';
-import { Search, ArrowRight, Layers, Radio, X } from 'lucide-react';
+import { Search, ArrowRight, Layers, Radio, X, Clock, Sparkles } from 'lucide-react';
 import { PerlinFlowField } from '../components/articles/PerlinFlowField';
 import styles from '../styles/articles.module.css';
+
+// Topic icon mapping for the horizontal category rail
+const TOPIC_ICONS: Record<string, string> = {
+  'all': '✦',
+  'ai-automation': '⚡',
+  'marketing-ads': '📈',
+  'web-design': '🎨',
+  'e-commerce': '🛒',
+  'customer-service': '💬',
+  'virtual-assistance': '🤖',
+  'pitch-decks': '📊',
+  'personal-assistance': '🧭',
+};
 
 export const ArticlesPage: React.FC = () => {
   const [selectedTopic, setSelectedTopic] = useState<string>('all');
@@ -24,13 +37,22 @@ export const ArticlesPage: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // Cursor spotlight tracking per card to animate localized illumination
+  // 3D Tilt & Cursor Spotlight tracking per card
   const handleCardMouseMove = (e: React.MouseEvent<HTMLElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
+    const rotateX = ((y / rect.height) - 0.5) * -5;
+    const rotateY = ((x / rect.width) - 0.5) * 5;
+    e.currentTarget.style.setProperty('--card-rotate-x', `${rotateX.toFixed(2)}deg`);
+    e.currentTarget.style.setProperty('--card-rotate-y', `${rotateY.toFixed(2)}deg`);
     e.currentTarget.style.setProperty('--spotlight-x', `${x}px`);
     e.currentTarget.style.setProperty('--spotlight-y', `${y}px`);
+  };
+
+  const handleCardMouseLeave = (e: React.MouseEvent<HTMLElement>) => {
+    e.currentTarget.style.setProperty('--card-rotate-x', '0deg');
+    e.currentTarget.style.setProperty('--card-rotate-y', '0deg');
   };
 
   const filteredArticles = ALL_ARTICLES.filter((article: ArticleEntry) => {
@@ -41,6 +63,7 @@ export const ArticlesPage: React.FC = () => {
       q === '' ||
       article.title.toLowerCase().includes(q) ||
       article.focusKeyword.toLowerCase().includes(q) ||
+      (article.beginnerStandfirst && article.beginnerStandfirst.toLowerCase().includes(q)) ||
       article.standfirst.toLowerCase().includes(q) ||
       (article.focusQuestion && article.focusQuestion.toLowerCase().includes(q));
     return matchesTopic && matchesStatus && matchesSearch;
@@ -99,7 +122,7 @@ export const ArticlesPage: React.FC = () => {
         <div className={styles.heroContent}>
           <div className={styles.heroEyebrow}>
             <Radio size={12} />
-            <span>ARTICLES & SYSTEM BLUEPRINTS</span>
+            <span>PRODUCTION ARTICLES & EXPLANATIONS</span>
           </div>
 
           <h1 className={styles.heroHeading}>
@@ -108,10 +131,10 @@ export const ArticlesPage: React.FC = () => {
 
           <p className={styles.heroSublead}>
             Every article is built on the three-question standard: What it is, How it physically works,
-            and Why it matters under extreme production load. Designed for systems engineers and engineering leaders.
+            and Why it matters under extreme production load. Designed for founders, operators, and systems engineers.
           </p>
 
-          {/* 4 Telemetry Metric Chips (Cleaned Vocabulary) */}
+          {/* 4 Telemetry Metric Chips */}
           <div className={styles.kpiStrip}>
             <div className={styles.kpiChip}>
               <span>TOTAL ARTICLES:</span>
@@ -127,34 +150,41 @@ export const ArticlesPage: React.FC = () => {
             </div>
             <div className={styles.kpiChip}>
               <span>STATUS:</span>
-              <span className={styles.kpiNumber}>{publishedCount} PUBLISHED // {plannedCount} COMING SOON</span>
+              <span className={styles.kpiNumber}>{publishedCount} READY TO READ // {plannedCount} IN ROADMAP</span>
             </div>
           </div>
         </div>
       </section>
 
       {/* =========================================================================
-          COMMAND DECK: Double-Bezel Search & Filter Console (CINEMATIC & PRODUCTIVE)
+          COMMAND DECK: Cinematic Double-Bezel Floating HUD (PRODUCTIVE & ZERO-WRAP)
           ========================================================================= */}
       <section className={styles.commandDeckSection}>
         <div className={styles.commandChassis}>
-          {/* Subtle Corner Reticle Accents */}
+          {/* Subtle 4-Corner Reticle Hardware Accents */}
           <div className={styles.chassisReticleTl} />
           <div className={styles.chassisReticleTr} />
+          <div className={styles.chassisReticleBl} />
+          <div className={styles.chassisReticleBr} />
 
-          {/* Top Row: Search Input + Status Segments */}
+          {/* Top Row: Search Input + Floating Status Segment */}
           <div className={styles.commandRowTop}>
             <div className={styles.searchContainer}>
               <Search size={15} className={styles.searchIcon} />
               <input
                 ref={searchInputRef}
                 type="text"
-                placeholder="Search articles, topics, or the questions they answer..."
+                placeholder="Search articles, topics, or key questions..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className={styles.searchInput}
               />
               <div className={styles.searchActions}>
+                {searchQuery && (
+                  <span className={styles.searchMatchPill}>
+                    {filteredArticles.length} found
+                  </span>
+                )}
                 {searchQuery && (
                   <button
                     type="button"
@@ -165,150 +195,199 @@ export const ArticlesPage: React.FC = () => {
                     <X size={13} />
                   </button>
                 )}
-                <span className={styles.searchKbd}>/</span>
+                <span className={styles.searchKbd} title="Press / to search">/</span>
               </div>
             </div>
 
-            {/* Status Segmented Controller (Cleaned Vocabulary) */}
+            {/* Engineered Status Toggle Switcher */}
             <div className={styles.statusSegment}>
               <button
                 type="button"
                 onClick={() => setStatusFilter('all')}
                 className={`${styles.statusToggleBtn} ${statusFilter === 'all' ? styles.statusToggleBtnActive : ''}`}
               >
-                ALL ({ALL_ARTICLES.length})
+                All Articles ({ALL_ARTICLES.length})
               </button>
               <button
                 type="button"
                 onClick={() => setStatusFilter('published')}
                 className={`${styles.statusToggleBtn} ${statusFilter === 'published' ? styles.statusToggleBtnActive : ''}`}
               >
-                PUBLISHED ({publishedCount})
+                Ready to Read ({publishedCount})
               </button>
               <button
                 type="button"
                 onClick={() => setStatusFilter('planned')}
                 className={`${styles.statusToggleBtn} ${statusFilter === 'planned' ? styles.statusToggleBtnActive : ''}`}
               >
-                COMING SOON ({plannedCount})
+                Roadmap ({plannedCount})
               </button>
             </div>
           </div>
 
-          {/* Bottom Row: Topic Filter Pills + Reset Quick Action */}
-          <div className={styles.domainPillRow}>
-            <button
-              type="button"
-              onClick={() => setSelectedTopic('all')}
-              className={`${styles.domainPill} ${selectedTopic === 'all' ? styles.domainPillActive : ''}`}
-            >
-              <span>ALL</span>
-              <span className={styles.domainCountBadge}>({getDomainCount('all')})</span>
-            </button>
-            {TOPICS.map((t) => {
-              const count = getDomainCount(t.slug);
-              const isActive = selectedTopic === t.slug;
-              return (
-                <button
-                  key={t.slug}
-                  type="button"
-                  onClick={() => setSelectedTopic(t.slug)}
-                  className={`${styles.domainPill} ${isActive ? styles.domainPillActive : ''}`}
-                >
-                  <span>{t.name.toUpperCase()}</span>
-                  <span className={styles.domainCountBadge}>({count})</span>
-                </button>
-              );
-            })}
-
-            {/* Instant Filter Reset (Productivity Feature) */}
-            {isFiltered && (
+          {/* Middle: Horizontal Category Rail (Zero Wrap, Pure Fluid Track) */}
+          <div className={styles.domainRailWrapper}>
+            <div className={styles.domainRailTrack}>
               <button
                 type="button"
-                onClick={handleResetFilters}
-                className={styles.resetFiltersBtn}
-                title="Reset all active filters"
+                onClick={() => setSelectedTopic('all')}
+                className={`${styles.domainPill} ${selectedTopic === 'all' ? styles.domainPillActive : ''}`}
               >
-                <span>RESET</span>
-                <X size={11} />
+                <span className={styles.pillIcon}>{TOPIC_ICONS['all']}</span>
+                <span>ALL</span>
+                <span className={styles.domainCountBadge}>({getDomainCount('all')})</span>
               </button>
-            )}
+
+              {TOPICS.map((t) => {
+                const count = getDomainCount(t.slug);
+                const isActive = selectedTopic === t.slug;
+                const icon = TOPIC_ICONS[t.slug] || '✦';
+                return (
+                  <button
+                    key={t.slug}
+                    type="button"
+                    onClick={() => setSelectedTopic(t.slug)}
+                    className={`${styles.domainPill} ${isActive ? styles.domainPillActive : ''}`}
+                  >
+                    <span className={styles.pillIcon}>{icon}</span>
+                    <span>{t.name.toUpperCase()}</span>
+                    <span className={styles.domainCountBadge}>({count})</span>
+                  </button>
+                );
+              })}
+
+              {/* Instant Filter Reset (Productivity Feature) */}
+              {isFiltered && (
+                <button
+                  type="button"
+                  onClick={handleResetFilters}
+                  className={styles.resetFiltersBtn}
+                  title="Reset all active filters"
+                >
+                  <span>RESET FILTERS</span>
+                  <X size={11} />
+                </button>
+              )}
+            </div>
           </div>
 
-          {/* Live Readout & Counter (Cleaned Vocabulary) */}
+          {/* Bottom Context Rail: Reader-Centric Promise */}
           <div className={styles.readoutBar}>
-            <span>
+            <span className={styles.readoutCount}>
               SHOWING {filteredArticles.length} OF {ALL_ARTICLES.length} ARTICLES
             </span>
-            <span>VERIFIED PRODUCTION MECHANISMS // THREE-QUESTION STANDARD</span>
+            <span className={styles.readoutTagline}>
+              CLEAR EXPLANATIONS OF REAL PRODUCTION SYSTEMS · ZERO UNEXPLAINED JARGON
+            </span>
           </div>
         </div>
       </section>
 
       {/* =========================================================================
-          BLUEPRINT GRID: 3-Column Machined Double-Bezel Cards (ALIVE & DYNAMIC)
+          ARTICLE CARDS GRID: 3-Column Machined Double-Bezel Architecture
           ========================================================================= */}
       <section className={styles.articlesGridSection}>
         <div className={styles.articlesGrid}>
           {filteredArticles.map((article) => {
             const isLive = article.status === 'published';
             const isFieldGuide = article.type === 'Pillar';
+            const readingTime = article.readingTime || (isFieldGuide ? '10 min read' : '6 min read');
+            const standfirstText = article.beginnerStandfirst || article.standfirst;
 
             const cardContent = (
               <>
-                {/* Luminous top-edge 1px scanline */}
+                {/* Luminous top-edge scanline */}
                 <div className={styles.cardTopScanline} />
+                {/* 4-corner micro hardware reticles */}
+                <div className={styles.cardCornerReticleTl} />
+                <div className={styles.cardCornerReticleBr} />
                 {/* Interactive cursor spotlight */}
                 <div className={styles.cardSpotlight} />
 
+                {/* Field Guide Ambient Rim Accent */}
+                {isFieldGuide && <div className={styles.fieldGuideGlow} />}
+
                 <div className={styles.cardContent}>
+                  {/* Card Header: Topic Badge + Type Distinction */}
                   <div className={styles.cardHeader}>
                     <span className={styles.topicBadge}>{article.topic}</span>
-                    <span className={isFieldGuide ? styles.typeBadgeFieldGuide : styles.typeBadgeDeepDive}>
-                      {isFieldGuide ? 'FIELD GUIDE' : 'DEEP DIVE'}
-                    </span>
+                    {isFieldGuide ? (
+                      <div className={styles.fieldGuideBadgeGroup}>
+                        <span className={styles.typeBadgeFieldGuide}>
+                          <Sparkles size={9} />
+                          <span>FIELD GUIDE</span>
+                        </span>
+                        <span className={styles.startHereChip}>START HERE</span>
+                      </div>
+                    ) : (
+                      <span className={styles.typeBadgeDeepDive}>
+                        DEEP DIVE · MECHANISM
+                      </span>
+                    )}
                   </div>
 
+                  {/* Title */}
                   <h3 className={styles.cardTitle}>{article.title}</h3>
-                  <p className={styles.cardStandfirst}>{article.standfirst}</p>
 
+                  {/* Beginner-Friendly Standfirst */}
+                  <p className={styles.cardStandfirst}>{standfirstText}</p>
+
+                  {/* The Big Question Box */}
                   {article.focusQuestion && (
                     <div className={styles.focusQuestionBox}>
-                      <span className={styles.focusQuestionLabel}>THE QUESTION THIS ANSWERS</span>
+                      <span className={styles.focusQuestionLabel}>✦ THE BIG QUESTION</span>
                       <p className={styles.focusQuestionText}>{article.focusQuestion}</p>
                     </div>
                   )}
 
-                  <div className={styles.keywordRow}>
-                    <span className={styles.keywordPill}>KEYWORD // {article.focusKeyword}</span>
+                  {/* Reading Metadata & 3-Step Reading Stepper (Replaces SEO Keywords & Dashes) */}
+                  <div className={styles.metaRow}>
+                    <div className={styles.metaPillsLeft}>
+                      <span className={styles.readingTimePill}>
+                        <Clock size={11} />
+                        <span>{readingTime}</span>
+                      </span>
+                      <span className={styles.levelPill}>
+                        {isFieldGuide ? 'Overview' : 'Focused'}
+                      </span>
+                    </div>
 
-                    {/* Three-Question Spine Indicator (3 small bars) */}
+                    {/* 3-Step Mechanism Stepper */}
                     <div
-                      className={styles.spineIndicator}
-                      title={isLive ? 'Three-question spine: Complete (What, How, Why)' : 'Three-question spine: In progress'}
+                      className={styles.readingStepper}
+                      title={isLive ? 'Full 3-step mechanism: What it is, How it works, Why it matters' : 'Drafting roadmap'}
                     >
-                      <span className={`${styles.spineBar} ${isLive ? styles.spineBarFilled : ''}`} />
-                      <span className={`${styles.spineBar} ${isLive ? styles.spineBarFilled : ''}`} />
-                      <span className={`${styles.spineBar} ${isLive ? styles.spineBarFilled : ''}`} />
+                      <span className={`${styles.stepDot} ${isLive ? styles.stepDotActive : ''}`} />
+                      <span className={`${styles.stepConnector} ${isLive ? styles.stepConnectorActive : ''}`} />
+                      <span className={`${styles.stepDot} ${isLive ? styles.stepDotActive : ''}`} />
+                      <span className={`${styles.stepConnector} ${isLive ? styles.stepConnectorActive : ''}`} />
+                      <span className={`${styles.stepDot} ${isLive ? styles.stepDotActive : ''}`} />
                     </div>
                   </div>
 
+                  {/* Card Footer: Living Action vs Roadmap Preview */}
                   <div className={styles.cardFooter}>
                     {isLive ? (
                       <>
                         <span className={styles.liveBeacon}>
                           <span className={styles.liveDot} />
-                          <span>PUBLISHED // READ NOW</span>
+                          <span>AVAILABLE NOW</span>
                         </span>
-                        <span className={styles.cardArrowBtn}>
-                          <ArrowRight size={13} />
-                        </span>
+                        <div className={styles.buttonInButton}>
+                          <span>Read Guide</span>
+                          <span className={styles.buttonIconCircle}>
+                            <ArrowRight size={12} />
+                          </span>
+                        </div>
                       </>
                     ) : (
-                      <span className={styles.comingSoonBeacon}>
-                        <span className={styles.comingSoonDot} />
-                        <span>COMING SOON // IN QUEUE</span>
-                      </span>
+                      <>
+                        <span className={styles.comingSoonBeacon}>
+                          <span className={styles.comingSoonDot} />
+                          <span>DRAFT IN PROGRESS</span>
+                        </span>
+                        <span className={styles.roadmapTag}>ROADMAP</span>
+                      </>
                     )}
                   </div>
                 </div>
@@ -320,8 +399,9 @@ export const ArticlesPage: React.FC = () => {
                 <Link
                   key={article.slug}
                   to={`/articles/${article.slug}`}
-                  className={`${styles.articleCard} ${styles.articleCardLive}`}
+                  className={`${styles.articleCard} ${styles.articleCardLive} ${isFieldGuide ? styles.articleCardFieldGuide : ''}`}
                   onMouseMove={handleCardMouseMove}
+                  onMouseLeave={handleCardMouseLeave}
                 >
                   {cardContent}
                 </Link>
@@ -331,8 +411,9 @@ export const ArticlesPage: React.FC = () => {
             return (
               <div
                 key={article.slug}
-                className={`${styles.articleCard} ${styles.articleCardPlanned}`}
+                className={`${styles.articleCard} ${styles.articleCardPlanned} ${isFieldGuide ? styles.articleCardFieldGuide : ''}`}
                 onMouseMove={handleCardMouseMove}
+                onMouseLeave={handleCardMouseLeave}
               >
                 {cardContent}
               </div>
