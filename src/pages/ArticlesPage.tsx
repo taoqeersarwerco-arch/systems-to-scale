@@ -70,14 +70,6 @@ export const ArticlesPage: React.FC = () => {
     return matchesTopic && matchesStatus && matchesSearch;
   });
 
-  const publishedCount = ALL_ARTICLES.filter((a) => a.status === 'published').length;
-  const plannedCount = ALL_ARTICLES.filter((a) => a.status === 'planned').length;
-
-  const getDomainCount = (slug: string) => {
-    if (slug === 'all') return ALL_ARTICLES.length;
-    return ALL_ARTICLES.filter((a) => a.topicSlug === slug).length;
-  };
-
   const isFiltered = searchQuery !== '' || selectedTopic !== 'all' || statusFilter !== 'all';
 
   const handleResetFilters = () => {
@@ -101,7 +93,7 @@ export const ArticlesPage: React.FC = () => {
           HERO SECTION: 3D Cosmic Web Macro-Structure (Exact Match to Topics Hub)
           ========================================================================= */}
       <section className={styles.heroSection}>
-        {/* Living 3D Cosmic Web: Macro-structure of all 40 production systems */}
+        {/* Living 3D Cosmic Web: Macro-structure of all production systems */}
         <div className={styles.canvasWrapper}>
           <CosmicWeb />
         </div>
@@ -119,9 +111,9 @@ export const ArticlesPage: React.FC = () => {
         <div className={styles.observatoryHudTop} aria-hidden="true">
           <span className={styles.observatoryHudItem}>SYS ARCHIVE // ARTICLES</span>
           <span className={styles.observatoryHudDivider}>/</span>
-          <span className={styles.observatoryHudItem}>COSMIC WEB: 40 ARCHITECTURAL NODES</span>
+          <span className={styles.observatoryHudItem}>COSMIC WEB: ARCHITECTURAL NODES</span>
           <span className={`${styles.observatoryHudDivider} ${styles.observatoryHudExtra}`}>/</span>
-          <span className={`${styles.observatoryHudItem} ${styles.observatoryHudExtra}`}>8 SUPERCLUSTERS • FILAMENT BRIDGES • 60 FPS</span>
+          <span className={`${styles.observatoryHudItem} ${styles.observatoryHudExtra}`}>SUPERCLUSTERS • FILAMENT BRIDGES • 60 FPS</span>
         </div>
 
         {/* Content Overlay Centred Vertically Over Flow Field (Exact Topics Hub Specs) */}
@@ -132,7 +124,7 @@ export const ArticlesPage: React.FC = () => {
           </div>
 
           <h1 className={styles.heroHeading}>
-            All 40 Production Systems.
+            All Production Systems.
           </h1>
 
           <p className={styles.heroSublead}>
@@ -143,20 +135,20 @@ export const ArticlesPage: React.FC = () => {
           {/* 4 Telemetry Metric Chips */}
           <div className={styles.kpiStrip}>
             <div className={styles.kpiChip}>
-              <span>TOTAL ARTICLES:</span>
-              <span className={styles.kpiNumber}>40 EXPLANATIONS</span>
+              <span>SCOPE:</span>
+              <span className={styles.kpiNumber}>FIELD GUIDES & DEEP DIVES</span>
             </div>
             <div className={styles.kpiChip}>
-              <span>FIELD GUIDES:</span>
-              <span className={styles.kpiNumber}>8 OVERVIEWS</span>
+              <span>STANDARD:</span>
+              <span className={styles.kpiNumber}>THREE-QUESTION METHOD</span>
             </div>
             <div className={styles.kpiChip}>
-              <span>DEEP DIVES:</span>
-              <span className={styles.kpiNumber}>32 MECHANISMS</span>
+              <span>CITATIONS:</span>
+              <span className={styles.kpiNumber}>PRIMARY DOCS ONLY</span>
             </div>
             <div className={styles.kpiChip}>
-              <span>STATUS:</span>
-              <span className={styles.kpiNumber}>{publishedCount} READY TO READ // {plannedCount} IN ROADMAP</span>
+              <span>ACCESS:</span>
+              <span className={styles.kpiNumber}>OPEN ARCHIVE</span>
             </div>
           </div>
         </div>
@@ -199,7 +191,7 @@ export const ArticlesPage: React.FC = () => {
               <div className={styles.searchActions}>
                 {searchQuery && (
                   <span className={styles.searchMatchPill}>
-                    {filteredArticles.length} found
+                    Matching Articles
                   </span>
                 )}
                 {searchQuery && (
@@ -223,21 +215,21 @@ export const ArticlesPage: React.FC = () => {
                 onClick={() => setStatusFilter('all')}
                 className={`${styles.statusToggleBtn} ${statusFilter === 'all' ? styles.statusToggleBtnActive : ''}`}
               >
-                All Articles ({ALL_ARTICLES.length})
+                All Articles
               </button>
               <button
                 type="button"
                 onClick={() => setStatusFilter('published')}
                 className={`${styles.statusToggleBtn} ${statusFilter === 'published' ? styles.statusToggleBtnActive : ''}`}
               >
-                Ready to Read ({publishedCount})
+                Ready to Read
               </button>
               <button
                 type="button"
                 onClick={() => setStatusFilter('planned')}
                 className={`${styles.statusToggleBtn} ${statusFilter === 'planned' ? styles.statusToggleBtnActive : ''}`}
               >
-                Roadmap ({plannedCount})
+                Roadmap
               </button>
             </div>
           </div>
@@ -252,11 +244,9 @@ export const ArticlesPage: React.FC = () => {
               >
                 <span className={styles.pillIcon}>{TOPIC_ICONS['all']}</span>
                 <span>ALL</span>
-                <span className={styles.domainCountBadge}>({getDomainCount('all')})</span>
               </button>
 
               {TOPICS.map((t) => {
-                const count = getDomainCount(t.slug);
                 const isActive = selectedTopic === t.slug;
                 const icon = TOPIC_ICONS[t.slug] || '✦';
                 return (
@@ -268,7 +258,6 @@ export const ArticlesPage: React.FC = () => {
                   >
                     <span className={styles.pillIcon}>{icon}</span>
                     <span>{t.name.toUpperCase()}</span>
-                    <span className={styles.domainCountBadge}>({count})</span>
                   </button>
                 );
               })}
@@ -291,7 +280,7 @@ export const ArticlesPage: React.FC = () => {
           {/* Bottom Context Rail: Reader-Centric Promise */}
           <div className={styles.readoutBar}>
             <span className={styles.readoutCount}>
-              SHOWING {filteredArticles.length} OF {ALL_ARTICLES.length} ARTICLES
+              {isFiltered ? 'FILTERED ARCHIVE' : 'PRODUCTION SYSTEMS ARCHIVE'}
             </span>
             <span className={styles.readoutTagline}>
               CLEAR EXPLANATIONS OF REAL PRODUCTION SYSTEMS · ZERO UNEXPLAINED JARGON
@@ -449,12 +438,12 @@ export const ArticlesPage: React.FC = () => {
             <div>
               <div className={styles.topicsStripTitle}>Looking for Comprehensive Overviews?</div>
               <div className={styles.topicsStripDesc}>
-                Explore our 8 field guides spanning AI & Automation, Marketing & Ads, Web Design, and E-commerce.
+                Explore our field guides spanning AI & Automation, Marketing & Ads, Web Design, and E-commerce.
               </div>
             </div>
           </div>
           <Link to="/topics" className={styles.topicsStripBtn}>
-            <span>Explore 8 Field Guides</span>
+            <span>Explore Field Guides</span>
             <ArrowRight size={14} />
           </Link>
         </div>
