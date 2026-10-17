@@ -70,8 +70,8 @@ export const TOPIC_CINEMATIC_LIST: TopicCinematicData[] = [
     name: 'Marketing & Ads',
     badge: 'MKT-02',
     hook: 'How ad auctions settle in milliseconds — bidding, attribution, and consent-mode tracking.',
-    scopeParagraph: 'Real-time programmatic ad auctions settle within a strict 80–120ms budget between supply-side platforms, demand-side algorithms, and ad exchanges. We analyse Vickrey second-price auctions, Consent Mode v2, and server-side tracking pipelines.',
-    verifiedFact: "The OpenRTB spec's tmax field defines the exchange timeout per-auction. Google's Authorized Buyers imposes 100ms. DSP bid calculation alone consumes roughly 50ms of that budget.",
+    scopeParagraph: 'Real-time programmatic ad auctions settle within a strict 80–120ms budget between supply-side platforms, demand-side algorithms, and ad exchanges. We analyse first-price clearing mechanics, Consent Mode v2, and server-side tracking pipelines.',
+    verifiedFact: "The OpenRTB spec's tmax field sets the exchange timeout per auction — Google's Authorized Buyers dynamically specifies deadlines typically between 80ms and 1,000ms (standard display auctions resolve around 80–120ms).",
     mechanismPills: ['RTB auctions', 'Programmatic', 'Attribution', 'Consent Mode', 'Server-side tracking'],
     articlesCount: 5,
     readTime: '42 min read',
@@ -81,7 +81,7 @@ export const TOPIC_CINEMATIC_LIST: TopicCinematicData[] = [
       { label: 'SSP Bid', tooltip: 'Sub-15ms ingress bid request', icon: Radio },
       { label: 'Enrich', tooltip: 'Consent & device graph lookup', icon: Layers },
       { label: 'Auction', tooltip: 'Real-time multi-DSP auction', icon: TrendingUp },
-      { label: 'Vickrey', tooltip: 'Second-price clearing settlement', icon: Scale },
+      { label: 'Clear', tooltip: 'First-price auction clearing settlement', icon: Scale },
       { label: 'Render', tooltip: '60fps frame inject & telemetry', icon: Eye }
     ],
     metrics: [
@@ -106,8 +106,8 @@ export const TOPIC_CINEMATIC_LIST: TopicCinematicData[] = [
       { label: 'Parse', tooltip: 'Byte stream tokenization & lexical parsing', icon: FileCode2 },
       { label: 'DOM Tree', tooltip: 'CSSOM & DOM tree graph compile', icon: GitBranch },
       { label: 'Layout', tooltip: 'Geometry & reflow bounding box', icon: Layout },
-      { label: 'Composite', tooltip: 'GPU texture layering & stacking', icon: Maximize2 },
-      { label: 'Paint', tooltip: '60 FPS display frame rasterization', icon: Sparkles }
+      { label: 'Paint', tooltip: 'Rasterization & display list recording', icon: Sparkles },
+      { label: 'Composite', tooltip: 'GPU texture layering & stacking', icon: Maximize2 }
     ],
     metrics: [
       { label: 'First Paint', value: 240, unit: 'ms', barPct: 40 },

@@ -74,6 +74,7 @@
   z-index: 5;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 12px;
   font-family: var(--sts-font-mono);
   font-size: 10.5px;
@@ -81,11 +82,19 @@
   color: rgba(255, 255, 255, 0.35);
   text-transform: uppercase;
   pointer-events: none;
-  white-space: nowrap;
+  width: max-content;
+  max-width: calc(100vw - 32px);
+  padding: 0 12px;
+  box-sizing: border-box;
 }
 
 .observatoryHudDivider {
   color: rgba(255, 255, 255, 0.15);
+  flex-shrink: 0;
+}
+
+.observatoryHudItem {
+  white-space: nowrap;
 }
 
 .observatoryReticleTl,
@@ -591,6 +600,13 @@
    Responsive Breakpoints
    -------------------------------------------------------------------------- */
 @media (max-width: 760px) {
+  .observatoryHudTop {
+    top: 76px;
+    font-size: 9.5px;
+    letter-spacing: 0.1em;
+    gap: 8px;
+    max-width: calc(100vw - 24px);
+  }
   .heroHeading {
     font-size: 36px;
   }
@@ -606,6 +622,15 @@
 }
 
 @media (max-width: 560px) {
+  .observatoryHudTop {
+    top: 72px;
+    font-size: 8.5px;
+    gap: 6px;
+    letter-spacing: 0.06em;
+  }
+  .observatoryHudExtra {
+    display: none;
+  }
   .newsletterForm {
     flex-direction: column;
     width: 100%;

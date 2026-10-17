@@ -196,11 +196,11 @@ export const TopicsHubPage: React.FC = () => {
 
         {/* Observatory Telemetry Bar */}
         <div className={styles.observatoryHudTop} aria-hidden="true">
-          <span>SYS ARCHIVE // CELESTIAL MESH</span>
+          <span className={styles.observatoryHudItem}>SYS ARCHIVE</span>
           <span className={styles.observatoryHudDivider}>/</span>
-          <span>STREAM: 24,000+ STELLAR NODES</span>
-          <span className={styles.observatoryHudDivider}>/</span>
-          <span>RA 00h 08m // DEC +03° 12′</span>
+          <span className={styles.observatoryHudItem}>24,000+ STELLAR NODES</span>
+          <span className={`${styles.observatoryHudDivider} ${styles.observatoryHudExtra}`}>/</span>
+          <span className={`${styles.observatoryHudItem} ${styles.observatoryHudExtra}`}>RA 00h 08m // DEC +03° 12′</span>
         </div>
 
         {/* Content Overlay Centred Vertically Over Mesh */}

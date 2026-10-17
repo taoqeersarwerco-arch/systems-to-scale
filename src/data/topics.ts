@@ -32,10 +32,10 @@ export const TOPICS: TopicData[] = [
     badge: 'MKT-02',
     hook: 'How ad auctions settle in milliseconds — bidding, attribution, and consent-mode tracking.',
     pillarSlug: 'how-ad-auctions-work',
-    scopeParagraph: 'Real-time programmatic ad auctions settle within a strict 80–120ms budget between supply-side platforms, demand-side algorithms, and ad exchanges. We analyse Vickrey second-price auctions, Consent Mode v2, and server-side tracking pipelines.',
+    scopeParagraph: 'Real-time programmatic ad auctions settle within a strict 80–120ms budget between supply-side platforms, demand-side algorithms, and ad exchanges. We analyse first-price clearing mechanics, Consent Mode v2, and server-side tracking pipelines.',
     mechanismPills: ['RTB auctions', 'Programmatic', 'Attribution', 'Consent Mode', 'Server-side tracking'],
     articleCount: 0,
-    verifiedFact: "The OpenRTB spec's tmax field defines the exchange timeout per-auction. Google's Authorized Buyers imposes 100ms. DSP bid calculation alone consumes roughly 50ms of that budget.",
+    verifiedFact: "The OpenRTB spec's tmax field sets the exchange timeout per auction — Google's Authorized Buyers dynamically specifies deadlines typically between 80ms and 1,000ms (standard display auctions resolve around 80–120ms).",
     accent: 'steel',
     simType: 'auction'
   },
