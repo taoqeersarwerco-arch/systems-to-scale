@@ -57,14 +57,16 @@ export const ArticlesPage: React.FC = () => {
   return (
     <div className={styles.articlesPage}>
       {/* =========================================================================
+          CONTINUOUS 3D PERLIN FLOW FIELD (Spans Hero through Command Deck)
+          ========================================================================= */}
+      <div className={styles.continuousCanvasWrapper}>
+        <PerlinFlowField />
+      </div>
+
+      {/* =========================================================================
           HERO SECTION: Perlin Noise Vector Flow Field Observatory
           ========================================================================= */}
       <section className={styles.heroSection}>
-        {/* 3D WebGL Canvas Layer */}
-        <div className={styles.canvasWrapper}>
-          <PerlinFlowField />
-        </div>
-
         {/* Typographic Readability Pocket */}
         <div className={styles.readingPocket} />
 
@@ -74,18 +76,16 @@ export const ArticlesPage: React.FC = () => {
           <span className={styles.observatoryHudDivider}>•</span>
           <span className={styles.observatoryHudItem}>FLOW FIELD: PERLIN 3D</span>
           <span className={`${styles.observatoryHudItem} ${styles.observatoryHudExtra}`}>
-            <span className={styles.observatoryHudDivider}>•</span> 14,500 PARTICLES
+            <span className={styles.observatoryHudDivider}>•</span> 16,000 PARTICLES
           </span>
           <span className={`${styles.observatoryHudItem} ${styles.observatoryHudExtra}`}>
             <span className={styles.observatoryHudDivider}>•</span> 60 FPS
           </span>
         </div>
 
-        {/* Corner Reticle Brackets */}
+        {/* Top Observatory Reticle Accents */}
         <div className={styles.heroReticleTl} />
         <div className={styles.heroReticleTr} />
-        <div className={styles.heroReticleBl} />
-        <div className={styles.heroReticleBr} />
 
         {/* Hero Typographic Content */}
         <div className={styles.heroContent}>
