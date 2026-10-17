@@ -183,10 +183,13 @@ export const TopicsHubPage: React.FC = () => {
           <ConstellationMesh />
         </div>
 
+        {/* Soft atmospheric reading sanctuary for text legibility */}
+        <div className={styles.readingPocket} />
+
         {/* Content Overlay Centred Vertically Over Mesh */}
         <div className={styles.heroContentOverlay}>
           <div className={styles.heroEyebrow}>
-            <Cpu size={15} color="var(--sts-brass)" />
+            <Cpu size={15} />
             <span>RESEARCH DISCIPLINES</span>
           </div>
 

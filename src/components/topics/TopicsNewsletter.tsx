@@ -62,7 +62,7 @@ export const TopicsNewsletter: React.FC = () => {
                 fontFamily: 'var(--sts-font-display)',
                 fontSize: '18px',
                 fontWeight: 600,
-                color: 'var(--sts-brass)',
+                color: '#FFFFFF',
                 marginBottom: '6px'
               }}
             >
@@ -72,7 +72,7 @@ export const TopicsNewsletter: React.FC = () => {
               style={{
                 fontFamily: 'var(--sts-font-body)',
                 fontSize: '14.5px',
-                color: 'rgba(237, 233, 227, 0.7)'
+                color: 'var(--sts-muted)'
               }}
             >
               Check your inbox to finalize your dispatch preferences.
@@ -115,10 +115,11 @@ export const TopicsNewsletter: React.FC = () => {
         {status === 'error' && (
           <div
             style={{
-              color: '#D9573C',
+              color: '#FFFFFF',
               fontSize: '13px',
-              fontFamily: 'var(--sts-font-body)',
-              marginBottom: '12px'
+              fontFamily: 'var(--sts-font-mono)',
+              marginBottom: '12px',
+              letterSpacing: '0.02em'
             }}
           >
             Please enter a valid email address.

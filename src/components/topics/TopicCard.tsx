@@ -19,16 +19,7 @@ export const TopicCard: React.FC<TopicCardProps> = ({ topic }) => {
         {/* Topic Name */}
         <h2 className={styles.topicCardName}>
           <span>{topic.name}</span>
-          <span
-            style={{
-              fontFamily: 'var(--sts-font-mono)',
-              fontSize: '11px',
-              fontWeight: 400,
-              letterSpacing: '0.08em',
-              color: 'var(--sts-brass)',
-              opacity: 0.85
-            }}
-          >
+          <span className={styles.topicBadge}>
             {topic.badge}
           </span>
         </h2>
