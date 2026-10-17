@@ -124,25 +124,6 @@ export const ArticlesPage: React.FC = () => {
             and Why it matters under extreme production load. Designed for founders, operators, and systems engineers.
           </p>
 
-          {/* 4 Telemetry Metric Chips */}
-          <div className={styles.kpiStrip}>
-            <div className={styles.kpiChip}>
-              <span>SCOPE:</span>
-              <span className={styles.kpiNumber}>FIELD GUIDES & DEEP DIVES</span>
-            </div>
-            <div className={styles.kpiChip}>
-              <span>STANDARD:</span>
-              <span className={styles.kpiNumber}>THREE-QUESTION METHOD</span>
-            </div>
-            <div className={styles.kpiChip}>
-              <span>CITATIONS:</span>
-              <span className={styles.kpiNumber}>PRIMARY DOCS ONLY</span>
-            </div>
-            <div className={styles.kpiChip}>
-              <span>ACCESS:</span>
-              <span className={styles.kpiNumber}>OPEN ARCHIVE</span>
-            </div>
-          </div>
         </div>
 
         {/* Scroll Indicator matching Topics Hub */}
