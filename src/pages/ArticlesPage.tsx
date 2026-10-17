@@ -107,14 +107,6 @@ export const ArticlesPage: React.FC = () => {
         <div className={styles.observatoryReticleBl} aria-hidden="true" />
         <div className={styles.observatoryReticleBr} aria-hidden="true" />
 
-        {/* Telemetry HUD Top Bar */}
-        <div className={styles.observatoryHudTop} aria-hidden="true">
-          <span className={styles.observatoryHudItem}>SYS ARCHIVE // ARTICLES</span>
-          <span className={styles.observatoryHudDivider}>/</span>
-          <span className={styles.observatoryHudItem}>COSMIC WEB: ARCHITECTURAL NODES</span>
-          <span className={`${styles.observatoryHudDivider} ${styles.observatoryHudExtra}`}>/</span>
-          <span className={`${styles.observatoryHudItem} ${styles.observatoryHudExtra}`}>SUPERCLUSTERS • FILAMENT BRIDGES • 60 FPS</span>
-        </div>
 
         {/* Content Overlay Centred Vertically Over Flow Field (Exact Topics Hub Specs) */}
         <div className={styles.heroContentOverlay}>

@@ -158,18 +158,6 @@ export const AboutPage: React.FC = () => {
         {/* Soft typographic reading pocket */}
         <div className={styles.readingPocket} />
 
-        {/* Observatory Telemetry HUD Bar */}
-        <div className={styles.observatoryHudTop}>
-          <span className={styles.observatoryHudItem}>ABOUT THIS PUBLICATION // SYSTEMS TO SCALE</span>
-          <span className={styles.observatoryHudDivider}>•</span>
-          <span className={styles.observatoryHudItem}>ORBITAL ENGINE: KEPLERIAN 3D</span>
-          <span className={styles.observatoryHudItem}>
-            <span className={styles.observatoryHudDivider}>•</span> 8 CELESTIAL BODIES
-          </span>
-          <span className={styles.observatoryHudItem}>
-            <span className={styles.observatoryHudDivider}>•</span> 60 FPS
-          </span>
-        </div>
 
         {/* Reticle Corner Accents */}
         <div className={styles.heroReticleTl} />
