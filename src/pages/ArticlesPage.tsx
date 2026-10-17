@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ALL_ARTICLES, ArticleEntry } from '../data/slug-registry';
 import { TOPICS } from '../data/topics';
-import { Search, ArrowRight, Layers, Radio, Sparkles, Filter, Terminal, BookOpen } from 'lucide-react';
+import { Search, ArrowRight, Layers, Radio, X } from 'lucide-react';
 import { PerlinFlowField } from '../components/articles/PerlinFlowField';
 import styles from '../styles/articles.module.css';
 
@@ -24,7 +24,7 @@ export const ArticlesPage: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // Cursor spotlight tracking per card to prevent unnecessary React renders
+  // Cursor spotlight tracking per card to animate localized illumination
   const handleCardMouseMove = (e: React.MouseEvent<HTMLElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -54,6 +54,14 @@ export const ArticlesPage: React.FC = () => {
     return ALL_ARTICLES.filter((a) => a.topicSlug === slug).length;
   };
 
+  const isFiltered = searchQuery !== '' || selectedTopic !== 'all' || statusFilter !== 'all';
+
+  const handleResetFilters = () => {
+    setSearchQuery('');
+    setSelectedTopic('all');
+    setStatusFilter('all');
+  };
+
   return (
     <div className={styles.articlesPage}>
       {/* =========================================================================
@@ -70,9 +78,9 @@ export const ArticlesPage: React.FC = () => {
         {/* Typographic Readability Pocket */}
         <div className={styles.readingPocket} />
 
-        {/* Observatory Telemetry HUD */}
+        {/* Telemetry HUD */}
         <div className={styles.observatoryHudTop}>
-          <span className={styles.observatoryHudItem}>OBSERVATORY // STS-ARCHIVE</span>
+          <span className={styles.observatoryHudItem}>ARTICLES & EXPLANATIONS // SYSTEMS TO SCALE</span>
           <span className={styles.observatoryHudDivider}>•</span>
           <span className={styles.observatoryHudItem}>FLOW FIELD: PERLIN 3D</span>
           <span className={`${styles.observatoryHudItem} ${styles.observatoryHudExtra}`}>
@@ -83,7 +91,7 @@ export const ArticlesPage: React.FC = () => {
           </span>
         </div>
 
-        {/* Top Observatory Reticle Accents */}
+        {/* Top Reticle Accents */}
         <div className={styles.heroReticleTl} />
         <div className={styles.heroReticleTr} />
 
@@ -91,7 +99,7 @@ export const ArticlesPage: React.FC = () => {
         <div className={styles.heroContent}>
           <div className={styles.heroEyebrow}>
             <Radio size={12} />
-            <span>TECHNICAL ARCHIVES & SYSTEM BLUEPRINTS</span>
+            <span>ARTICLES & SYSTEM BLUEPRINTS</span>
           </div>
 
           <h1 className={styles.heroHeading}>
@@ -103,33 +111,37 @@ export const ArticlesPage: React.FC = () => {
             and Why it matters under extreme production load. Designed for systems engineers and engineering leaders.
           </p>
 
-          {/* 4 Telemetry Metric Chips */}
+          {/* 4 Telemetry Metric Chips (Cleaned Vocabulary) */}
           <div className={styles.kpiStrip}>
             <div className={styles.kpiChip}>
-              <span>TOTAL BLUEPRINTS:</span>
-              <span className={styles.kpiNumber}>40 SPECIFICATIONS</span>
+              <span>TOTAL ARTICLES:</span>
+              <span className={styles.kpiNumber}>40 EXPLANATIONS</span>
             </div>
             <div className={styles.kpiChip}>
-              <span>CORE ARCHITECTURES:</span>
-              <span className={styles.kpiNumber}>8 PILLARS</span>
+              <span>FIELD GUIDES:</span>
+              <span className={styles.kpiNumber}>8 OVERVIEWS</span>
             </div>
             <div className={styles.kpiChip}>
-              <span>SPECIALIZED MODULES:</span>
-              <span className={styles.kpiNumber}>32 CLUSTERS</span>
+              <span>DEEP DIVES:</span>
+              <span className={styles.kpiNumber}>32 MECHANISMS</span>
             </div>
             <div className={styles.kpiChip}>
-              <span>NETWORK STATUS:</span>
-              <span className={styles.kpiNumber}>{publishedCount} DEPLOYED // {plannedCount} IN RESEARCH</span>
+              <span>STATUS:</span>
+              <span className={styles.kpiNumber}>{publishedCount} PUBLISHED // {plannedCount} COMING SOON</span>
             </div>
           </div>
         </div>
       </section>
 
       {/* =========================================================================
-          COMMAND DECK: Double-Bezel Search & Filter Console
+          COMMAND DECK: Double-Bezel Search & Filter Console (CINEMATIC & PRODUCTIVE)
           ========================================================================= */}
       <section className={styles.commandDeckSection}>
         <div className={styles.commandChassis}>
+          {/* Subtle Corner Reticle Accents */}
+          <div className={styles.chassisReticleTl} />
+          <div className={styles.chassisReticleTr} />
+
           {/* Top Row: Search Input + Status Segments */}
           <div className={styles.commandRowTop}>
             <div className={styles.searchContainer}>
@@ -137,15 +149,27 @@ export const ArticlesPage: React.FC = () => {
               <input
                 ref={searchInputRef}
                 type="text"
-                placeholder="Search blueprints, keywords, or primary questions..."
+                placeholder="Search articles, topics, or the questions they answer..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className={styles.searchInput}
               />
-              <span className={styles.searchKbd}>/</span>
+              <div className={styles.searchActions}>
+                {searchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => setSearchQuery('')}
+                    className={styles.searchClearBtn}
+                    title="Clear search"
+                  >
+                    <X size={13} />
+                  </button>
+                )}
+                <span className={styles.searchKbd}>/</span>
+              </div>
             </div>
 
-            {/* Status Segmented Controller */}
+            {/* Status Segmented Controller (Cleaned Vocabulary) */}
             <div className={styles.statusSegment}>
               <button
                 type="button"
@@ -159,26 +183,26 @@ export const ArticlesPage: React.FC = () => {
                 onClick={() => setStatusFilter('published')}
                 className={`${styles.statusToggleBtn} ${statusFilter === 'published' ? styles.statusToggleBtnActive : ''}`}
               >
-                DEPLOYED ({publishedCount})
+                PUBLISHED ({publishedCount})
               </button>
               <button
                 type="button"
                 onClick={() => setStatusFilter('planned')}
                 className={`${styles.statusToggleBtn} ${statusFilter === 'planned' ? styles.statusToggleBtnActive : ''}`}
               >
-                IN RESEARCH ({plannedCount})
+                COMING SOON ({plannedCount})
               </button>
             </div>
           </div>
 
-          {/* Bottom Row: 8 Domain Filter Pills */}
+          {/* Bottom Row: Topic Filter Pills + Reset Quick Action */}
           <div className={styles.domainPillRow}>
             <button
               type="button"
               onClick={() => setSelectedTopic('all')}
               className={`${styles.domainPill} ${selectedTopic === 'all' ? styles.domainPillActive : ''}`}
             >
-              <span>ALL DOMAINS</span>
+              <span>ALL</span>
               <span className={styles.domainCountBadge}>({getDomainCount('all')})</span>
             </button>
             {TOPICS.map((t) => {
@@ -196,86 +220,52 @@ export const ArticlesPage: React.FC = () => {
                 </button>
               );
             })}
+
+            {/* Instant Filter Reset (Productivity Feature) */}
+            {isFiltered && (
+              <button
+                type="button"
+                onClick={handleResetFilters}
+                className={styles.resetFiltersBtn}
+                title="Reset all active filters"
+              >
+                <span>RESET</span>
+                <X size={11} />
+              </button>
+            )}
           </div>
 
-          {/* Live Readout & Counter */}
+          {/* Live Readout & Counter (Cleaned Vocabulary) */}
           <div className={styles.readoutBar}>
             <span>
-              SHOWING {filteredArticles.length} OF {ALL_ARTICLES.length} TECHNICAL ARCHIVES
+              SHOWING {filteredArticles.length} OF {ALL_ARTICLES.length} ARTICLES
             </span>
-            <span>INDEX REVISION: 2026.10 // STRICT PRODUCTION SPEC</span>
+            <span>VERIFIED PRODUCTION MECHANISMS // THREE-QUESTION STANDARD</span>
           </div>
         </div>
       </section>
 
       {/* =========================================================================
-          BLUEPRINT GRID: 3-Column Machined Double-Bezel Cards
+          BLUEPRINT GRID: 3-Column Machined Double-Bezel Cards (ALIVE & DYNAMIC)
           ========================================================================= */}
       <section className={styles.articlesGridSection}>
         <div className={styles.articlesGrid}>
           {filteredArticles.map((article) => {
             const isLive = article.status === 'published';
-            const isPillar = article.type === 'Pillar';
+            const isFieldGuide = article.type === 'Pillar';
 
-            if (isLive) {
-              return (
-                <Link
-                  key={article.slug}
-                  to={`/articles/${article.slug}`}
-                  className={styles.articleCard}
-                  onMouseMove={handleCardMouseMove}
-                >
-                  <div className={styles.cardSpotlight} />
-                  <div className={styles.cardContent}>
-                    <div className={styles.cardHeader}>
-                      <span className={styles.topicBadge}>{article.topic}</span>
-                      <span className={isPillar ? styles.typeBadgePillar : styles.typeBadgeCluster}>
-                        {isPillar ? 'PILLAR ARCHITECTURE' : 'CLUSTER SPEC'}
-                      </span>
-                    </div>
-
-                    <h3 className={styles.cardTitle}>{article.title}</h3>
-                    <p className={styles.cardStandfirst}>{article.standfirst}</p>
-
-                    {article.focusQuestion && (
-                      <div className={styles.focusQuestionBox}>
-                        <span className={styles.focusQuestionLabel}>PRIMARY INQUIRY</span>
-                        <span>{article.focusQuestion}</span>
-                      </div>
-                    )}
-
-                    {article.focusKeyword && (
-                      <div className={styles.keywordPill}>
-                        <span>KEYWORD // {article.focusKeyword}</span>
-                      </div>
-                    )}
-
-                    <div className={styles.cardFooter}>
-                      <span className={styles.liveBeacon}>
-                        <span className={styles.liveDot} />
-                        <span>DEPLOYED // READ NOW</span>
-                      </span>
-                      <span className={styles.cardArrowBtn}>
-                        <ArrowRight size={13} />
-                      </span>
-                    </div>
-                  </div>
-                </Link>
-              );
-            }
-
-            return (
-              <div
-                key={article.slug}
-                className={styles.articleCard}
-                onMouseMove={handleCardMouseMove}
-              >
+            const cardContent = (
+              <>
+                {/* Luminous top-edge 1px scanline */}
+                <div className={styles.cardTopScanline} />
+                {/* Interactive cursor spotlight */}
                 <div className={styles.cardSpotlight} />
+
                 <div className={styles.cardContent}>
                   <div className={styles.cardHeader}>
                     <span className={styles.topicBadge}>{article.topic}</span>
-                    <span className={isPillar ? styles.typeBadgePillar : styles.typeBadgeCluster}>
-                      {isPillar ? 'PILLAR ARCHITECTURE' : 'CLUSTER SPEC'}
+                    <span className={isFieldGuide ? styles.typeBadgeFieldGuide : styles.typeBadgeDeepDive}>
+                      {isFieldGuide ? 'FIELD GUIDE' : 'DEEP DIVE'}
                     </span>
                   </div>
 
@@ -284,23 +274,67 @@ export const ArticlesPage: React.FC = () => {
 
                   {article.focusQuestion && (
                     <div className={styles.focusQuestionBox}>
-                      <span className={styles.focusQuestionLabel}>RESEARCH INQUIRY</span>
-                      <span>{article.focusQuestion}</span>
+                      <span className={styles.focusQuestionLabel}>THE QUESTION THIS ANSWERS</span>
+                      <p className={styles.focusQuestionText}>{article.focusQuestion}</p>
                     </div>
                   )}
 
-                  {article.focusKeyword && (
-                    <div className={styles.keywordPill}>
-                      <span>KEYWORD // {article.focusKeyword}</span>
+                  <div className={styles.keywordRow}>
+                    <span className={styles.keywordPill}>KEYWORD // {article.focusKeyword}</span>
+
+                    {/* Three-Question Spine Indicator (3 small bars) */}
+                    <div
+                      className={styles.spineIndicator}
+                      title={isLive ? 'Three-question spine: Complete (What, How, Why)' : 'Three-question spine: In progress'}
+                    >
+                      <span className={`${styles.spineBar} ${isLive ? styles.spineBarFilled : ''}`} />
+                      <span className={`${styles.spineBar} ${isLive ? styles.spineBarFilled : ''}`} />
+                      <span className={`${styles.spineBar} ${isLive ? styles.spineBarFilled : ''}`} />
                     </div>
-                  )}
+                  </div>
 
                   <div className={styles.cardFooter}>
-                    <span className={styles.plannedBadge}>
-                      • QUEUED IN RESEARCH // Q4 ROADMAP
-                    </span>
+                    {isLive ? (
+                      <>
+                        <span className={styles.liveBeacon}>
+                          <span className={styles.liveDot} />
+                          <span>PUBLISHED // READ NOW</span>
+                        </span>
+                        <span className={styles.cardArrowBtn}>
+                          <ArrowRight size={13} />
+                        </span>
+                      </>
+                    ) : (
+                      <span className={styles.comingSoonBeacon}>
+                        <span className={styles.comingSoonDot} />
+                        <span>COMING SOON // IN QUEUE</span>
+                      </span>
+                    )}
                   </div>
                 </div>
+              </>
+            );
+
+            if (isLive) {
+              return (
+                <Link
+                  key={article.slug}
+                  to={`/articles/${article.slug}`}
+                  className={`${styles.articleCard} ${styles.articleCardLive}`}
+                  onMouseMove={handleCardMouseMove}
+                >
+                  {cardContent}
+                </Link>
+              );
+            }
+
+            return (
+              <div
+                key={article.slug}
+                className={`${styles.articleCard} ${styles.articleCardPlanned}`}
+                onMouseMove={handleCardMouseMove}
+              >
+                {cardContent}
               </div>
             );
           })}
@@ -308,21 +342,21 @@ export const ArticlesPage: React.FC = () => {
       </section>
 
       {/* =========================================================================
-          CROSS-SILO NAVIGATION STRIP
+          CROSS-TOPIC NAVIGATION STRIP (Cleaned Vocabulary)
           ========================================================================= */}
       <section className={styles.topicsStripSection}>
         <div className={styles.topicsStripBox}>
           <div className={styles.topicsStripLeft}>
             <Layers size={22} color="#FFFFFF" />
             <div>
-              <div className={styles.topicsStripTitle}>Looking for High-Level Domain Blueprints?</div>
+              <div className={styles.topicsStripTitle}>Looking for Comprehensive Overviews?</div>
               <div className={styles.topicsStripDesc}>
-                Explore our 8 architectural pillars spanning AI Agents, Event Streams, High-Throughput APIs, and Security.
+                Explore our 8 field guides spanning AI & Automation, Marketing & Ads, Web Design, and E-commerce.
               </div>
             </div>
           </div>
           <Link to="/topics" className={styles.topicsStripBtn}>
-            <span>Explore 8 Pillar Domains</span>
+            <span>Explore 8 Field Guides</span>
             <ArrowRight size={14} />
           </Link>
         </div>

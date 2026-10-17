@@ -226,13 +226,37 @@
 
 .commandChassis {
   position: relative;
-  background: rgba(13, 15, 16, 0.76);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(13, 15, 16, 0.78);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: 16px;
   padding: 22px 24px;
-  box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  box-shadow: 0 24px 50px -12px rgba(0, 0, 0, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+/* Subtle corner reticles on the chassis */
+.chassisReticleTl,
+.chassisReticleTr {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-color: rgba(255, 255, 255, 0.2);
+  border-style: solid;
+  pointer-events: none;
+}
+
+.chassisReticleTl {
+  top: 8px;
+  left: 8px;
+  border-width: 1px 0 0 1px;
+}
+
+.chassisReticleTr {
+  top: 8px;
+  right: 8px;
+  border-width: 1px 1px 0 0;
 }
 
 .commandRowTop {
@@ -240,7 +264,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
   flex-wrap: wrap;
 }
 
@@ -248,7 +272,7 @@
   position: relative;
   flex: 1;
   min-width: 280px;
-  max-width: 460px;
+  max-width: 480px;
 }
 
 .searchIcon {
@@ -258,51 +282,82 @@
   transform: translateY(-50%);
   color: rgba(255, 255, 255, 0.4);
   pointer-events: none;
+  transition: color 0.15s ease;
 }
 
 .searchInput {
   width: 100%;
   height: 42px;
-  background: rgba(0, 0, 0, 0.45);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: 10px;
-  padding: 0 44px 0 40px;
+  padding: 0 68px 0 40px;
   color: #FFFFFF;
   font-family: var(--sts-font-body);
   font-size: 13.5px;
   outline: none;
   box-sizing: border-box;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
 .searchInput:focus {
+  background: rgba(0, 0, 0, 0.65);
   border-color: rgba(255, 255, 255, 0.35);
-  box-shadow: 0 0 16px rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.searchInput:focus + .searchIcon {
+  color: #FFFFFF;
 }
 
 .searchInput::placeholder {
   color: var(--sts-dim);
 }
 
-.searchKbd {
+.searchActions {
   position: absolute;
-  right: 12px;
+  right: 10px;
   top: 50%;
   transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.searchClearBtn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+  padding: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.searchClearBtn:hover {
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.searchKbd {
   font-family: var(--sts-font-mono);
   font-size: 10px;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.45);
   background: rgba(255, 255, 255, 0.06);
   padding: 2px 6px;
   border-radius: 4px;
   pointer-events: none;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+/* Status Segmented Controller */
 .statusSegment {
   display: flex;
   align-items: center;
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 8px;
   padding: 3px;
@@ -335,6 +390,7 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
+/* Topic Filter Pills */
 .domainPillRow {
   display: flex;
   flex-wrap: wrap;
@@ -360,8 +416,9 @@
 }
 
 .domainPill:hover {
-  border-color: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.25);
   color: #FFFFFF;
+  transform: translateY(-1px);
 }
 
 .domainPillActive {
@@ -385,6 +442,29 @@
   opacity: 0.9;
 }
 
+.resetFiltersBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-family: var(--sts-font-mono);
+  font-size: 10.5px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  margin-left: auto;
+}
+
+.resetFiltersBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* Live Readout & Counter */
 .readoutBar {
   display: flex;
   align-items: center;
@@ -399,7 +479,7 @@
 }
 
 /* --------------------------------------------------------------------------
-   Blueprint Grid: 3-Column Machined Double-Bezel Cards
+   Blueprint Grid: 3-Column Machined Double-Bezel Cards (ALIVE & DYNAMIC)
    -------------------------------------------------------------------------- */
 .articlesGridSection {
   max-width: 1240px;
@@ -431,12 +511,50 @@
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
-.articleCard:hover {
-  border-color: rgba(255, 255, 255, 0.28);
-  transform: translateY(-3px);
-  box-shadow: 0 20px 48px -12px rgba(0, 0, 0, 0.9), 0 0 24px -4px rgba(255, 255, 255, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+/* Top luminous 1px scanline */
+.cardTopScanline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.12) 30%,
+    rgba(255, 255, 255, 0.12) 70%,
+    transparent 100%
+  );
+  transition: background 0.25s ease, box-shadow 0.25s ease;
 }
 
+.articleCardLive:hover {
+  border-color: rgba(255, 255, 255, 0.28);
+  transform: translateY(-4px);
+  box-shadow: 0 24px 50px -12px rgba(0, 0, 0, 0.95), 0 0 24px -4px rgba(255, 255, 255, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.articleCardLive:hover .cardTopScanline {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.7) 30%,
+    rgba(255, 255, 255, 0.7) 70%,
+    transparent 100%
+  );
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.35);
+}
+
+.articleCardPlanned {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.articleCardPlanned:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Interactive Cursor-following Spotlight */
 .cardSpotlight {
   position: absolute;
   inset: 0;
@@ -478,25 +596,31 @@
   border-radius: 9999px;
 }
 
-.typeBadgePillar {
+/* Vocabulary Swap: Field Guide (Overview) */
+.typeBadgeFieldGuide {
   font-family: var(--sts-font-mono);
   font-size: 9.5px;
   font-weight: 600;
-  letter-spacing: 0.1em;
-  color: #FFFFFF;
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  letter-spacing: 0.08em;
+  color: #000000;
+  background: #FFFFFF;
   padding: 2px 8px;
   border-radius: 4px;
   text-transform: uppercase;
+  box-shadow: 0 2px 6px rgba(255, 255, 255, 0.15);
 }
 
-.typeBadgeCluster {
+/* Vocabulary Swap: Deep Dive (Focused Mechanism) */
+.typeBadgeDeepDive {
   font-family: var(--sts-font-mono);
   font-size: 9.5px;
   font-weight: 500;
   letter-spacing: 0.08em;
-  color: rgba(255, 255, 255, 0.35);
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 2px 7px;
+  border-radius: 4px;
   text-transform: uppercase;
 }
 
@@ -528,27 +652,41 @@
   margin-bottom: 16px;
 }
 
+/* The question this answers - Clean & alive */
 .focusQuestionBox {
   background: rgba(0, 0, 0, 0.4);
   border: 1px solid rgba(255, 255, 255, 0.05);
-  border-left: 2px solid rgba(255, 255, 255, 0.5);
+  border-left: 2px solid rgba(255, 255, 255, 0.45);
   border-radius: 6px;
   padding: 10px 12px;
   margin-bottom: 16px;
-  font-family: var(--sts-font-mono);
-  font-size: 11px;
-  line-height: 1.45;
-  color: rgba(255, 255, 255, 0.7);
 }
 
 .focusQuestionLabel {
   display: block;
+  font-family: var(--sts-font-mono);
   font-size: 9px;
   letter-spacing: 0.1em;
   color: rgba(255, 255, 255, 0.35);
   text-transform: uppercase;
-  margin-bottom: 3px;
+  margin-bottom: 4px;
   font-weight: 600;
+}
+
+.focusQuestionText {
+  font-family: var(--sts-font-body);
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+}
+
+.keywordRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  gap: 12px;
 }
 
 .keywordPill {
@@ -562,8 +700,41 @@
   border: 1px solid rgba(255, 255, 255, 0.06);
   padding: 3px 8px;
   border-radius: 4px;
-  margin-bottom: 20px;
   width: fit-content;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.articleCardLive:hover .keywordPill {
+  border-color: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Three-Question Spine Indicator: 3 small bars */
+.spineIndicator {
+  display: inline-flex;
+  gap: 3px;
+  align-items: center;
+}
+
+.spineBar {
+  width: 7px;
+  height: 2.5px;
+  border-radius: 1px;
+  background: rgba(255, 255, 255, 0.15);
+  transition: background-color 0.2s ease;
+}
+
+.articleCardLive:hover .spineBar {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.spineBarFilled {
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.articleCardLive:hover .spineBarFilled {
+  background: #FFFFFF;
+  box-shadow: 0 0 4px rgba(255, 255, 255, 0.4);
 }
 
 .cardFooter {
@@ -575,6 +746,7 @@
   margin-top: auto;
 }
 
+/* Living Pulse Beacon for Published articles */
 .liveBeacon {
   display: inline-flex;
   align-items: center;
@@ -607,11 +779,22 @@
   }
 }
 
-.plannedBadge {
+/* Coming Soon Quiet Beacon */
+.comingSoonBeacon {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-family: var(--sts-font-mono);
   font-size: 10.5px;
   color: rgba(255, 255, 255, 0.35);
   letter-spacing: 0.04em;
+}
+
+.comingSoonDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.35);
 }
 
 .cardArrowBtn {
@@ -626,8 +809,8 @@
   transition: transform 0.2s cubic-bezier(0.22, 1, 0.32, 1);
 }
 
-.articleCard:hover .cardArrowBtn {
-  transform: translateX(3px);
+.articleCardLive:hover .cardArrowBtn {
+  transform: translateX(4px);
 }
 
 /* --------------------------------------------------------------------------
