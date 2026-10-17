@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { ALL_ARTICLES, ArticleEntry } from '../data/slug-registry';
 import { TOPICS } from '../data/topics';
 import { Search, ArrowRight, Layers, Radio, X, Clock, Sparkles, ChevronDown } from 'lucide-react';
-import { PerlinFlowField } from '../components/articles/PerlinFlowField';
+import { CosmicWeb } from '../components/articles/CosmicWeb';
 import styles from '../styles/articles.module.css';
 
 // Topic icon mapping for the horizontal category rail
@@ -98,16 +98,14 @@ export const ArticlesPage: React.FC = () => {
   return (
     <div className={styles.articlesPage}>
       {/* =========================================================================
-          CONTINUOUS 3D PERLIN FLOW FIELD (Spans Hero through Command Deck)
-          ========================================================================= */}
-      <div className={styles.continuousCanvasWrapper}>
-        <PerlinFlowField />
-      </div>
-
-      {/* =========================================================================
-          HERO SECTION: Perlin Noise Vector Flow Field Observatory (Matching Topics Hub)
+          HERO SECTION: 3D Cosmic Web Macro-Structure (Exact Match to Topics Hub)
           ========================================================================= */}
       <section className={styles.heroSection}>
+        {/* Living 3D Cosmic Web: Macro-structure of all 40 production systems */}
+        <div className={styles.canvasWrapper}>
+          <CosmicWeb />
+        </div>
+
         {/* Typographic Readability Pocket */}
         <div className={styles.readingPocket} />
 
@@ -121,9 +119,9 @@ export const ArticlesPage: React.FC = () => {
         <div className={styles.observatoryHudTop} aria-hidden="true">
           <span className={styles.observatoryHudItem}>SYS ARCHIVE // ARTICLES</span>
           <span className={styles.observatoryHudDivider}>/</span>
-          <span className={styles.observatoryHudItem}>16,000+ PERLIN STREAM VECTORS</span>
+          <span className={styles.observatoryHudItem}>COSMIC WEB: 40 ARCHITECTURAL NODES</span>
           <span className={`${styles.observatoryHudDivider} ${styles.observatoryHudExtra}`}>/</span>
-          <span className={`${styles.observatoryHudItem} ${styles.observatoryHudExtra}`}>40 PRODUCTION SYSTEMS • 60 FPS</span>
+          <span className={`${styles.observatoryHudItem} ${styles.observatoryHudExtra}`}>8 SUPERCLUSTERS • FILAMENT BRIDGES • 60 FPS</span>
         </div>
 
         {/* Content Overlay Centred Vertically Over Flow Field (Exact Topics Hub Specs) */}
