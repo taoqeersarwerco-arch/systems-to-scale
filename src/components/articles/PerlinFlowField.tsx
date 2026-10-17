@@ -85,32 +85,32 @@ export const PerlinFlowField: React.FC = () => {
 
       phases[i] = Math.random();
 
-      // Multi-layer depth tiering (delicate, faint airy-disk background matching Topics Hub)
+      // Multi-layer depth tiering (Prominent, vivid Airy-disk particles clearly visible behind title)
       const tier = Math.random();
-      if (tier > 0.88) {
-        // High-velocity foreground filament (softened brilliance)
-        colors[i3] = 0.95;
-        colors[i3 + 1] = 0.97;
+      if (tier > 0.84) {
+        // High-velocity foreground filament (brilliant crystalline streaming vectors)
+        colors[i3] = 1.0;
+        colors[i3 + 1] = 1.0;
         colors[i3 + 2] = 1.0;
-        sizes[i] = 0.65 + Math.random() * 0.35;
-        alphas[i] = 0.45 + Math.random() * 0.15;
-        speeds[i] = 0.042 + Math.random() * 0.025;
-      } else if (tier > 0.42) {
-        // Mid-speed ambient stream (whisper-faint)
-        colors[i3] = 0.78;
-        colors[i3 + 1] = 0.82;
-        colors[i3 + 2] = 0.88;
-        sizes[i] = 0.42 + Math.random() * 0.25;
-        alphas[i] = 0.24 + Math.random() * 0.14;
-        speeds[i] = 0.022 + Math.random() * 0.015;
+        sizes[i] = 1.15 + Math.random() * 0.60;
+        alphas[i] = 0.92 + Math.random() * 0.08;
+        speeds[i] = 0.052 + Math.random() * 0.035;
+      } else if (tier > 0.36) {
+        // Mid-speed ambient stream (clear, glowing vector streamlines)
+        colors[i3] = 0.88;
+        colors[i3 + 1] = 0.92;
+        colors[i3 + 2] = 0.98;
+        sizes[i] = 0.75 + Math.random() * 0.40;
+        alphas[i] = 0.65 + Math.random() * 0.22;
+        speeds[i] = 0.028 + Math.random() * 0.020;
       } else {
-        // Deep cosmic field (subtle depth)
-        colors[i3] = 0.42;
-        colors[i3 + 1] = 0.46;
-        colors[i3 + 2] = 0.50;
-        sizes[i] = 0.25 + Math.random() * 0.20;
-        alphas[i] = 0.10 + Math.random() * 0.10;
-        speeds[i] = 0.010 + Math.random() * 0.006;
+        // Deep cosmic field (rich atmospheric depth)
+        colors[i3] = 0.62;
+        colors[i3 + 1] = 0.68;
+        colors[i3 + 2] = 0.76;
+        sizes[i] = 0.45 + Math.random() * 0.30;
+        alphas[i] = 0.38 + Math.random() * 0.20;
+        speeds[i] = 0.014 + Math.random() * 0.010;
       }
     }
 
@@ -123,7 +123,7 @@ export const PerlinFlowField: React.FC = () => {
     geometry.setAttribute('aPhase', new THREE.BufferAttribute(phases, 1));
 
     // -------------------------------------------------------------------------
-    // GPU Vertex & Fragment Shaders with Real-Time Gravitational Wave Warp
+    // GPU Vertex & Fragment Shaders with Highly Prominent Distortion & Scroll
     // -------------------------------------------------------------------------
     const vertexShader = `
       attribute float aSize;
@@ -145,53 +145,55 @@ export const PerlinFlowField: React.FC = () => {
         vColor = color;
 
         // Subtle organic luminous twinkle
-        float twinkle = sin(uTime * 1.8 + aPhase * 6.28318) * 0.18 + 0.82;
+        float twinkle = sin(uTime * 1.8 + aPhase * 6.28318) * 0.15 + 0.85;
         vAlpha = aAlpha * twinkle;
 
         vec3 pos = position;
 
-        // Continuous seamless downward flow drift
-        pos.y = mod(pos.y - uTime * aSpeed * 2.0 + 26.0, 52.0) - 26.0;
+        // Continuous seamless downward flow drift + scroll longitudinal warp
+        pos.y = mod(pos.y - uTime * aSpeed * 2.2 - uScroll * 0.016 + 26.0, 52.0) - 26.0;
 
-        // Fluid vector curl drift using harmonic trigonometry
+        // Fluid vector curl drift using harmonic trigonometry + scroll harmonic response
         float theta = sin(pos.x * 0.08 + uTime * 0.45) * cos(pos.y * 0.07 + uTime * 0.35) * 3.14159;
         float phi = cos(pos.z * 0.09 + uTime * 0.25) * 3.14159;
 
-        pos.x += cos(theta) * sin(phi) * 1.2;
-        pos.z += cos(phi) * 0.8;
+        pos.x += cos(theta) * sin(phi) * (1.3 + uScroll * 0.002);
+        pos.z += cos(phi) * 0.85;
 
         vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
         vec4 clipPos = projectionMatrix * mvPosition;
         vec2 ndcPos = clipPos.xy / clipPos.w;
 
-        // Dynamic cursor-following distortion & gravitational wave warp
+        // HIGHLY PROMINENT cursor-following gravitational wave warp & vortex
+        float pointScale = 1.0;
         if (uMouseActive > 0.5) {
           vec2 diff = ndcPos - uMouse;
           diff.x *= uAspect;
           float dist = length(diff);
-          float radius = 0.52; // Generous screen-space interaction radius
+          float radius = 0.68; // Expansive screen-space interaction radius
 
           if (dist < radius && dist > 0.001) {
             float factor = (1.0 - dist / radius);
             float smoothFactor = smoothstep(0.0, 1.0, factor);
 
-            // Fluid warp: radial repulsion + tangential vortex swirl + mouse momentum
+            // Powerful fluid warp: radial repulsion + strong vortex swirl + momentum
             vec2 normDiff = normalize(diff);
             vec2 tangent = vec2(-normDiff.y, normDiff.x);
-            vec2 velInfluence = uMouseVel * 0.012;
+            vec2 velInfluence = uMouseVel * 0.024;
 
-            vec2 warp = (normDiff * 0.24 + tangent * 0.15 + velInfluence) * smoothFactor * smoothFactor;
+            vec2 warp = (normDiff * 0.45 + tangent * 0.30 + velInfluence) * smoothFactor * smoothFactor;
             warp.x /= uAspect;
 
             clipPos.xy += warp * clipPos.w;
 
-            // Energize / ionize stars near cursor (luminous bloom on hover)
-            vAlpha = min(1.0, vAlpha + smoothFactor * 0.65);
+            // Luminous ionization bloom & particle swell on hover
+            vAlpha = min(1.0, vAlpha + smoothFactor * 0.85);
+            pointScale = 1.0 + smoothFactor * 0.75;
           }
         }
 
         gl_Position = clipPos;
-        gl_PointSize = max(1.0, aSize * (180.0 / -mvPosition.z) * uPixelRatio);
+        gl_PointSize = max(1.0, aSize * pointScale * (200.0 / -mvPosition.z) * uPixelRatio);
       }
     `;
 
@@ -335,13 +337,13 @@ export const PerlinFlowField: React.FC = () => {
       scene.rotation.y = currentMouseX;
       scene.rotation.x = currentMouseY;
 
-      // Realistic deep-space scroll pull-back (observed from the outside)
-      currentScroll += (targetScroll - currentScroll) * 0.055;
-      camera.position.z = 24 + currentScroll * 0.0065;
-      camera.position.y = -currentScroll * 0.0035;
+      // Dynamic deep-space scroll pull-back & longitudinal acceleration
+      currentScroll += (targetScroll - currentScroll) * 0.075;
+      camera.position.z = 24 + currentScroll * 0.012;
+      camera.position.y = -currentScroll * 0.007;
 
-      // Celestial slow drift
-      particleSystem.rotation.z = elapsed * 0.012;
+      // Celestial organic drift with scroll responsiveness
+      particleSystem.rotation.z = elapsed * 0.018 + currentScroll * 0.0003;
 
       renderer.render(scene, camera);
     };

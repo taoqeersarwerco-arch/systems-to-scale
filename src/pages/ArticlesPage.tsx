@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ALL_ARTICLES, ArticleEntry } from '../data/slug-registry';
 import { TOPICS } from '../data/topics';
-import { Search, ArrowRight, Layers, Radio, X, Clock, Sparkles } from 'lucide-react';
+import { Search, ArrowRight, Layers, Radio, X, Clock, Sparkles, ChevronDown } from 'lucide-react';
 import { PerlinFlowField } from '../components/articles/PerlinFlowField';
 import styles from '../styles/articles.module.css';
 
@@ -85,6 +85,14 @@ export const ArticlesPage: React.FC = () => {
     setStatusFilter('all');
   };
 
+  const handleScrollToDeck = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const target = document.getElementById('command-deck');
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className={styles.articlesPage}>
       {/* =========================================================================
@@ -95,33 +103,31 @@ export const ArticlesPage: React.FC = () => {
       </div>
 
       {/* =========================================================================
-          HERO SECTION: Perlin Noise Vector Flow Field Observatory
+          HERO SECTION: Perlin Noise Vector Flow Field Observatory (Matching Topics Hub)
           ========================================================================= */}
       <section className={styles.heroSection}>
         {/* Typographic Readability Pocket */}
         <div className={styles.readingPocket} />
 
-        {/* Telemetry HUD */}
-        <div className={styles.observatoryHudTop}>
-          <span className={styles.observatoryHudItem}>ARTICLES & EXPLANATIONS // SYSTEMS TO SCALE</span>
-          <span className={styles.observatoryHudDivider}>•</span>
-          <span className={styles.observatoryHudItem}>FLOW FIELD: PERLIN 3D</span>
-          <span className={`${styles.observatoryHudItem} ${styles.observatoryHudExtra}`}>
-            <span className={styles.observatoryHudDivider}>•</span> 16,000 PARTICLES
-          </span>
-          <span className={`${styles.observatoryHudItem} ${styles.observatoryHudExtra}`}>
-            <span className={styles.observatoryHudDivider}>•</span> 60 FPS
-          </span>
+        {/* Observatory Reticle Corner Brackets (Exact 4-Corner Topics Hub Layout) */}
+        <div className={styles.observatoryReticleTl} aria-hidden="true" />
+        <div className={styles.observatoryReticleTr} aria-hidden="true" />
+        <div className={styles.observatoryReticleBl} aria-hidden="true" />
+        <div className={styles.observatoryReticleBr} aria-hidden="true" />
+
+        {/* Telemetry HUD Top Bar */}
+        <div className={styles.observatoryHudTop} aria-hidden="true">
+          <span className={styles.observatoryHudItem}>SYS ARCHIVE // ARTICLES</span>
+          <span className={styles.observatoryHudDivider}>/</span>
+          <span className={styles.observatoryHudItem}>16,000+ PERLIN STREAM VECTORS</span>
+          <span className={`${styles.observatoryHudDivider} ${styles.observatoryHudExtra}`}>/</span>
+          <span className={`${styles.observatoryHudItem} ${styles.observatoryHudExtra}`}>40 PRODUCTION SYSTEMS • 60 FPS</span>
         </div>
 
-        {/* Top Reticle Accents */}
-        <div className={styles.heroReticleTl} />
-        <div className={styles.heroReticleTr} />
-
-        {/* Hero Typographic Content */}
-        <div className={styles.heroContent}>
+        {/* Content Overlay Centred Vertically Over Flow Field (Exact Topics Hub Specs) */}
+        <div className={styles.heroContentOverlay}>
           <div className={styles.heroEyebrow}>
-            <Radio size={12} />
+            <Radio size={14} />
             <span>PRODUCTION ARTICLES & EXPLANATIONS</span>
           </div>
 
@@ -154,12 +160,23 @@ export const ArticlesPage: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {/* Scroll Indicator matching Topics Hub */}
+        <a
+          href="#command-deck"
+          onClick={handleScrollToDeck}
+          className={styles.scrollIndicator}
+          aria-label="Scroll to articles archive"
+        >
+          <span>EXPLORE ARCHIVE</span>
+          <ChevronDown size={16} />
+        </a>
       </section>
 
       {/* =========================================================================
           COMMAND DECK: Cinematic Double-Bezel Floating HUD (PRODUCTIVE & ZERO-WRAP)
           ========================================================================= */}
-      <section className={styles.commandDeckSection}>
+      <section className={styles.commandDeckSection} id="command-deck">
         <div className={styles.commandChassis}>
           {/* Subtle 4-Corner Reticle Hardware Accents */}
           <div className={styles.chassisReticleTl} />
