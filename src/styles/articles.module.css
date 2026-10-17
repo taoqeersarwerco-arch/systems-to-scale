@@ -1214,6 +1214,9 @@
    Reduced Motion
    -------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
+  .scrollIndicator {
+    animation: none;
+  }
   .articleCard:hover {
     transform: none;
   }

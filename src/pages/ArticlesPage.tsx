@@ -39,6 +39,7 @@ export const ArticlesPage: React.FC = () => {
 
   // 3D Tilt & Cursor Spotlight tracking per card
   const handleCardMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
@@ -89,7 +90,8 @@ export const ArticlesPage: React.FC = () => {
     e.preventDefault();
     const target = document.getElementById('command-deck');
     if (target) {
-      target.scrollIntoView({ behavior: 'smooth' });
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      target.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth' });
     }
   };
 

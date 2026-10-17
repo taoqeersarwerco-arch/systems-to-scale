@@ -1074,3 +1074,17 @@
     display: none;
   }
 }
+
+/* --------------------------------------------------------------------------
+   Reduced Motion
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .fieldCard:hover,
+  .methodCard:hover {
+    transform: none;
+  }
+  .methodPulseDot {
+    animation: none;
+  }
+}
+

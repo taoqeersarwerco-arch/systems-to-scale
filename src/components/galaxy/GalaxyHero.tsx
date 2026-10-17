@@ -808,7 +808,7 @@ export const GalaxyHero: React.FC<GalaxyHeroProps> = ({ onExploreClick }) => {
       onExploreClick();
     } else {
       const el = document.getElementById('topics');
-      if (el) el.scrollIntoView({ behavior: 'smooth' });
+      if (el) el.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth' });
     }
   };
 

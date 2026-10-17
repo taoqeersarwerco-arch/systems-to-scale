@@ -35,6 +35,7 @@ export const AboutPage: React.FC = () => {
 
   // Interactive 3D tilt & spotlight tracking for cards
   const handleCardMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
@@ -56,8 +57,9 @@ export const AboutPage: React.FC = () => {
     if (location.hash === '#method') {
       const el = document.getElementById('method');
       if (el) {
+        const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         setTimeout(() => {
-          el.scrollIntoView({ behavior: 'smooth' });
+          el.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth' });
         }, 150);
       }
     }
