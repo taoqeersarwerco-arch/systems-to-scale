@@ -368,9 +368,9 @@ export const CosmicWeb: React.FC = () => {
     scene.add(bgPoints);
 
     // -------------------------------------------------------------
-    // 6. PROMINENT NEBULAR DUST CLOUDS (Visibly Luminous to Naked Eye)
+    // 6. DELICATE SUBTLE NEBULAR HAZE (No Giant Bokeh Blobs)
     // -------------------------------------------------------------
-    const dustCount = 2000;
+    const dustCount = 650;
     const dustGeo = new THREE.BufferGeometry();
     const dustPositions = new Float32Array(dustCount * 3);
     const dustColors = new Float32Array(dustCount * 3);
@@ -385,47 +385,46 @@ export const CosmicWeb: React.FC = () => {
       let z: number;
 
       if (layer < 0.45) {
-        // Equatorial waist ring dust layer - frames around the reading sanctuary
+        // Equatorial waist ring dust layer
         const theta = Math.random() * Math.PI * 2;
-        const rad = 3.2 + Math.pow(Math.random(), 1.1) * 9.5;
+        const rad = 3.6 + Math.pow(Math.random(), 1.2) * 8.0;
         x = Math.cos(theta) * rad;
-        y = Math.sin(theta) * rad * 0.52 + (Math.random() - 0.5) * 1.6;
-        z = (Math.random() - 0.5) * 3.8;
-      } else if (layer < 0.82) {
+        y = Math.sin(theta) * rad * 0.45 + (Math.random() - 0.5) * 1.0;
+        z = -2.5 - Math.random() * 4.0; // In the background behind the lines
+      } else if (layer < 0.80) {
         // Dual expanding hourglass lobes dust layer
         const sign = Math.random() > 0.5 ? 1 : -1;
-        const u = Math.pow(Math.random(), 0.78);
-        const h = u * 11.5;
-        const lobeRadius = 3.0 + Math.sin(u * Math.PI * 0.88) * 6.2 + u * 2.5;
+        const u = Math.pow(Math.random(), 0.85);
+        const h = u * 12.0;
+        const lobeRadius = 2.4 + Math.sin(u * Math.PI * 0.85) * 5.2 + u * 2.0;
         const phi = Math.random() * Math.PI * 2;
-        const rad = lobeRadius * (0.70 + Math.random() * 0.50);
+        const rad = lobeRadius * (0.75 + Math.random() * 0.35);
 
         x = Math.cos(phi) * rad;
-        y = sign * (h + 0.9) + (Math.random() - 0.5) * 1.4;
-        z = Math.sin(phi) * rad * 0.75 + (Math.random() - 0.5) * 2.2;
+        y = sign * (h + 1.0) + (Math.random() - 0.5) * 1.0;
+        z = -2.0 - Math.random() * 4.5; // In the background behind the lines
       } else {
-        // Surrounding volumetric cosmic envelope
-        const rad = Math.pow(Math.random(), 0.6) * 25.0;
+        // Deep background cosmic envelope
+        const rad = 6.0 + Math.random() * 20.0;
         const theta = Math.random() * Math.PI * 2;
         x = Math.cos(theta) * rad;
-        y = Math.sin(theta) * rad * 0.75;
-        z = (Math.random() - 0.5) * 8.5;
+        y = Math.sin(theta) * rad * 0.70;
+        z = -3.5 - Math.random() * 5.0; // Deep background
       }
 
       dustPositions[i3] = x;
       dustPositions[i3 + 1] = y;
       dustPositions[i3 + 2] = z;
 
-      // Color grading: luminous pure white, radiant silver, and slate clouds
-      const cRand = Math.random();
-      const c = cRand > 0.55 ? colorWhite : (cRand > 0.22 ? colorSilver : colorSlate);
+      // Color grading: subtle silver and dark slate (never bright white blobs)
+      const c = Math.random() > 0.40 ? colorSilver : colorDarkSlate;
       dustColors[i3] = c.r;
       dustColors[i3 + 1] = c.g;
       dustColors[i3 + 2] = c.b;
 
-      // Contrast: prominently visible to the naked eye with lush volumetric presence
-      dustSizes[i] = 4.0 + Math.random() * 6.2;
-      dustAlphas[i] = 0.14 + Math.random() * 0.22;
+      // Subtle, refined atmospheric haze
+      dustSizes[i] = 1.6 + Math.random() * 2.4;
+      dustAlphas[i] = 0.04 + Math.random() * 0.08;
     }
 
     dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPositions, 3));
@@ -445,7 +444,8 @@ export const CosmicWeb: React.FC = () => {
         vAlpha = aAlpha;
         vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
         gl_Position = projectionMatrix * mvPosition;
-        gl_PointSize = max(3.0, aSize * (180.0 / -mvPosition.z) * uPixelRatio);
+        // Clamp maximum size to 24.0px so it NEVER blooms into giant bokeh spheres
+        gl_PointSize = clamp(aSize * (80.0 / -mvPosition.z) * uPixelRatio, 1.0, 24.0);
       }
     `;
 
@@ -456,9 +456,9 @@ export const CosmicWeb: React.FC = () => {
       void main() {
         float dist = length(gl_PointCoord - vec2(0.5));
         if (dist > 0.5) discard;
-        // Soft volumetric Gaussian envelope with luminous core
-        float intensity = exp(-dist * dist * 9.0);
-        gl_FragColor = vec4(vColor, vAlpha * intensity * 1.35);
+        // Subtle Gaussian atmospheric decay
+        float intensity = exp(-dist * dist * 16.0);
+        gl_FragColor = vec4(vColor, vAlpha * intensity);
       }
     `;
 
@@ -541,14 +541,14 @@ export const CosmicWeb: React.FC = () => {
       nodePositions[i * 3 + 1] = node.y;
       nodePositions[i * 3 + 2] = node.z;
 
-      const isKeySystem = i % 5 === 0;
+      const isKeySystem = i % 4 === 0;
       const c = isKeySystem ? colorWhite : colorSilver;
       nodeColors[i * 3] = c.r;
       nodeColors[i * 3 + 1] = c.g;
       nodeColors[i * 3 + 2] = c.b;
 
-      nodeSizes[i] = isKeySystem ? 1.4 : 0.9;
-      nodeAlphas[i] = node.baseAlpha;
+      nodeSizes[i] = isKeySystem ? 2.2 : 1.4;
+      nodeAlphas[i] = isKeySystem ? 0.98 : 0.85;
       nodeTwinkles[i] = Math.random();
     }
 
@@ -582,7 +582,7 @@ export const CosmicWeb: React.FC = () => {
     // -------------------------------------------------------------
     // 8. DYNAMIC LINE FILAMENTS (Crystalline Connecting Tracks)
     // -------------------------------------------------------------
-    const maxLines = 160;
+    const maxLines = 320;
     const linePositions = new Float32Array(maxLines * 6);
     const lineColors = new Float32Array(maxLines * 6);
 
@@ -609,7 +609,7 @@ export const CosmicWeb: React.FC = () => {
         const dy = systemNodes[i].oy - systemNodes[j].oy;
         const dz = systemNodes[i].oz - systemNodes[j].oz;
         const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
-        if (dist < 4.8) {
+        if (dist < 6.0) {
           filamentPairs.push([i, j]);
         }
       }
@@ -815,11 +815,11 @@ export const CosmicWeb: React.FC = () => {
         const midX = (nodeA.x + nodeB.x) * 0.5;
         const midY = (nodeA.y + nodeB.y) * 0.5;
         const dMid = Math.hypot(mouseWorld.x - midX, mouseWorld.y - midY);
-        const isNear = isMouseActive && dMid < 4.2;
-        const alpha = isNear ? 0.60 : 0.18; // Very subtle, delicate monochrome track
+        const isNear = isMouseActive && dMid < 4.8;
+        const alpha = isNear ? 0.95 : 0.48; // Crisp, clearly visible monochrome connecting filaments
 
         for (let j = 0; j < 6; j++) {
-          lColArr[ptr + j] = alpha;
+          lColArr[ptr + j] = (isNear ? 1.0 : 0.92) * alpha;
         }
 
         lineIndex++;
