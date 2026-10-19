@@ -3,7 +3,6 @@ import * as THREE from 'three';
 
 interface CosmicNode {
   id: string;
-  name: string;
   x: number;
   y: number;
   z: number;
@@ -13,36 +12,8 @@ interface CosmicNode {
   vx: number;
   vy: number;
   vz: number;
-  isPrimary: boolean;
   baseAlpha: number;
 }
-
-// 8 Primary Discipline Superclusters (Matching Topics Hub 3D Coordinates)
-const SUPERCLUSTER_ANCHORS = [
-  { id: 'ai-automation', name: 'AI & Automation', pos: [-8.2, 4.6, 2.0] },
-  { id: 'e-commerce', name: 'E-commerce', pos: [-6.8, -3.8, 2.8] },
-  { id: 'marketing-ads', name: 'Marketing & Ads', pos: [6.4, -4.2, -1.8] },
-  { id: 'web-design', name: 'Web Design', pos: [8.8, 3.2, 1.2] },
-  { id: 'customer-service', name: 'Customer Service', pos: [-3.2, 7.2, -1.6] },
-  { id: 'virtual-assistance', name: 'Virtual Assistance', pos: [4.4, 6.8, 1.8] },
-  { id: 'personal-assistance', name: 'Personal Assistance', pos: [0.8, -7.0, 1.4] },
-  { id: 'pitch-decks', name: 'Pitch Decks', pos: [7.6, -0.8, -2.6] }
-];
-
-// Primary Architectural Filaments (Exact Match to Topics Hub Backbone)
-const PRIMARY_FILAMENTS: [number, number][] = [
-  [0, 1], // AI & Automation <-> E-commerce
-  [0, 4], // AI & Automation <-> Customer Service
-  [0, 6], // AI & Automation <-> Personal Assistance
-  [1, 2], // E-commerce <-> Marketing & Ads
-  [2, 3], // Marketing & Ads <-> Web Design
-  [3, 7], // Web Design <-> Pitch Decks
-  [4, 5], // Customer Service <-> Virtual Assistance
-  [5, 6], // Virtual Assistance <-> Personal Assistance
-  [1, 6], // E-commerce <-> Personal Assistance
-  [2, 7], // Marketing & Ads <-> Pitch Decks
-  [0, 2]  // AI & Automation <-> Marketing & Ads
-];
 
 export const CosmicWeb: React.FC = () => {
   const mountRef = useRef<HTMLDivElement>(null);
@@ -71,13 +42,13 @@ export const CosmicWeb: React.FC = () => {
     if (!container) return;
 
     // -------------------------------------------------------------
-    // 1. SCENE & CAMERA (Exact Match to Topics Hub Deep-Space Setup)
+    // 1. SCENE & CAMERA (Deep-Space Optical Setup)
     // -------------------------------------------------------------
     const width = container.clientWidth;
     const height = container.clientHeight;
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x080808); // Exact deep obsidian background
+    scene.background = new THREE.Color(0x080808); // Deep obsidian background
 
     const camera = new THREE.PerspectiveCamera(54, width / height, 0.1, 1000);
     camera.position.set(0, 0, 28);
@@ -99,14 +70,15 @@ export const CosmicWeb: React.FC = () => {
     container.appendChild(renderer.domElement);
 
     // -------------------------------------------------------------
-    // 2. CELESTIAL GROUP (Shifted upward so the arc frames the H1 title)
+    // 2. CELESTIAL GROUP: BIPOLAR PLANETARY NEBULA ORIENTATION
     // -------------------------------------------------------------
-    const webGroup = new THREE.Group();
-    webGroup.position.set(0, 3.2, 0); // Exact Topics Hub framing offset
-    webGroup.rotation.x = Math.PI * 0.28; // ~50° celestial inclination
-    webGroup.rotation.y = -Math.PI * 0.07;
-    webGroup.rotation.z = Math.PI * 0.08;
-    scene.add(webGroup);
+    // Tilted gracefully across the viewport diagonal (~34° inclination)
+    const nebulaGroup = new THREE.Group();
+    nebulaGroup.position.set(0, 1.8, 0); // Gentle upward framing so center sits behind title
+    nebulaGroup.rotation.x = Math.PI * 0.18; // ~32° pitch
+    nebulaGroup.rotation.y = -Math.PI * 0.08;
+    nebulaGroup.rotation.z = Math.PI * 0.14; // Diagonal sweep
+    scene.add(nebulaGroup);
 
     // Mouse tracking vectors
     const mouseNDC = new THREE.Vector2(0, 0);
@@ -137,7 +109,7 @@ export const CosmicWeb: React.FC = () => {
 
       void main() {
         vColor = color;
-        float twinkle = sin(uTime * 1.6 + aTwinkle * 6.28318) * 0.2 + 0.8;
+        float twinkle = sin(uTime * 1.5 + aTwinkle * 6.28318) * 0.18 + 0.82;
         vAlpha = aAlpha * twinkle;
 
         vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
@@ -192,9 +164,9 @@ export const CosmicWeb: React.FC = () => {
     `;
 
     // -------------------------------------------------------------
-    // 4. CELESTIAL STELLAR STREAM (20,000 Pinpoint Crystalline Stars)
+    // 4. BIPOLAR PLANETARY NEBULA STELLAR PARTICLES (22,000 Pinpoints)
     // -------------------------------------------------------------
-    const starCount = 20000;
+    const starCount = 22000;
     const starGeo = new THREE.BufferGeometry();
     const starPositions = new Float32Array(starCount * 3);
     const starColors = new Float32Array(starCount * 3);
@@ -204,75 +176,102 @@ export const CosmicWeb: React.FC = () => {
 
     const colorWhite = new THREE.Color(0xffffff);
     const colorSilver = new THREE.Color(0xd4d4d4);
-    const colorMuted = new THREE.Color(0x94a3b8);
+    const colorSlate = new THREE.Color(0x94a3b8);
     const colorDarkSlate = new THREE.Color(0x475569);
 
-    const maxRadius = 24.0;
-    const streamBranches = 3;
-
+    // Parametric Bipolar Planetary Nebula generator
+    // Two symmetric expanding hourglass lobes + central toroidal waist ring
     for (let i = 0; i < starCount; i++) {
       const i3 = i * 3;
-      const isCoreNexus = Math.random() < 0.28;
-      const isHalo = !isCoreNexus && Math.random() < 0.18;
+      const isWaistRing = Math.random() < 0.28; // 28% form the delicate central waist
+      const isDiffuseHalo = !isWaistRing && Math.random() < 0.14; // 14% form the outer halo
 
-      let r: number;
-      let theta: number;
-      let zDisp: number;
-      let xyDisp: number;
+      let x: number;
+      let y: number;
+      let z: number;
+      let normDist: number;
 
-      if (isCoreNexus) {
-        r = Math.pow(Math.random(), 1.8) * 6.5;
-        theta = Math.random() * Math.PI * 2;
-        xyDisp = (Math.random() - 0.5) * 0.6;
-        zDisp = (Math.random() - 0.5) * Math.max(0.2, (6.5 - r) * 0.45);
-      } else if (isHalo) {
-        r = 5.0 + Math.pow(Math.random(), 1.3) * (maxRadius * 1.25);
-        theta = Math.random() * Math.PI * 2;
-        xyDisp = (Math.random() - 0.5) * 2.2;
-        zDisp = (Math.random() - 0.5) * 3.5 * (1 - r / (maxRadius * 1.35));
+      if (isWaistRing) {
+        // Equatorial Toroidal Ring (The waist of the nebula)
+        const theta = Math.random() * Math.PI * 2;
+        const r = 3.6 + Math.pow(Math.random(), 1.6) * 5.4;
+        const spreadY = (Math.random() + Math.random() - 1.0) * 0.7;
+        const spreadZ = (Math.random() + Math.random() - 1.0) * 0.9;
+
+        x = Math.cos(theta) * r;
+        y = Math.sin(theta) * r * 0.42 + spreadY; // Elliptical inclination
+        z = spreadZ;
+        normDist = r / 9.0;
+      } else if (isDiffuseHalo) {
+        // Faint deep-space stellar envelope around the nebula
+        const u = Math.random();
+        const v = Math.random();
+        const phi = Math.acos(2 * v - 1);
+        const lam = 2 * Math.PI * u;
+        const rad = 14.0 + Math.pow(Math.random(), 1.4) * 16.0;
+
+        x = rad * Math.sin(phi) * Math.cos(lam);
+        y = rad * Math.sin(phi) * Math.sin(lam) * 0.8;
+        z = rad * Math.cos(phi) * 0.7;
+        normDist = 1.0;
       } else {
-        r = 3.5 + Math.pow(Math.random(), 1.2) * (maxRadius - 3.5);
-        const branchIdx = i % streamBranches;
-        const branchAngle = (branchIdx / streamBranches) * Math.PI * 2;
-        const spinAngle = Math.pow(r / maxRadius, 0.72) * 1.4 * Math.PI * 2;
-        theta = branchAngle + spinAngle;
+        // Dual Expanding Bipolar Lobes (Hourglass shape)
+        const sign = Math.random() > 0.5 ? 1 : -1; // Upper or lower lobe
+        const u = Math.pow(Math.random(), 0.92); // Normalized distance along polar axis (0 -> 1)
+        const h = u * 15.5; // Extension height
 
-        const spread = 0.3 + (r / maxRadius) * 1.1;
-        xyDisp = (Math.random() + Math.random() - 1.0) * spread;
-        zDisp = (Math.random() + Math.random() - 1.0) * spread * 0.35;
+        // Hourglass profile: expands outward, peaks at ~0.65h, then curls softly
+        const lobeRadius = 2.2 + Math.sin(u * Math.PI * 0.88) * 5.6 + u * 2.8;
+
+        // Shell concentration: stars concentrate along the lobe boundaries with subtle noise
+        const shellThickness = 0.8 + Math.random() * 0.9;
+        const rad = lobeRadius * (0.78 + Math.random() * 0.38);
+        const phi = Math.random() * Math.PI * 2;
+
+        const jitterX = (Math.random() - 0.5) * shellThickness;
+        const jitterY = (Math.random() - 0.5) * shellThickness * 0.8;
+        const jitterZ = (Math.random() - 0.5) * shellThickness;
+
+        x = Math.cos(phi) * rad + jitterX;
+        y = sign * (h + 1.2) + jitterY;
+        z = Math.sin(phi) * rad * 0.75 + jitterZ;
+        normDist = Math.min(1.0, (Math.abs(y) + rad) / 22.0);
       }
 
-      starPositions[i3] = Math.cos(theta) * r + xyDisp;
-      starPositions[i3 + 1] = Math.sin(theta) * r * 0.88 + xyDisp;
-      starPositions[i3 + 2] = zDisp;
+      starPositions[i3] = x;
+      starPositions[i3 + 1] = y;
+      starPositions[i3 + 2] = z;
 
-      const normR = Math.min(1.0, r / maxRadius);
+      // Color mapping: subtle monochrome gradient
       const mixedColor = new THREE.Color();
-      if (normR < 0.2) {
-        mixedColor.lerpColors(colorWhite, colorSilver, normR / 0.2);
-      } else if (normR < 0.6) {
-        mixedColor.lerpColors(colorSilver, colorMuted, (normR - 0.2) / 0.4);
+      if (normDist < 0.25) {
+        mixedColor.lerpColors(colorWhite, colorSilver, normDist / 0.25);
+      } else if (normDist < 0.65) {
+        mixedColor.lerpColors(colorSilver, colorSlate, (normDist - 0.25) / 0.40);
       } else {
-        mixedColor.lerpColors(colorMuted, colorDarkSlate, (normR - 0.6) / 0.4);
+        mixedColor.lerpColors(colorSlate, colorDarkSlate, (normDist - 0.65) / 0.35);
       }
 
       starColors[i3] = mixedColor.r;
       starColors[i3 + 1] = mixedColor.g;
       starColors[i3 + 2] = mixedColor.b;
 
+      // Subtle, non-intrusive alpha and size matching Topics Hub and Homepage
       const pRand = Math.random();
       let pSize: number;
       let pAlpha: number;
 
-      if (pRand > 0.96) {
-        pSize = 1.3 + Math.random() * 0.7;
-        pAlpha = 0.95;
-      } else if (pRand > 0.82) {
-        pSize = 0.8 + Math.random() * 0.4;
-        pAlpha = 0.75;
+      if (pRand > 0.97) {
+        // Rare accent pinpoint
+        pSize = 0.9 + Math.random() * 0.4;
+        pAlpha = 0.72;
+      } else if (pRand > 0.85) {
+        pSize = 0.55 + Math.random() * 0.3;
+        pAlpha = 0.52;
       } else {
-        pSize = 0.3 + Math.random() * 0.38;
-        pAlpha = 0.30 + Math.random() * 0.45;
+        // Delicate background crystalline pinpoint
+        pSize = 0.25 + Math.random() * 0.28;
+        pAlpha = 0.18 + Math.random() * 0.32;
       }
 
       starSizes[i] = pSize;
@@ -304,12 +303,12 @@ export const CosmicWeb: React.FC = () => {
     });
 
     const starPoints = new THREE.Points(starGeo, starMaterial);
-    webGroup.add(starPoints);
+    nebulaGroup.add(starPoints);
 
     // -------------------------------------------------------------
     // 5. DISTANT DEEP-SPACE FIELD STARS (Infinite Depth Layer)
     // -------------------------------------------------------------
-    const bgStarCount = 2200;
+    const bgStarCount = 1800;
     const bgGeo = new THREE.BufferGeometry();
     const bgPositions = new Float32Array(bgStarCount * 3);
     const bgColors = new Float32Array(bgStarCount * 3);
@@ -323,19 +322,20 @@ export const CosmicWeb: React.FC = () => {
       const v = Math.random();
       const phi = Math.acos(2 * v - 1);
       const lam = 2 * Math.PI * u;
-      const rad = 45 + Math.random() * 40;
+      const rad = 42 + Math.random() * 38;
 
       bgPositions[i3] = rad * Math.sin(phi) * Math.cos(lam);
       bgPositions[i3 + 1] = rad * Math.sin(phi) * Math.sin(lam);
-      bgPositions[i3 + 2] = rad * Math.cos(phi) - 14.0;
+      bgPositions[i3 + 2] = rad * Math.cos(phi);
 
-      const c = Math.random() > 0.6 ? colorSilver : colorMuted;
+      const isSubtleSilver = Math.random() > 0.45;
+      const c = isSubtleSilver ? colorSilver : colorDarkSlate;
       bgColors[i3] = c.r;
       bgColors[i3 + 1] = c.g;
       bgColors[i3 + 2] = c.b;
 
-      bgSizes[i] = 0.25 + Math.random() * 0.45;
-      bgAlphas[i] = 0.18 + Math.random() * 0.45;
+      bgSizes[i] = 0.22 + Math.random() * 0.35;
+      bgAlphas[i] = 0.14 + Math.random() * 0.35;
       bgTwinkles[i] = Math.random();
     }
 
@@ -366,9 +366,9 @@ export const CosmicWeb: React.FC = () => {
     scene.add(bgPoints);
 
     // -------------------------------------------------------------
-    // 6. DELICATE COSMIC DUST CLOUDS (Subtle Nebular Haze)
+    // 6. DELICATE NEBULAR DUST HAZE (Subtle Ethereal Atmosphere)
     // -------------------------------------------------------------
-    const dustCount = 1200;
+    const dustCount = 1300;
     const dustGeo = new THREE.BufferGeometry();
     const dustPositions = new Float32Array(dustCount * 3);
     const dustColors = new Float32Array(dustCount * 3);
@@ -377,21 +377,24 @@ export const CosmicWeb: React.FC = () => {
 
     for (let i = 0; i < dustCount; i++) {
       const i3 = i * 3;
-      const rad = Math.pow(Math.random(), 0.65) * 26.0;
-      const theta = Math.random() * Math.PI * 2;
-      const zDisp = (Math.random() - 0.5) * 9.0;
+      const sign = Math.random() > 0.5 ? 1 : -1;
+      const u = Math.pow(Math.random(), 0.85);
+      const h = u * 14.0;
+      const lobeRadius = 2.4 + Math.sin(u * Math.PI * 0.85) * 5.2 + u * 2.5;
+      const phi = Math.random() * Math.PI * 2;
+      const rad = lobeRadius * (0.8 + Math.random() * 0.35);
 
-      dustPositions[i3] = Math.cos(theta) * rad;
-      dustPositions[i3 + 1] = Math.sin(theta) * rad * 0.75;
-      dustPositions[i3 + 2] = zDisp;
+      dustPositions[i3] = Math.cos(phi) * rad;
+      dustPositions[i3 + 1] = sign * (h + 1.0);
+      dustPositions[i3 + 2] = Math.sin(phi) * rad * 0.7;
 
       const c = Math.random() > 0.5 ? colorSilver : colorDarkSlate;
       dustColors[i3] = c.r;
       dustColors[i3 + 1] = c.g;
       dustColors[i3 + 2] = c.b;
 
-      dustSizes[i] = 2.6 + Math.random() * 4.2;
-      dustAlphas[i] = 0.07 + Math.random() * 0.16; // Very faint, subtle haze
+      dustSizes[i] = 2.4 + Math.random() * 3.8;
+      dustAlphas[i] = 0.04 + Math.random() * 0.09; // Whisper-faint, subtle haze
     }
 
     dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPositions, 3));
@@ -440,46 +443,44 @@ export const CosmicWeb: React.FC = () => {
     });
 
     const dustPoints = new THREE.Points(dustGeo, dustMaterial);
-    webGroup.add(dustPoints);
+    nebulaGroup.add(dustPoints);
 
     // -------------------------------------------------------------
-    // 7. 8 PRIMARY SUPERCLUSTERS & 32 DEEP-DIVE COMPANIONS
+    // 7. 40 ARCHITECTURAL PRODUCTION NODES & DELICATE FILAMENTS
     // -------------------------------------------------------------
-    const scaleFactor = isMobile ? 0.72 : 1.0;
-    const allNodes: CosmicNode[] = [];
+    // 40 precision system anchor nodes placed along the nebula structure
+    // (representing the 40 indexed production systems)
+    const systemNodes: CosmicNode[] = [];
+    const scaleFactor = isMobile ? 0.75 : 1.0;
 
-    // Add 8 Supercluster Centers
-    SUPERCLUSTER_ANCHORS.forEach((p) => {
-      allNodes.push({
-        id: p.id,
-        name: p.name,
-        x: p.pos[0] * scaleFactor,
-        y: p.pos[1] * scaleFactor,
-        z: p.pos[2] * scaleFactor,
-        ox: p.pos[0] * scaleFactor,
-        oy: p.pos[1] * scaleFactor,
-        oz: p.pos[2] * scaleFactor,
-        vx: 0,
-        vy: 0,
-        vz: 0,
-        isPrimary: true,
-        baseAlpha: 1.0
-      });
-    });
+    for (let i = 0; i < 40; i++) {
+      let x: number;
+      let y: number;
+      let z: number;
 
-    // Add 32 Deep-Dive Companion Stars (4 per supercluster, naturally dispersed)
-    const secondaryCount = 32;
-    for (let i = 0; i < secondaryCount; i++) {
-      const parentPrimary = allNodes[i % 8];
-      const angle = (i * 0.785) + Math.sin(i) * 0.6;
-      const dist = 1.8 + (i % 4) * 0.9;
-      const x = parentPrimary.ox + Math.cos(angle) * dist;
-      const y = parentPrimary.oy + Math.sin(angle) * dist * 0.85;
-      const z = parentPrimary.oz + (Math.sin(i * 1.5)) * 1.6;
+      if (i < 12) {
+        // Waist ring systems
+        const angle = (i / 12) * Math.PI * 2;
+        const r = (4.4 + (i % 3) * 0.9) * scaleFactor;
+        x = Math.cos(angle) * r;
+        y = Math.sin(angle) * r * 0.45;
+        z = (Math.sin(i * 1.7)) * 1.1;
+      } else {
+        // Polar lobe systems distributed across upper and lower lobes
+        const lobeIdx = i - 12;
+        const sign = lobeIdx % 2 === 0 ? 1 : -1;
+        const u = 0.15 + ((lobeIdx / 28) * 0.75);
+        const h = u * 13.5 * scaleFactor;
+        const lobeRadius = (3.2 + Math.sin(u * Math.PI * 0.85) * 4.6) * scaleFactor;
+        const phi = (lobeIdx * 0.95) + Math.sin(lobeIdx) * 0.5;
 
-      allNodes.push({
-        id: `article-${i}`,
-        name: '',
+        x = Math.cos(phi) * lobeRadius;
+        y = sign * (h + 1.2);
+        z = Math.sin(phi) * lobeRadius * 0.75;
+      }
+
+      systemNodes.push({
+        id: `system-${i}`,
         x,
         y,
         z,
@@ -489,12 +490,11 @@ export const CosmicWeb: React.FC = () => {
         vx: 0,
         vy: 0,
         vz: 0,
-        isPrimary: false,
-        baseAlpha: 0.45 + (i % 3) * 0.15
+        baseAlpha: 0.45 + (i % 4) * 0.12
       });
     }
 
-    const totalNodeCount = allNodes.length;
+    const totalNodeCount = systemNodes.length;
 
     // Node Point Cloud Geometry
     const nodePositions = new Float32Array(totalNodeCount * 3);
@@ -504,17 +504,18 @@ export const CosmicWeb: React.FC = () => {
     const nodeTwinkles = new Float32Array(totalNodeCount);
 
     for (let i = 0; i < totalNodeCount; i++) {
-      const node = allNodes[i];
+      const node = systemNodes[i];
       nodePositions[i * 3] = node.x;
       nodePositions[i * 3 + 1] = node.y;
       nodePositions[i * 3 + 2] = node.z;
 
-      const c = node.isPrimary ? colorWhite : colorSilver;
+      const isKeySystem = i % 5 === 0;
+      const c = isKeySystem ? colorWhite : colorSilver;
       nodeColors[i * 3] = c.r;
       nodeColors[i * 3 + 1] = c.g;
       nodeColors[i * 3 + 2] = c.b;
 
-      nodeSizes[i] = node.isPrimary ? 2.8 : 1.3;
+      nodeSizes[i] = isKeySystem ? 1.4 : 0.9;
       nodeAlphas[i] = node.baseAlpha;
       nodeTwinkles[i] = Math.random();
     }
@@ -544,68 +545,16 @@ export const CosmicWeb: React.FC = () => {
     });
 
     const nodePoints = new THREE.Points(nodeGeo, nodeMaterial);
-    webGroup.add(nodePoints);
+    nebulaGroup.add(nodePoints);
 
     // -------------------------------------------------------------
-    // 8. DIFFRACTION HALOS & ORBITAL BEACONS (8 Major Superclusters)
+    // 8. DYNAMIC LINE FILAMENTS (Crystalline Connecting Tracks)
     // -------------------------------------------------------------
-    const createHaloTexture = () => {
-      const cvs = document.createElement('canvas');
-      cvs.width = 128;
-      cvs.height = 128;
-      const ctx = cvs.getContext('2d');
-      if (ctx) {
-        const grad = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
-        grad.addColorStop(0, 'rgba(255, 255, 255, 1)');
-        grad.addColorStop(0.18, 'rgba(255, 255, 255, 0.75)');
-        grad.addColorStop(0.45, 'rgba(230, 230, 230, 0.25)');
-        grad.addColorStop(0.80, 'rgba(180, 180, 180, 0.06)');
-        grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, 0, 128, 128);
-      }
-      return new THREE.CanvasTexture(cvs);
-    };
-
-    const haloTexture = createHaloTexture();
-    const haloMat = new THREE.SpriteMaterial({
-      map: haloTexture,
-      transparent: true,
-      blending: THREE.AdditiveBlending,
-      opacity: 0.88
-    });
-
-    const primaryGlowSprites: THREE.Sprite[] = [];
-    const primaryRings: THREE.Mesh[] = [];
-    const ringGeo = new THREE.RingGeometry(0.52, 0.55, 32);
-    const ringMat = new THREE.MeshBasicMaterial({
-      color: 0xffffff,
-      transparent: true,
-      opacity: 0.24,
-      side: THREE.DoubleSide
-    });
-
-    for (let i = 0; i < 8; i++) {
-      const sprite = new THREE.Sprite(haloMat);
-      sprite.position.set(allNodes[i].x, allNodes[i].y, allNodes[i].z);
-      sprite.scale.set(2.6, 2.6, 2.6); // Exact Topics Hub scale
-      webGroup.add(sprite);
-      primaryGlowSprites.push(sprite);
-
-      const ring = new THREE.Mesh(ringGeo, ringMat);
-      ring.position.set(allNodes[i].x, allNodes[i].y, allNodes[i].z);
-      webGroup.add(ring);
-      primaryRings.push(ring);
-    }
-
-    // -------------------------------------------------------------
-    // 9. DELICATE ARCHITECTURAL FILAMENTS (Zero Clutter or Tangled Fans)
-    // -------------------------------------------------------------
-    const maxLines = 240;
-    const lineGeo = new THREE.BufferGeometry();
+    const maxLines = 160;
     const linePositions = new Float32Array(maxLines * 6);
     const lineColors = new Float32Array(maxLines * 6);
 
+    const lineGeo = new THREE.BufferGeometry();
     lineGeo.setAttribute('position', new THREE.BufferAttribute(linePositions, 3));
     lineGeo.setAttribute('color', new THREE.BufferAttribute(lineColors, 3));
 
@@ -618,10 +567,24 @@ export const CosmicWeb: React.FC = () => {
     });
 
     const lineSegments = new THREE.LineSegments(lineGeo, lineMat);
-    webGroup.add(lineSegments);
+    nebulaGroup.add(lineSegments);
+
+    // Precompute nearest neighbor pairs along the nebula geometry
+    const filamentPairs: [number, number][] = [];
+    for (let i = 0; i < totalNodeCount; i++) {
+      for (let j = i + 1; j < totalNodeCount; j++) {
+        const dx = systemNodes[i].ox - systemNodes[j].ox;
+        const dy = systemNodes[i].oy - systemNodes[j].oy;
+        const dz = systemNodes[i].oz - systemNodes[j].oz;
+        const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+        if (dist < 4.8) {
+          filamentPairs.push([i, j]);
+        }
+      }
+    }
 
     // -------------------------------------------------------------
-    // 10. INTERACTION LISTENERS & CAMERA KINEMATICS
+    // 9. INTERACTION LISTENERS & CAMERA KINEMATICS
     // -------------------------------------------------------------
     const raycaster = new THREE.Raycaster();
     const planeZ = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
@@ -635,8 +598,8 @@ export const CosmicWeb: React.FC = () => {
       mouseVel.y = ndcY - mouseNDC.y;
       mouseNDC.set(ndcX, ndcY);
 
-      targetMouseX = ((e.clientX / window.innerWidth) - 0.5) * 0.16;
-      targetMouseY = ((e.clientY / window.innerHeight) - 0.5) * 0.16;
+      targetMouseX = ((e.clientX / window.innerWidth) - 0.5) * 0.14;
+      targetMouseY = ((e.clientY / window.innerHeight) - 0.5) * 0.14;
 
       raycaster.setFromCamera(mouseNDC, camera);
       raycaster.ray.intersectPlane(planeZ, mouseWorld);
@@ -685,20 +648,18 @@ export const CosmicWeb: React.FC = () => {
     window.addEventListener('resize', handleResize);
 
     // -------------------------------------------------------------
-    // 11. ANIMATION LOOP: VORTEX DISTORTION & PULL-BACK
+    // 10. ANIMATION LOOP: VORTEX DISTORTION & PULL-BACK
     // -------------------------------------------------------------
     let frameId: number;
-    let lastTime = performance.now();
 
     const animate = () => {
       frameId = requestAnimationFrame(animate);
       if (!isVisible) return;
 
       const now = performance.now();
-      const elapsed = (now - lastTime) * 0.001;
+      const tSec = now * 0.001;
 
       // Uniform updates
-      const tSec = now * 0.001;
       starMaterial.uniforms.uTime.value = tSec;
       starMaterial.uniforms.uMouse.value.copy(mouseNDC);
       starMaterial.uniforms.uMouseVel.value.copy(mouseVel);
@@ -714,7 +675,7 @@ export const CosmicWeb: React.FC = () => {
       mouseVel.multiplyScalar(0.92);
 
       // Celestial cosmic rotation
-      webGroup.rotation.z += 0.00035;
+      nebulaGroup.rotation.z += 0.0003;
 
       // Smooth weightless 3D mouse parallax
       currentMouseX += (targetMouseX - currentMouseX) * 0.025;
@@ -722,23 +683,23 @@ export const CosmicWeb: React.FC = () => {
       scene.rotation.y = currentMouseX;
       scene.rotation.x = currentMouseY;
 
-      // Smooth camera pull-back on scroll (Exact Topics Hub Kinematics)
-      camera.position.z = 28 + scrollY * 0.0055;
-      camera.position.y = -scrollY * 0.0035;
+      // Smooth camera pull-back on scroll
+      camera.position.z = 28 + scrollY * 0.005;
+      camera.position.y = -scrollY * 0.003;
 
-      // Update Node Physics and Positions
+      // Update Node Physics and Dynamic Filaments
       const nodePosArr = (nodeGeo.attributes.position as THREE.BufferAttribute).array as Float32Array;
       const lPosArr = (lineGeo.attributes.position as THREE.BufferAttribute).array as Float32Array;
       const lColArr = (lineGeo.attributes.color as THREE.BufferAttribute).array as Float32Array;
       let lineIndex = 0;
 
       for (let i = 0; i < totalNodeCount; i++) {
-        const node = allNodes[i];
+        const node = systemNodes[i];
 
         // Organic celestial orbital drift
-        const driftX = Math.sin(tSec * 0.38 + i * 1.5) * 0.14;
-        const driftY = Math.cos(tSec * 0.32 + i * 1.2) * 0.14;
-        const driftZ = Math.sin(tSec * 0.28 + i * 2.0) * 0.09;
+        const driftX = Math.sin(tSec * 0.35 + i * 1.4) * 0.12;
+        const driftY = Math.cos(tSec * 0.30 + i * 1.1) * 0.12;
+        const driftZ = Math.sin(tSec * 0.25 + i * 1.8) * 0.08;
         const targetX = node.ox + driftX;
         const targetY = node.oy + driftY;
         const targetZ = node.oz + driftZ;
@@ -749,49 +710,40 @@ export const CosmicWeb: React.FC = () => {
           const dy = mouseWorld.y - node.y;
           const dCursor = Math.sqrt(dx * dx + dy * dy);
 
-          if (dCursor < 7.5 && dCursor > 0.1) {
-            const force = (1.0 - dCursor / 7.5) * 0.008;
-            node.vx += dx * force;
-            node.vy += dy * force;
+          if (dCursor < 6.0 && dCursor > 0.1) {
+            const pull = (1.0 - dCursor / 6.0) * 0.035;
+            node.vx += (dx / dCursor) * pull;
+            node.vy += (dy / dCursor) * pull;
+
+            // Fluid tangential vortex push
+            node.vx += (-dy / dCursor) * mouseVel.x * 0.15;
+            node.vy += (dx / dCursor) * mouseVel.y * 0.15;
           }
         }
 
-        node.x += (targetX - node.x) * 0.08 + node.vx;
-        node.y += (targetY - node.y) * 0.08 + node.vy;
-        node.z += (targetZ - node.z) * 0.08 + node.vz;
+        // Spring force towards anchor target
+        node.vx += (targetX - node.x) * 0.04;
+        node.vy += (targetY - node.y) * 0.04;
+        node.vz += (targetZ - node.z) * 0.04;
 
-        node.vx *= 0.92;
-        node.vy *= 0.92;
-        node.vz *= 0.92;
+        // Velocity damping
+        node.vx *= 0.88;
+        node.vy *= 0.88;
+        node.vz *= 0.88;
+
+        node.x += node.vx;
+        node.y += node.vy;
+        node.z += node.vz;
 
         nodePosArr[i * 3] = node.x;
         nodePosArr[i * 3 + 1] = node.y;
         nodePosArr[i * 3 + 2] = node.z;
 
-        // Update primary halos and rings
-        if (i < 8) {
-          primaryGlowSprites[i].position.set(node.x, node.y, node.z);
-          primaryRings[i].position.set(node.x, node.y, node.z);
-          primaryRings[i].rotation.z = tSec * 0.22 + i;
-
-          const dToCursor = Math.hypot(mouseWorld.x - node.x, mouseWorld.y - node.y);
-          if (isMouseActive && dToCursor < 5.5) {
-            const boost = 1.0 - dToCursor / 5.5;
-            primaryGlowSprites[i].scale.set(2.6 + boost * 0.8, 2.6 + boost * 0.8, 1);
-            primaryGlowSprites[i].material.opacity = 0.88 + boost * 0.12;
-            (primaryRings[i].material as THREE.MeshBasicMaterial).opacity = 0.24 + boost * 0.35;
-          } else {
-            primaryGlowSprites[i].scale.set(2.6, 2.6, 1);
-            primaryGlowSprites[i].material.opacity = 0.88;
-            (primaryRings[i].material as THREE.MeshBasicMaterial).opacity = 0.24;
-          }
-        }
-
         // Dynamic Cursor Laser Filament
         if (isMouseActive && lineIndex < maxLines) {
           const dToCursor = Math.hypot(mouseWorld.x - node.x, mouseWorld.y - node.y);
-          if (dToCursor < 6.5) {
-            const alpha = (1.0 - dToCursor / 6.5) * 0.75;
+          if (dToCursor < 5.5) {
+            const alpha = (1.0 - dToCursor / 5.5) * 0.45;
             const ptr = lineIndex * 6;
 
             lPosArr[ptr] = mouseWorld.x;
@@ -803,8 +755,8 @@ export const CosmicWeb: React.FC = () => {
             lPosArr[ptr + 5] = node.z;
 
             for (let j = 0; j < 3; j++) {
-              lColArr[ptr + j] = 1.0 * alpha;
-              lColArr[ptr + 3 + j] = 0.78 * alpha;
+              lColArr[ptr + j] = 0.85 * alpha;
+              lColArr[ptr + 3 + j] = 0.65 * alpha;
             }
 
             lineIndex++;
@@ -812,11 +764,12 @@ export const CosmicWeb: React.FC = () => {
         }
       }
 
-      // 1. Primary Filaments (Major 8 Disciplinary Trunks)
-      PRIMARY_FILAMENTS.forEach(([aIdx, bIdx]) => {
-        if (lineIndex >= maxLines) return;
-        const nodeA = allNodes[aIdx];
-        const nodeB = allNodes[bIdx];
+      // Draw subtle filaments between neighboring system nodes
+      for (let p = 0; p < filamentPairs.length; p++) {
+        if (lineIndex >= maxLines) break;
+        const [aIdx, bIdx] = filamentPairs[p];
+        const nodeA = systemNodes[aIdx];
+        const nodeB = systemNodes[bIdx];
 
         const ptr = lineIndex * 6;
         lPosArr[ptr] = nodeA.x;
@@ -830,52 +783,28 @@ export const CosmicWeb: React.FC = () => {
         const midX = (nodeA.x + nodeB.x) * 0.5;
         const midY = (nodeA.y + nodeB.y) * 0.5;
         const dMid = Math.hypot(mouseWorld.x - midX, mouseWorld.y - midY);
-        const isNear = isMouseActive && dMid < 4.8;
-        const alpha = isNear ? 0.92 : 0.35;
+        const isNear = isMouseActive && dMid < 4.2;
+        const alpha = isNear ? 0.60 : 0.18; // Very subtle, delicate monochrome track
 
         for (let j = 0; j < 6; j++) {
           lColArr[ptr + j] = alpha;
         }
 
         lineIndex++;
-      });
+      }
 
-      // 2. Secondary Filaments (Clean, Delicate Bridge to Companions without Fans)
-      for (let i = 8; i < totalNodeCount; i += 2) {
-        if (lineIndex >= maxLines) break;
-        const nodeA = allNodes[i];
-        const parentPrimary = allNodes[i % 8];
-        const dist = Math.hypot(nodeA.x - parentPrimary.x, nodeA.y - parentPrimary.y);
-
-        if (dist < 4.5) {
-          const alpha = (1.0 - dist / 4.5) * 0.20;
-          const ptr = lineIndex * 6;
-
-          lPosArr[ptr] = nodeA.x;
-          lPosArr[ptr + 1] = nodeA.y;
-          lPosArr[ptr + 2] = nodeA.z;
-
-          lPosArr[ptr + 3] = parentPrimary.x;
-          lPosArr[ptr + 4] = parentPrimary.y;
-          lPosArr[ptr + 5] = parentPrimary.z;
-
-          for (let j = 0; j < 6; j++) {
-            lColArr[ptr + j] = alpha;
-          }
-
-          lineIndex++;
+      // Clear remaining line vertices
+      for (let k = lineIndex; k < maxLines; k++) {
+        const ptr = k * 6;
+        for (let j = 0; j < 6; j++) {
+          lPosArr[ptr + j] = 0;
+          lColArr[ptr + j] = 0;
         }
       }
 
-      // Clear remaining unused lines
-      for (let k = lineIndex * 6; k < maxLines * 6; k++) {
-        lPosArr[k] = 0;
-        lColArr[k] = 0;
-      }
-
-      (nodeGeo.attributes.position as THREE.BufferAttribute).needsUpdate = true;
-      (lineGeo.attributes.position as THREE.BufferAttribute).needsUpdate = true;
-      (lineGeo.attributes.color as THREE.BufferAttribute).needsUpdate = true;
+      nodeGeo.attributes.position.needsUpdate = true;
+      lineGeo.attributes.position.needsUpdate = true;
+      lineGeo.attributes.color.needsUpdate = true;
 
       renderer.render(scene, camera);
     };
@@ -883,19 +812,15 @@ export const CosmicWeb: React.FC = () => {
     animate();
 
     // -------------------------------------------------------------
-    // 12. CLEANUP
+    // CLEANUP
     // -------------------------------------------------------------
     return () => {
       cancelAnimationFrame(frameId);
-      observer.disconnect();
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseleave', handleMouseLeave);
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleResize);
-
-      if (container.contains(renderer.domElement)) {
-        container.removeChild(renderer.domElement);
-      }
+      observer.disconnect();
 
       starGeo.dispose();
       starMaterial.dispose();
@@ -907,25 +832,25 @@ export const CosmicWeb: React.FC = () => {
       nodeMaterial.dispose();
       lineGeo.dispose();
       lineMat.dispose();
-      haloTexture.dispose();
-      haloMat.dispose();
-      ringGeo.dispose();
-      ringMat.dispose();
+
       renderer.dispose();
+      if (renderer.domElement && renderer.domElement.parentNode) {
+        renderer.domElement.parentNode.removeChild(renderer.domElement);
+      }
     };
-  }, [prefersReducedMotion, isMobile]);
+  }, [prefersReducedMotion]);
 
   return (
     <div
       ref={mountRef}
       style={{
-        position: 'absolute',
-        inset: 0,
         width: '100%',
         height: '100%',
-        pointerEvents: 'none',
-        zIndex: 1,
-        overflow: 'hidden'
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        overflow: 'hidden',
+        pointerEvents: 'auto'
       }}
       aria-hidden="true"
     />
