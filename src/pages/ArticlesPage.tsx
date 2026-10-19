@@ -336,7 +336,17 @@ export const ArticlesPage: React.FC = () => {
           SECTION A: OBSERVATORY COMMAND DECK (Search & Topics Console)
           ========================================================================= */}
       <section className={styles.commandDeckSection} id="command-deck">
-        <div className={styles.commandChassis}>
+        <div
+          className={styles.commandChassis}
+          onMouseMove={(e) => {
+            const rect = e.currentTarget.getBoundingClientRect();
+            e.currentTarget.style.setProperty('--desk-x', `${e.clientX - rect.left}px`);
+            e.currentTarget.style.setProperty('--desk-y', `${e.clientY - rect.top}px`);
+          }}
+        >
+          {/* Luminous Top Accent Scanline */}
+          <div className={styles.commandTopScanline} />
+
           {/* Subtle 4-Corner Reticle Hardware Accents */}
           <div className={styles.chassisReticleTl} aria-hidden="true" />
           <div className={styles.chassisReticleTr} aria-hidden="true" />
@@ -350,17 +360,12 @@ export const ArticlesPage: React.FC = () => {
               <input
                 ref={searchInputRef}
                 type="text"
-                placeholder="Search articles, topics, or key production questions..."
+                placeholder="Search articles or topics..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className={styles.searchInput}
               />
               <div className={styles.searchActions}>
-                {searchQuery && (
-                  <span className={styles.searchMatchPill}>
-                    {filteredArticles.length} MATCHING
-                  </span>
-                )}
                 {searchQuery && (
                   <button
                     type="button"
@@ -411,27 +416,10 @@ export const ArticlesPage: React.FC = () => {
                   className={styles.resetFiltersBtn}
                   title="Reset active filters"
                 >
-                  <span>RESET FILTERS</span>
+                  <span>RESET</span>
                   <X size={11} />
                 </button>
               )}
-            </div>
-          </div>
-
-          {/* Live System Telemetry Status Bar */}
-          <div className={styles.telemetryStatusBar}>
-            <div className={styles.telemetryLeft}>
-              <span className={styles.telemetryDot} />
-              <span className={styles.telemetryText}>
-                {filteredArticles.length} PRODUCTION {filteredArticles.length === 1 ? 'SYSTEM' : 'SYSTEMS'} AVAILABLE
-              </span>
-              <span className={styles.telemetryDivider}>//</span>
-              <span className={styles.telemetryScope}>
-                {selectedTopic === 'all' ? 'ALL DISCIPLINES' : selectedTopic.toUpperCase().replace('-', ' ')}
-              </span>
-            </div>
-            <div className={styles.telemetryRight}>
-              <span className={styles.telemetryTag}>100% SPEC VERIFIED</span>
             </div>
           </div>
         </div>
