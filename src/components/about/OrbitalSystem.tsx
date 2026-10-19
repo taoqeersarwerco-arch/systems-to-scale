@@ -165,26 +165,26 @@ export const OrbitalSystem: React.FC = () => {
       starPositions[i3 + 1] = Math.sin(theta) * rad;
       starPositions[i3 + 2] = zSpread;
 
-      // Subtle, faint bone-tinted stars matching Topics Hub
+      // Subtle, bone-white airy-disk stars with depth
       const tint = Math.random();
       if (tint > 0.85) {
-        starColors[i3] = 0.95;
-        starColors[i3 + 1] = 0.97;
+        starColors[i3] = 1.0;
+        starColors[i3 + 1] = 1.0;
         starColors[i3 + 2] = 1.0;
-        starSizes[i] = 0.65 + Math.random() * 0.35;
-        starAlphas[i] = 0.30 + Math.random() * 0.15;
+        starSizes[i] = 0.85 + Math.random() * 0.45;
+        starAlphas[i] = 0.55 + Math.random() * 0.25;
       } else if (tint > 0.4) {
-        starColors[i3] = 0.82;
-        starColors[i3 + 1] = 0.85;
-        starColors[i3 + 2] = 0.90;
-        starSizes[i] = 0.40 + Math.random() * 0.25;
-        starAlphas[i] = 0.18 + Math.random() * 0.12;
+        starColors[i3] = 0.90;
+        starColors[i3 + 1] = 0.92;
+        starColors[i3 + 2] = 0.96;
+        starSizes[i] = 0.55 + Math.random() * 0.35;
+        starAlphas[i] = 0.35 + Math.random() * 0.20;
       } else {
-        starColors[i3] = 0.55;
-        starColors[i3 + 1] = 0.60;
-        starColors[i3 + 2] = 0.65;
-        starSizes[i] = 0.25 + Math.random() * 0.20;
-        starAlphas[i] = 0.10 + Math.random() * 0.08;
+        starColors[i3] = 0.70;
+        starColors[i3 + 1] = 0.75;
+        starColors[i3 + 2] = 0.82;
+        starSizes[i] = 0.35 + Math.random() * 0.25;
+        starAlphas[i] = 0.20 + Math.random() * 0.12;
       }
 
       starTwinkles[i] = Math.random();
@@ -292,37 +292,49 @@ export const OrbitalSystem: React.FC = () => {
     orbitalGroup.add(coreGroup);
 
     // Central core bead
-    const coreGeo = new THREE.SphereGeometry(0.28, 24, 24);
-    const coreMat = new THREE.MeshBasicMaterial({ color: 0xF1F5F9 });
+    const coreGeo = new THREE.SphereGeometry(0.38, 24, 24);
+    const coreMat = new THREE.MeshBasicMaterial({ color: 0xFFFFFF });
     const coreMesh = new THREE.Mesh(coreGeo, coreMat);
     coreGroup.add(coreMesh);
 
+    // Luminous inner core atmospheric glow
+    const coreGlowGeo = new THREE.SphereGeometry(1.15, 20, 20);
+    const coreGlowMat = new THREE.MeshBasicMaterial({
+      color: 0xFFFFFF,
+      transparent: true,
+      opacity: 0.22,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    });
+    const coreGlowMesh = new THREE.Mesh(coreGlowGeo, coreGlowMat);
+    coreGroup.add(coreGlowMesh);
+
     // Soft wireframe breathing halo
-    const coronaGeo = new THREE.SphereGeometry(0.65, 18, 18);
+    const coronaGeo = new THREE.SphereGeometry(0.85, 20, 20);
     const coronaMat = new THREE.MeshBasicMaterial({
       color: 0xE2E8F0,
       transparent: true,
-      opacity: 0.10,
+      opacity: 0.22,
       wireframe: true,
       depthWrite: false,
     });
     const coronaMesh = new THREE.Mesh(coronaGeo, coronaMat);
     coreGroup.add(coronaMesh);
 
-    // Faint prominence lines
+    // Prominence reticle lines
     const reticleGeo = new THREE.BufferGeometry();
     const reticlePts: THREE.Vector3[] = [];
-    const reticleSegments = 24;
+    const reticleSegments = 32;
     for (let r = 0; r < reticleSegments; r++) {
       const angle = (r / reticleSegments) * Math.PI * 2;
       reticlePts.push(new THREE.Vector3(0, 0, 0));
-      reticlePts.push(new THREE.Vector3(Math.cos(angle) * 1.4, Math.sin(angle) * 1.4, 0));
+      reticlePts.push(new THREE.Vector3(Math.cos(angle) * 2.2, Math.sin(angle) * 2.2, 0));
     }
     reticleGeo.setFromPoints(reticlePts);
     const reticleMat = new THREE.LineBasicMaterial({
-      color: 0xE2E8F0,
+      color: 0xFFFFFF,
       transparent: true,
-      opacity: 0.035,
+      opacity: 0.10,
       blending: THREE.AdditiveBlending,
       depthWrite: false
     });
@@ -361,11 +373,11 @@ export const OrbitalSystem: React.FC = () => {
       const traceGeo = new THREE.BufferGeometry().setFromPoints(points);
       traceGeometries.push(traceGeo);
 
-      // Whisper-faint, delicate bone-tinted ellipse trace
+      // Distinct, prominent bone-white ellipse trace
       const traceMat = new THREE.LineBasicMaterial({
-        color: 0xE2E8F0,
+        color: 0xFFFFFF,
         transparent: true,
-        opacity: 0.065, // Harmonious luminous trace
+        opacity: 0.25, // Prominent, crisp astronomical orbits
         blending: THREE.AdditiveBlending,
         depthWrite: false,
       });
@@ -373,20 +385,20 @@ export const OrbitalSystem: React.FC = () => {
       const traceLine = new THREE.LineLoop(traceGeo, traceMat);
       orbitalGroup.add(traceLine);
 
-      // Main Celestial Body (Spherical bead)
-      const bodyRadius = 0.17 + (idx % 3) * 0.03;
-      const bodyGeo = new THREE.SphereGeometry(bodyRadius, 20, 20);
+      // Main Celestial Body (Spherical planetary bead)
+      const bodyRadius = 0.26 + (idx % 3) * 0.04;
+      const bodyGeo = new THREE.SphereGeometry(bodyRadius, 24, 24);
       const bodyMat = new THREE.MeshBasicMaterial({ color: body.colorHex });
       const bodyMesh = new THREE.Mesh(bodyGeo, bodyMat);
       orbitalGroup.add(bodyMesh);
       body.mesh = bodyMesh;
 
-      // Soft Atmospheric Glow Halo
-      const glowGeo = new THREE.SphereGeometry(bodyRadius * 2.0, 14, 14);
+      // Radiant Atmospheric Glow Halo
+      const glowGeo = new THREE.SphereGeometry(bodyRadius * 2.6, 18, 18);
       const glowMat = new THREE.MeshBasicMaterial({
         color: body.colorHex,
         transparent: true,
-        opacity: 0.24,
+        opacity: 0.42,
         blending: THREE.AdditiveBlending,
         depthWrite: false,
       });
@@ -396,11 +408,11 @@ export const OrbitalSystem: React.FC = () => {
 
       // Thin Planetary Ring for Body 2 (Database Engines)
       if (body.hasRing) {
-        const ringGeo = new THREE.RingGeometry(bodyRadius * 2.1, bodyRadius * 3.4, 32);
+        const ringGeo = new THREE.RingGeometry(bodyRadius * 1.8, bodyRadius * 3.4, 36);
         const ringMat = new THREE.MeshBasicMaterial({
           color: 0xE2E8F0,
           transparent: true,
-          opacity: 0.18,
+          opacity: 0.35,
           side: THREE.DoubleSide,
           blending: THREE.AdditiveBlending,
           depthWrite: false,
@@ -413,20 +425,20 @@ export const OrbitalSystem: React.FC = () => {
 
       // Micro-Satellite Moon for Bodies 0, 3, 6
       if (body.hasMoon) {
-        const moonGeo = new THREE.SphereGeometry(0.05, 10, 10);
+        const moonGeo = new THREE.SphereGeometry(0.08, 12, 12);
         const moonMat = new THREE.MeshBasicMaterial({ color: 0xFFFFFF });
         const moonMesh = new THREE.Mesh(moonGeo, moonMat);
         orbitalGroup.add(moonMesh);
         body.moonMesh = moonMesh;
       }
 
-      // Fading Cometary Ribbon Trail (35 points)
-      const MAX_TRAIL = 35;
+      // Streaming Luminous Cometary Ribbon Trail (50 points)
+      const MAX_TRAIL = 50;
       const trailPositions = new Float32Array(MAX_TRAIL * 3);
       const trailColors = new Float32Array(MAX_TRAIL * 3);
 
       for (let p = 0; p < MAX_TRAIL; p++) {
-        const alpha = Math.pow(1 - p / MAX_TRAIL, 2.2) * 0.16;
+        const alpha = Math.pow(1 - p / MAX_TRAIL, 1.35) * 0.45;
         trailColors[p * 3] = alpha;
         trailColors[p * 3 + 1] = alpha;
         trailColors[p * 3 + 2] = alpha;
@@ -581,6 +593,8 @@ export const OrbitalSystem: React.FC = () => {
       // Central core gentle breathing
       const breath = 1.0 + Math.sin(elapsedTime * 1.8) * 0.04;
       coreMesh.scale.set(breath, breath, breath);
+      const glowBreath = 1.0 + Math.sin(elapsedTime * 1.8) * 0.08;
+      coreGlowMesh.scale.set(glowBreath, glowBreath, glowBreath);
       coronaMesh.rotation.y += 0.002;
       reticleLines.rotation.z += 0.001;
 
@@ -658,14 +672,14 @@ export const OrbitalSystem: React.FC = () => {
         // Update Graded Cometary Ribbon Trail
         if (body.trailLine && !prefersReducedMotion) {
           body.trailPoints.unshift(new THREE.Vector3(x, y, z));
-          if (body.trailPoints.length > 35) {
+          if (body.trailPoints.length > 50) {
             body.trailPoints.pop();
           }
 
           const posAttr = body.trailLine.geometry.attributes.position as THREE.BufferAttribute;
           const posArr = posAttr.array as Float32Array;
 
-          for (let p = 0; p < 35; p++) {
+          for (let p = 0; p < 50; p++) {
             const pt = body.trailPoints[p] ||
                        body.trailPoints[body.trailPoints.length - 1] ||
                        new THREE.Vector3(x, y, z);
