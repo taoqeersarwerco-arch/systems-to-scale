@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { TOPICS } from '../data/topics';
 import { OrbitalSystem } from '../components/about/OrbitalSystem';
 import { SystemMechanismVisualizer } from '../components/about/SystemMechanismVisualizer';
+import { MethodStageVisualizer } from '../components/about/MethodStageVisualizer';
 import {
   Zap,
   TrendingUp,
@@ -17,7 +18,10 @@ import {
   ShieldCheck,
   Radio,
   Sparkles,
-  ChevronDown
+  ChevronDown,
+  Layers,
+  Cpu,
+  Target
 } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -69,6 +73,7 @@ export const AboutPage: React.FC = () => {
 
   // Active hover tracking for mechanism animations
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
+  const [hoveredMethodStage, setHoveredMethodStage] = useState<'mechanism' | 'execution' | 'impact' | null>(null);
 
   // Newsletter form states
   const [email, setEmail] = useState('');
@@ -238,18 +243,48 @@ export const AboutPage: React.FC = () => {
         );
       }
 
-      // Stagger Method Cards
+      // Stagger Method Pipeline Cards with Cinematic Perspective Sweep
       if (methodStackRef.current) {
-        const methodCards = methodStackRef.current.querySelectorAll(`.${styles.methodCard}`);
+        const pipelineCards = methodStackRef.current.querySelectorAll(`.${styles.methodPipelineCard}`);
+        const pipelineRail = methodStackRef.current.querySelector(`.${styles.pipelineRail}`);
+
+        if (pipelineRail) {
+          gsap.fromTo(
+            pipelineRail,
+            { scaleX: 0, opacity: 0 },
+            {
+              scaleX: 1,
+              opacity: 1,
+              duration: 1.1,
+              ease: 'power3.out',
+              scrollTrigger: {
+                trigger: methodStackRef.current,
+                start: 'top 82%',
+                once: true,
+              },
+            }
+          );
+        }
+
         gsap.fromTo(
-          methodCards,
-          { opacity: 0, y: 20 },
+          pipelineCards,
+          {
+            opacity: 0,
+            y: 36,
+            rotateY: -8,
+            scale: 0.95,
+            filter: 'blur(6px)',
+          },
           {
             opacity: 1,
             y: 0,
-            duration: 0.65,
+            rotateY: 0,
+            scale: 1,
+            filter: 'blur(0px)',
+            duration: 0.95,
             stagger: 0.12,
-            ease: 'power2.out',
+            ease: 'power3.out',
+            clearProps: 'filter,transform',
             scrollTrigger: {
               trigger: methodStackRef.current,
               start: 'top 80%',
@@ -434,89 +469,171 @@ export const AboutPage: React.FC = () => {
           ========================================================================= */}
       <section id="method" className={styles.methodSection}>
         <div className={styles.methodContainer}>
-          <div className={styles.methodEyebrow}>
-            <Radio size={12} />
-            <span>EDITORIAL PROTOCOL (#METHOD)</span>
+          <div className={styles.methodHeaderCenter}>
+            <div className={styles.methodEyebrow}>
+              <Compass size={12} className={styles.eyebrowIcon} />
+              <span>THE STANDARD</span>
+            </div>
+
+            <h2 className={styles.methodHeading}>
+              Three questions. Complete clarity.
+            </h2>
+
+            <p className={styles.methodSubhead}>
+              Every system we evaluate must pass three foundational criteria. If a mechanism cannot be verified with primary evidence, it gets discarded.
+            </p>
           </div>
 
-          <h2 className={styles.methodHeading}>
-            The three-question standard.
-          </h2>
-
-          <p className={styles.methodSubhead}>
-            Before anything publishes, it has to answer three questions with primary sources. If it
-            can't, it goes back to research.
-          </p>
-
-          <div className={styles.methodCardsStack} ref={methodStackRef}>
-            {/* Card 1 */}
-            <div
-              className={styles.methodCard}
-              onMouseMove={handleCardMouseMove}
-              onMouseLeave={handleCardMouseLeave}
-            >
-              <div className={styles.methodCardHeader}>
-                <span className={styles.methodNumberBadge}>01</span>
-                <h3 className={styles.methodQuestion}>What is the mechanism?</h3>
-              </div>
-              <p className={styles.methodExplanation}>
-                Define what it does and what problem it solves — without marketing language, without
-                jargon, without assuming the reader already knows.
-              </p>
-              <div className={styles.methodTagRow}>
-                <span className={styles.methodTag}>Contract: Mechanism Definition</span>
-                <span className={styles.methodTag}>Zero Marketing Jargon</span>
-                <span className={styles.methodTag}>Primary Specs Only</span>
-              </div>
+          {/* Kinetic 3-Column Pipeline with Interconnecting Luminous Rail */}
+          <div className={styles.pipelineWrapper} ref={methodStackRef}>
+            {/* Horizontal Interconnecting Light Beam across columns */}
+            <div className={styles.pipelineRail} aria-hidden="true">
+              <div className={styles.pipelineBeam} />
+              <div className={styles.pipelinePulse} />
             </div>
 
-            {/* Card 2 */}
-            <div
-              className={styles.methodCard}
-              onMouseMove={handleCardMouseMove}
-              onMouseLeave={handleCardMouseLeave}
-            >
-              <div className={styles.methodCardHeader}>
-                <span className={styles.methodNumberBadge}>02</span>
-                <h3 className={styles.methodQuestion}>How does it physically work?</h3>
-              </div>
-              <p className={styles.methodExplanation}>
-                Walk through the actual execution — the steps, the components, the failure modes. Use
-                the real system, not an analogy for it.
-              </p>
-              <div className={styles.methodTagRow}>
-                <span className={styles.methodTag}>Contract: State Machine</span>
-                <span className={styles.methodTag}>Deconstruct Execution</span>
-                <span className={styles.methodTag}>Failure Mode Analysis</span>
-              </div>
-            </div>
+            <div className={styles.pipelineGrid}>
+              {/* Card 1: The Core Mechanism */}
+              <div
+                className={styles.methodPipelineCard}
+                onMouseEnter={() => setHoveredMethodStage('mechanism')}
+                onMouseMove={handleCardMouseMove}
+                onMouseLeave={(e) => {
+                  handleCardMouseLeave(e);
+                  setHoveredMethodStage(null);
+                }}
+              >
+                <div>
+                  <div className={styles.methodCardHeader}>
+                    <div className={styles.methodStageTitleRow}>
+                      <Layers size={16} className={styles.methodStageIcon} />
+                      <span className={styles.methodStageTag}>CORE MECHANISM</span>
+                    </div>
+                    <ArrowUpRight size={15} className={styles.methodArrow} />
+                  </div>
 
-            {/* Card 3 */}
-            <div
-              className={styles.methodCard}
-              onMouseMove={handleCardMouseMove}
-              onMouseLeave={handleCardMouseLeave}
-            >
-              <div className={styles.methodCardHeader}>
-                <span className={styles.methodNumberBadge}>03</span>
-                <h3 className={styles.methodQuestion}>Why does it matter?</h3>
+                  <div className={styles.methodVisualizerWindow}>
+                    <MethodStageVisualizer
+                      stage="mechanism"
+                      isHovered={hoveredMethodStage === 'mechanism'}
+                    />
+                  </div>
+
+                  <h3 className={styles.methodQuestion}>
+                    What is the mechanism?
+                  </h3>
+
+                  <p className={styles.methodExplanation}>
+                    Define what it does and the exact problem it solves — in plain English, with zero commercial hype or assumptions.
+                  </p>
+                </div>
+
+                <div className={styles.methodCardFooter}>
+                  <div className={styles.methodStageStatus}>
+                    <span className={styles.methodStatusDot} />
+                    <span>FOUNDATION TEST</span>
+                  </div>
+                  <span className={styles.methodStageNumber}>STAGE 1 →</span>
+                </div>
               </div>
-              <p className={styles.methodExplanation}>
-                Connect the mechanism to a real outcome. What breaks if you get this wrong? What
-                changes if you understand it?
-              </p>
-              <div className={styles.methodTagRow}>
-                <span className={styles.methodTag}>Contract: Production Impact</span>
-                <span className={styles.methodTag}>Extreme Load Verification</span>
-                <span className={styles.methodTag}>Architectural Tradeoffs</span>
+
+              {/* Card 2: The Physical Reality */}
+              <div
+                className={styles.methodPipelineCard}
+                onMouseEnter={() => setHoveredMethodStage('execution')}
+                onMouseMove={handleCardMouseMove}
+                onMouseLeave={(e) => {
+                  handleCardMouseLeave(e);
+                  setHoveredMethodStage(null);
+                }}
+              >
+                <div>
+                  <div className={styles.methodCardHeader}>
+                    <div className={styles.methodStageTitleRow}>
+                      <Cpu size={16} className={styles.methodStageIcon} />
+                      <span className={styles.methodStageTag}>PHYSICAL REALITY</span>
+                    </div>
+                    <ArrowUpRight size={15} className={styles.methodArrow} />
+                  </div>
+
+                  <div className={styles.methodVisualizerWindow}>
+                    <MethodStageVisualizer
+                      stage="execution"
+                      isHovered={hoveredMethodStage === 'execution'}
+                    />
+                  </div>
+
+                  <h3 className={styles.methodQuestion}>
+                    How does it physically work?
+                  </h3>
+
+                  <p className={styles.methodExplanation}>
+                    Walk through the real execution — the components, the data pathways, and where the architecture breaks under stress.
+                  </p>
+                </div>
+
+                <div className={styles.methodCardFooter}>
+                  <div className={styles.methodStageStatus}>
+                    <span className={styles.methodStatusDot} />
+                    <span>EXECUTION TEST</span>
+                  </div>
+                  <span className={styles.methodStageNumber}>STAGE 2 →</span>
+                </div>
+              </div>
+
+              {/* Card 3: Proven Outcome */}
+              <div
+                className={styles.methodPipelineCard}
+                onMouseEnter={() => setHoveredMethodStage('impact')}
+                onMouseMove={handleCardMouseMove}
+                onMouseLeave={(e) => {
+                  handleCardMouseLeave(e);
+                  setHoveredMethodStage(null);
+                }}
+              >
+                <div>
+                  <div className={styles.methodCardHeader}>
+                    <div className={styles.methodStageTitleRow}>
+                      <Target size={16} className={styles.methodStageIcon} />
+                      <span className={styles.methodStageTag}>PROVEN OUTCOME</span>
+                    </div>
+                    <ArrowUpRight size={15} className={styles.methodArrow} />
+                  </div>
+
+                  <div className={styles.methodVisualizerWindow}>
+                    <MethodStageVisualizer
+                      stage="impact"
+                      isHovered={hoveredMethodStage === 'impact'}
+                    />
+                  </div>
+
+                  <h3 className={styles.methodQuestion}>
+                    Why does it matter?
+                  </h3>
+
+                  <p className={styles.methodExplanation}>
+                    Connect the engineering to real business outcomes so you understand what to build, what to avoid, and what to scale.
+                  </p>
+                </div>
+
+                <div className={styles.methodCardFooter}>
+                  <div className={styles.methodStageStatus}>
+                    <span className={styles.methodStatusDot} />
+                    <span>IMPACT TEST</span>
+                  </div>
+                  <span className={styles.methodStageNumber}>STAGE 3 →</span>
+                </div>
               </div>
             </div>
           </div>
 
-          <p className={styles.methodFooterNote}>
-            Every article on this site follows this structure. The question numbers map to the H2
-            headings you'll find in each piece.
-          </p>
+          {/* Clean Editorial Guarantee Capsule */}
+          <div className={styles.methodGuaranteeContainer}>
+            <div className={styles.methodGuaranteeCapsule}>
+              <ShieldCheck size={14} className={styles.guaranteeIcon} />
+              <span>No sponsored reviews. No surface-level summaries. Just the foundational mechanics.</span>
+            </div>
+          </div>
         </div>
       </section>
 
