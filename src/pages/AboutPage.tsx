@@ -21,7 +21,11 @@ import {
   ChevronDown,
   Layers,
   Cpu,
-  Target
+  Target,
+  UserCheck,
+  FileText,
+  History,
+  Check
 } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -70,6 +74,7 @@ export const AboutPage: React.FC = () => {
   const sectionHeaderRef = useRef<HTMLDivElement>(null);
   const fieldsGridRef = useRef<HTMLDivElement>(null);
   const methodStackRef = useRef<HTMLDivElement>(null);
+  const standardsGridRef = useRef<HTMLDivElement>(null);
 
   // Active hover tracking for mechanism animations
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
@@ -288,6 +293,29 @@ export const AboutPage: React.FC = () => {
             scrollTrigger: {
               trigger: methodStackRef.current,
               start: 'top 80%',
+              once: true,
+            },
+          }
+        );
+      }
+
+      // Stagger Standards Bento Cards
+      if (standardsGridRef.current) {
+        const standardCards = standardsGridRef.current.querySelectorAll(`.${styles.standardCard}`);
+        gsap.fromTo(
+          standardCards,
+          { opacity: 0, y: 32, scale: 0.96 },
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.8,
+            stagger: 0.09,
+            ease: 'power3.out',
+            clearProps: 'filter,transform',
+            scrollTrigger: {
+              trigger: standardsGridRef.current,
+              start: 'top 82%',
               once: true,
             },
           }
@@ -645,118 +673,173 @@ export const AboutPage: React.FC = () => {
       </div>
 
       {/* =========================================================================
-          SECTION 4: CONTRIBUTORS (Honest Empty State with Cinematic Quality)
+          SECTION 4: TRANSPARENCY & STANDARDS BENTO GRID
           ========================================================================= */}
-      <section className={styles.contributorsSection}>
-        <div className={styles.contributorsContainer}>
-          <div className={styles.honestPlaceholderBox}>
-            <div className={styles.honestHeader}>
-              <span className={styles.honestStatusTag}>
-                <span className={styles.fieldBeacon} />
-                STATUS: ACTIVE RECRUITMENT // BYLINE INTEGRITY
-              </span>
-              <span className={styles.fieldBadge}>ZERO AI PSEUDONYMS</span>
+      <section className={styles.standardsSection}>
+        <div className={styles.standardsContainer}>
+          <div className={styles.standardsHeaderCenter}>
+            <div className={styles.standardsEyebrow}>
+              <ShieldCheck size={12} className={styles.eyebrowIcon} />
+              <span>TRANSPARENCY & STANDARDS</span>
             </div>
 
-            <h2 className={styles.contributorsHeading}>Who writes this.</h2>
+            <h2 className={styles.standardsHeading}>
+              Built on trust. Backed by primary sources.
+            </h2>
 
-            <p className={styles.honestPlaceholderText}>
-              We're building our contributor team. Every article will carry a real byline linked to a
-              real author page — no pseudonyms, no stock photos. This section updates when the first
-              contributor is confirmed.
+            <p className={styles.standardsSubhead}>
+              Complete independence from marketing incentives, sponsored partnerships, and synthetic bylines.
             </p>
+          </div>
 
-            <div className={styles.editorialIntegrityBadge}>
-              <ShieldCheck size={14} />
-              <span>EDITORIAL INTEGRITY PROTOCOL // REAL BYLINES ONLY · VERIFIED PRACTITIONERS</span>
+          <div className={styles.standardsGrid} ref={standardsGridRef}>
+            {/* Pillar 1: Verified Practitioners */}
+            <div
+              className={styles.standardCard}
+              onMouseMove={handleCardMouseMove}
+              onMouseLeave={handleCardMouseLeave}
+            >
+              <div>
+                <div className={styles.standardCardHeader}>
+                  <div className={styles.standardIconBadge}>
+                    <UserCheck size={18} className={styles.standardVectorIcon} />
+                  </div>
+                  <ArrowUpRight size={15} className={styles.standardArrow} />
+                </div>
+
+                <h3 className={styles.standardTitle}>
+                  Verified Practitioners
+                </h3>
+
+                <p className={styles.standardBody}>
+                  Every breakdown is researched and written by real practitioners with hands-on systems experience. We reject synthetic ghostwriting, AI pseudonyms, and stock author personas.
+                </p>
+              </div>
+
+              <div className={styles.standardCardFooter}>
+                <div className={styles.standardPill}>
+                  <span className={styles.standardPillDot} />
+                  <span>NO AI PSEUDONYMS</span>
+                </div>
+                <span className={styles.standardFootNote}>REAL BYLINES ONLY</span>
+              </div>
+            </div>
+
+            {/* Pillar 2: Publisher Independence */}
+            <div
+              className={styles.standardCard}
+              onMouseMove={handleCardMouseMove}
+              onMouseLeave={handleCardMouseLeave}
+            >
+              <div>
+                <div className={styles.standardCardHeader}>
+                  <div className={styles.standardIconBadge}>
+                    <ShieldCheck size={18} className={styles.standardVectorIcon} />
+                  </div>
+                  <ArrowUpRight size={15} className={styles.standardArrow} />
+                </div>
+
+                <h3 className={styles.standardTitle}>
+                  Publisher Independence
+                </h3>
+
+                <p className={styles.standardBody}>
+                  Systems to Scale is published by Uniqentic, but operates under strict editorial independence. No article contains sales pitches, affiliate referral links, or commercial kickbacks.
+                </p>
+              </div>
+
+              <div className={styles.standardCardFooter}>
+                <div className={styles.standardPill}>
+                  <span className={styles.standardPillDot} />
+                  <span>ZERO COMMERCIAL BIAS</span>
+                </div>
+                <span className={styles.standardFootNote}>EDITORIAL ONLY</span>
+              </div>
+            </div>
+
+            {/* Pillar 3: Primary Documentation */}
+            <div
+              className={styles.standardCard}
+              onMouseMove={handleCardMouseMove}
+              onMouseLeave={handleCardMouseLeave}
+            >
+              <div>
+                <div className={styles.standardCardHeader}>
+                  <div className={styles.standardIconBadge}>
+                    <FileText size={18} className={styles.standardVectorIcon} />
+                  </div>
+                  <ArrowUpRight size={15} className={styles.standardArrow} />
+                </div>
+
+                <h3 className={styles.standardTitle}>
+                  Primary Documentation
+                </h3>
+
+                <p className={styles.standardBody}>
+                  External citations link strictly to official engineering specifications, open-source repositories, RFCs, and architecture whitepapers—never marketing blogs or SEO aggregator farms.
+                </p>
+              </div>
+
+              <div className={styles.standardCardFooter}>
+                <div className={styles.standardPill}>
+                  <span className={styles.standardPillDot} />
+                  <span>PRIMARY SOURCES ONLY</span>
+                </div>
+                <span className={styles.standardFootNote}>DIRECT SPECS</span>
+              </div>
+            </div>
+
+            {/* Pillar 4: Open Revision History */}
+            <div
+              className={styles.standardCard}
+              onMouseMove={handleCardMouseMove}
+              onMouseLeave={handleCardMouseLeave}
+            >
+              <div>
+                <div className={styles.standardCardHeader}>
+                  <div className={styles.standardIconBadge}>
+                    <History size={18} className={styles.standardVectorIcon} />
+                  </div>
+                  <ArrowUpRight size={15} className={styles.standardArrow} />
+                </div>
+
+                <h3 className={styles.standardTitle}>
+                  Open Revision History
+                </h3>
+
+                <p className={styles.standardBody}>
+                  If an engineering nuance or architectural detail is proven inaccurate, we update it publicly with dated timestamps rather than silently editing text. Version stamps reflect verified re-tests.
+                </p>
+              </div>
+
+              <div className={styles.standardCardFooter}>
+                <div className={styles.standardPill}>
+                  <span className={styles.standardPillDot} />
+                  <span>TRANSPARENT REVISIONS</span>
+                </div>
+                <span className={styles.standardFootNote}>PUBLIC LOGS</span>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* CURVE SEAM 4: Panel (#0D0F10) -> Ground (#080808) */}
-      <div className={styles.seamCurveContainer} style={{ backgroundColor: '#0D0F10' }}>
-        <svg viewBox="0 0 1440 44" fill="none" preserveAspectRatio="none" className={styles.seamSvg}>
-          <path d="M0,0 C480,44 960,44 1440,0 L1440,44 L0,44 Z" fill="#080808" />
-        </svg>
-      </div>
-
       {/* =========================================================================
-          SECTION 5 & 6: PUBLISHER DISCLOSURE & POLICIES (Dark Band)
-          ========================================================================= */}
-      <section className={styles.publisherSection}>
-        <div className={styles.publisherContainer}>
-          {/* Section 5: Publisher Disclosure Card */}
-          <div className={styles.publisherCard}>
-            <span className={styles.publisherEyebrow}>Publisher Disclosure</span>
-            <h2 className={styles.publisherHeading}>Published by Uniqentic.</h2>
-            <p className={styles.publisherBody}>
-              Systems to Scale is published by Uniqentic. The eight fields covered here map to the
-              services the company offers. This relationship is disclosed here and in the footer —
-              nowhere else. Articles are editorial, not promotional. No article on this site contains a
-              sales pitch, an affiliate link, or a call to action for the parent company.
-            </p>
-          </div>
-
-          <div className={styles.policyDividerRule} />
-
-          {/* Section 6: Links & Corrections Policy */}
-          <div className={styles.policySection}>
-            <h3 className={styles.policyHeading}>How we link and how we correct.</h3>
-
-            <div className={styles.policyGrid}>
-              {/* Column 1: Links */}
-              <div className={styles.policyCol}>
-                <div className={styles.policyColHeader}>
-                  <h4 className={styles.policyColTitle}>Links</h4>
-                  <span className={styles.policyColTag}>PRIMARY DOCS ONLY</span>
-                </div>
-                <p className={styles.policyColBody}>
-                  External links go to primary sources — official documentation, specifications,
-                  standards, and papers. We don't link to aggregators or competitors' commercial
-                  pages. Every external link carries <code>rel="noopener"</code>. We don't add
-                  nofollow to editorial citations.
-                </p>
-              </div>
-
-              {/* Column 2: Corrections */}
-              <div className={styles.policyCol}>
-                <div className={styles.policyColHeader}>
-                  <h4 className={styles.policyColTitle}>Corrections</h4>
-                  <span className={styles.policyColTag}>TRANSPARENT REVISIONS</span>
-                </div>
-                <p className={styles.policyColBody}>
-                  Every article has a visible corrections block. If we get something wrong, we fix it,
-                  date the correction, and leave both versions visible. We don't silently edit
-                  published work. The version stamp on each article shows when it was last tested and
-                  re-checked.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CURVE SEAM 5: Ground (#080808) -> Panel (#0D0F10) */}
-      <div className={styles.seamCurveContainer} style={{ backgroundColor: '#080808' }}>
-        <svg viewBox="0 0 1440 44" fill="none" preserveAspectRatio="none" className={styles.seamSvg}>
-          <path d="M0,0 C480,44 960,44 1440,0 L1440,44 L0,44 Z" fill="#0D0F10" />
-        </svg>
-      </div>
-
-      {/* =========================================================================
-          SECTION 7: NEWSLETTER CTA (Command Console)
+          SECTION 5: THE WEEKLY DISPATCH CONSOLE (Newsletter)
           ========================================================================= */}
       <section className={styles.newsletterSection} id="newsletter-section">
         <div className={styles.newsletterContainer}>
           <div className={styles.newsletterEyebrow}>
-            <Radio size={12} />
-            <span>WEEKLY MECHANISM DISPATCH</span>
+            <Sparkles size={12} className={styles.eyebrowIcon} />
+            <span>WEEKLY DISPATCH</span>
           </div>
 
-          <h2 className={styles.newsletterHeading}>Follow the work.</h2>
+          <h2 className={styles.newsletterHeading}>
+            Stay ahead of how systems scale.
+          </h2>
+
           <p className={styles.newsletterSubhead}>
-            One email when something new publishes. No spam, no pitch, unsubscribe anytime.
+            In-depth mechanism breakdowns delivered directly to your inbox. No promotional noise, no sponsored pitches, unsubscribe anytime.
           </p>
 
           <form onSubmit={handleNewsletterSubmit} className={styles.newsletterForm}>
@@ -799,13 +882,27 @@ export const AboutPage: React.FC = () => {
             </div>
           )}
 
-          <div className={styles.newsletterGuarantees}>
-            KIT PROTECTED // DWELL-TRAP SHIELD // UNSUBSCRIBE WITH ONE CLICK
+          {/* Minimal Human Trust Badges */}
+          <div className={styles.newsletterTrustPills}>
+            <span className={styles.trustPill}>
+              <Check size={12} className={styles.trustCheckIcon} />
+              <span>One email per breakdown</span>
+            </span>
+            <span className={styles.trustDot}>•</span>
+            <span className={styles.trustPill}>
+              <Check size={12} className={styles.trustCheckIcon} />
+              <span>Zero commercial spam</span>
+            </span>
+            <span className={styles.trustDot}>•</span>
+            <span className={styles.trustPill}>
+              <Check size={12} className={styles.trustCheckIcon} />
+              <span>One-click unsubscribe</span>
+            </span>
           </div>
         </div>
       </section>
 
-      {/* CURVE SEAM 6: Panel (#0D0F10) -> Footer Dark (#080808) */}
+      {/* CURVE SEAM 4: Panel (#0D0F10) -> Footer Dark (#080808) */}
       <div className={styles.seamCurveContainer} style={{ backgroundColor: '#0D0F10' }}>
         <svg viewBox="0 0 1440 44" fill="none" preserveAspectRatio="none" className={styles.seamSvg}>
           <path d="M0,0 C480,44 960,44 1440,0 L1440,44 L0,44 Z" fill="#080808" />
