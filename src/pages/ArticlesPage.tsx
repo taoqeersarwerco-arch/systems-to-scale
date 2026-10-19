@@ -20,11 +20,11 @@ import {
   MessageSquare,
   Bot,
   BarChart3,
-  Compass,
-  CheckCircle2,
-  SlidersHorizontal
+  Compass
 } from 'lucide-react';
 import { CosmicWeb } from '../components/articles/CosmicWeb';
+import { ArticleCard } from '../components/articles/ArticleCard';
+import { TopicSchematic } from '../components/ui/TopicSchematics';
 import styles from '../styles/articles.module.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -58,9 +58,10 @@ const renderTopicIcon = (slug: string) => {
 export const ArticlesPage: React.FC = () => {
   const [selectedTopic, setSelectedTopic] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [spotlightHovered, setSpotlightHovered] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
-  const marqueeRef = useRef<HTMLDivElement>(null);
+  const spotlightRef = useRef<HTMLDivElement>(null);
   const protocolRef = useRef<HTMLDivElement>(null);
 
   // Keyboard shortcut '/' to immediately focus the search console
@@ -75,21 +76,22 @@ export const ArticlesPage: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // 3D Tilt & Cursor Spotlight tracking per card
-  const handleCardMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+  // 3D Tilt & Cursor Spotlight tracking for Spotlight Slab
+  const handleSpotlightMouseMove = (e: React.MouseEvent<HTMLElement>) => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-    const rotateX = ((y / rect.height) - 0.5) * -4;
-    const rotateY = ((x / rect.width) - 0.5) * 4;
+    const rotateX = ((y / rect.height) - 0.5) * -3;
+    const rotateY = ((x / rect.width) - 0.5) * 3;
     e.currentTarget.style.setProperty('--card-rotate-x', `${rotateX.toFixed(2)}deg`);
     e.currentTarget.style.setProperty('--card-rotate-y', `${rotateY.toFixed(2)}deg`);
     e.currentTarget.style.setProperty('--spotlight-x', `${x}px`);
     e.currentTarget.style.setProperty('--spotlight-y', `${y}px`);
   };
 
-  const handleCardMouseLeave = (e: React.MouseEvent<HTMLElement>) => {
+  const handleSpotlightMouseLeave = (e: React.MouseEvent<HTMLElement>) => {
+    setSpotlightHovered(false);
     e.currentTarget.style.setProperty('--card-rotate-x', '0deg');
     e.currentTarget.style.setProperty('--card-rotate-y', '0deg');
   };
@@ -107,10 +109,10 @@ export const ArticlesPage: React.FC = () => {
     return matchesTopic && matchesSearch;
   });
 
-  // Separate the foundational Field Guide (Pillar) from component deep dives
-  const featuredFieldGuide = filteredArticles.find((a) => a.type === 'Pillar');
-  const deepDiveArticles = featuredFieldGuide
-    ? filteredArticles.filter((a) => a.slug !== featuredFieldGuide.slug)
+  // Separate featured article from the grid
+  const featuredArticle = filteredArticles.find((a) => a.type === 'Pillar');
+  const gridArticles = featuredArticle
+    ? filteredArticles.filter((a) => a.slug !== featuredArticle.slug)
     : filteredArticles;
 
   const isFiltered = searchQuery !== '' || selectedTopic !== 'all';
@@ -134,10 +136,10 @@ export const ArticlesPage: React.FC = () => {
     const isReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const ctx = gsap.context(() => {
-      // Marquee entrance
-      if (marqueeRef.current) {
+      // Spotlight entrance
+      if (spotlightRef.current) {
         gsap.fromTo(
-          marqueeRef.current,
+          spotlightRef.current,
           { opacity: 0, y: isReduced ? 0 : 20 },
           {
             opacity: 1,
@@ -145,7 +147,7 @@ export const ArticlesPage: React.FC = () => {
             duration: isReduced ? 0.2 : 0.65,
             ease: 'cubic-bezier(0.16, 1, 0.3, 1)',
             scrollTrigger: {
-              trigger: marqueeRef.current,
+              trigger: spotlightRef.current,
               start: 'top 85%',
               once: true
             }
@@ -163,7 +165,7 @@ export const ArticlesPage: React.FC = () => {
             opacity: 1,
             y: 0,
             duration: isReduced ? 0.2 : 0.6,
-            stagger: isReduced ? 0 : 0.06,
+            stagger: isReduced ? 0 : 0.05,
             ease: 'cubic-bezier(0.16, 1, 0.3, 1)',
             scrollTrigger: {
               trigger: gridRef.current,
@@ -178,15 +180,15 @@ export const ArticlesPage: React.FC = () => {
       if (protocolRef.current) {
         gsap.fromTo(
           protocolRef.current,
-          { opacity: 0, y: isReduced ? 0 : 20 },
+          { opacity: 0, y: isReduced ? 0 : 24 },
           {
             opacity: 1,
             y: 0,
-            duration: isReduced ? 0.2 : 0.6,
+            duration: isReduced ? 0.2 : 0.7,
             ease: 'cubic-bezier(0.16, 1, 0.3, 1)',
             scrollTrigger: {
               trigger: protocolRef.current,
-              start: 'top 85%',
+              start: 'top 80%',
               once: true
             }
           }
@@ -197,277 +199,285 @@ export const ArticlesPage: React.FC = () => {
     return () => ctx.revert();
   }, [selectedTopic, searchQuery]);
 
+  // Set SEO metadata and JSON-LD structured data
+  useEffect(() => {
+    const originalTitle = document.title;
+    document.title = 'Articles — Systems to Scale';
+
+    let metaDesc = document.querySelector('meta[name="description"]');
+    const originalDesc = metaDesc ? metaDesc.getAttribute('content') : '';
+    const targetDesc =
+      'Explore clear, visual explanations of how modern software and business systems work. Simple language, interactive schematics, and zero buzzwords.';
+
+    if (metaDesc) {
+      metaDesc.setAttribute('content', targetDesc);
+    } else {
+      metaDesc = document.createElement('meta');
+      metaDesc.setAttribute('name', 'description');
+      metaDesc.setAttribute('content', targetDesc);
+      document.head.appendChild(metaDesc);
+    }
+
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.setAttribute('rel', 'canonical');
+      canonical.setAttribute('href', 'https://systemstoscale.tech/articles');
+      document.head.appendChild(canonical);
+    } else {
+      canonical.setAttribute('href', 'https://systemstoscale.tech/articles');
+    }
+
+    const scriptId = 'articles-hub-jsonld';
+    let scriptTag = document.getElementById(scriptId) as HTMLScriptElement | null;
+    if (!scriptTag) {
+      scriptTag = document.createElement('script');
+      scriptTag.id = scriptId;
+      scriptTag.type = 'application/ld+json';
+      document.head.appendChild(scriptTag);
+    }
+
+    const schemas = [
+      {
+        '@context': 'https://schema.org',
+        '@type': 'CollectionPage',
+        name: 'Systems to Scale Articles',
+        description: targetDesc,
+        url: 'https://systemstoscale.tech/articles',
+        isPartOf: {
+          '@type': 'WebSite',
+          name: 'Systems to Scale',
+          url: 'https://systemstoscale.tech'
+        }
+      },
+      {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: 'Home',
+            item: 'https://systemstoscale.tech/'
+          },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: 'Articles',
+            item: 'https://systemstoscale.tech/articles'
+          }
+        ]
+      }
+    ];
+
+    scriptTag.textContent = JSON.stringify(schemas);
+
+    return () => {
+      document.title = originalTitle;
+      if (metaDesc && originalDesc) {
+        metaDesc.setAttribute('content', originalDesc);
+      }
+      if (scriptTag && scriptTag.parentNode) {
+        scriptTag.parentNode.removeChild(scriptTag);
+      }
+    };
+  }, []);
+
   return (
-    <div className={styles.articlesPage}>
+    <div className={styles.articlesPageContainer}>
       {/* =========================================================================
-          HERO SECTION: 3D Cosmic Web Macro-Structure (Exact Match to Topics Hub)
+          HERO SECTION: Cosmic structures background & Command Deck
           ========================================================================= */}
       <section className={styles.heroSection}>
-        {/* Living 3D Cosmic Web: Macro-structure of all production systems */}
-        <div className={styles.canvasWrapper}>
-          <CosmicWeb />
+        <CosmicWeb />
+
+        <div className={styles.observatoryHudTop}>
+          <span className={styles.observatoryHudLabel}>SYSTEMS TO SCALE</span>
+          <span className={styles.observatoryHudDivider}>/</span>
+          <span className={styles.observatoryHudCoordinates}>ARTICLES</span>
+          <span className={styles.observatoryHudDivider}>/</span>
+          <span className={styles.observatoryHudStatus}>INDEX</span>
         </div>
 
-        {/* Typographic Readability Pocket */}
-        <div className={styles.readingPocket} />
+        <div className={styles.heroReticleTl} aria-hidden="true" />
+        <div className={styles.heroReticleTr} aria-hidden="true" />
 
-        {/* Observatory Reticle Corner Brackets (Exact 4-Corner Topics Hub Layout) */}
-        <div className={styles.observatoryReticleTl} aria-hidden="true" />
-        <div className={styles.observatoryReticleTr} aria-hidden="true" />
-        <div className={styles.observatoryReticleBl} aria-hidden="true" />
-        <div className={styles.observatoryReticleBr} aria-hidden="true" />
-
-        {/* Content Overlay Centred Vertically Over Flow Field (Exact Topics Hub Specs) */}
-        <div className={styles.heroContentOverlay}>
+        <div className={styles.heroInner}>
           <div className={styles.heroEyebrow}>
-            <Radio size={14} />
-            <span>PRODUCTION ARTICLES & EXPLANATIONS</span>
+            <span className={styles.eyebrowIconWrapper}>
+              <Radio size={14} className={styles.eyebrowIcon} />
+            </span>
+            <span className={styles.eyebrowText}>KNOWLEDGE BASE</span>
           </div>
 
           <h1 className={styles.heroHeading}>
-            All Production Systems.
+            Understand the system.
           </h1>
 
           <p className={styles.heroSublead}>
-            Every article is built on the three-question standard: What it is, How it physically works,
-            and Why it matters under extreme production load. Designed for founders, operators, and systems engineers.
+            Clear, visual breakdowns of how modern software, payments, and automation pipelines actually work under the hood.
           </p>
+
+          <a
+            href="#command-deck"
+            onClick={handleScrollToDeck}
+            className={styles.scrollIndicator}
+            aria-label="Scroll down to search articles"
+          >
+            <ChevronDown size={18} />
+          </a>
         </div>
 
-        {/* Scroll Indicator matching Topics Hub */}
-        <a
-          href="#command-deck"
-          onClick={handleScrollToDeck}
-          className={styles.scrollIndicator}
-          aria-label="Scroll to articles archive"
-        >
-          <span>EXPLORE ARCHIVE</span>
-          <ChevronDown size={16} />
-        </a>
-      </section>
-
-      {/* =========================================================================
-          SECTION A: OBSERVATORY COMMAND DECK (Search & Topics Console)
-          ========================================================================= */}
-      <section className={styles.commandDeckSection} id="command-deck">
-        <div className={styles.commandChassis}>
-          {/* Subtle 4-Corner Reticle Hardware Accents */}
-          <div className={styles.chassisReticleTl} aria-hidden="true" />
-          <div className={styles.chassisReticleTr} aria-hidden="true" />
-          <div className={styles.chassisReticleBl} aria-hidden="true" />
-          <div className={styles.chassisReticleBr} aria-hidden="true" />
-
-          {/* Full-Width Cinematic Search Bar */}
-          <div className={styles.searchRow}>
-            <div className={styles.searchContainer}>
-              <Search size={15} className={styles.searchIcon} />
+        {/* Command Deck Console */}
+        <div className={styles.commandDeckContainer} id="command-deck">
+          <div className={styles.commandChassis}>
+            <div className={styles.searchConsoleRow}>
+              <div className={styles.searchIconCol}>
+                <Search size={17} className={styles.searchConsoleIcon} />
+              </div>
               <input
                 ref={searchInputRef}
                 type="text"
-                placeholder="Search articles, topics, or key production questions..."
+                placeholder="Search articles by title, topic, or keyword..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className={styles.searchInput}
+                className={styles.searchConsoleInput}
+                aria-label="Search articles"
               />
-              <div className={styles.searchActions}>
-                {searchQuery && (
-                  <span className={styles.searchMatchPill}>
-                    {filteredArticles.length} MATCHING
-                  </span>
-                )}
-                {searchQuery && (
-                  <button
-                    type="button"
-                    onClick={() => setSearchQuery('')}
-                    className={styles.searchClearBtn}
-                    title="Clear search"
-                  >
-                    <X size={13} />
-                  </button>
-                )}
-                <span className={styles.searchKbd} title="Press / to search">/</span>
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  className={styles.searchConsoleClear}
+                  aria-label="Clear search query"
+                >
+                  <X size={15} />
+                </button>
+              )}
+              <div className={styles.searchKeyboardCue} aria-hidden="true">
+                <kbd>/</kbd>
               </div>
             </div>
-          </div>
 
-          {/* Horizontal Topics Rail (Zero Wrap, Pure Fluid Track with Monochrome Vector Icons) */}
-          <div className={styles.domainRailWrapper}>
-            <div className={styles.domainRailTrack}>
+            {/* Filter pills */}
+            <div className={styles.topicsFilterRow}>
               <button
                 type="button"
                 onClick={() => setSelectedTopic('all')}
-                className={`${styles.domainPill} ${selectedTopic === 'all' ? styles.domainPillActive : ''}`}
+                className={`${styles.topicPill} ${selectedTopic === 'all' ? styles.topicPillActive : ''}`}
               >
-                <span className={styles.pillIcon}>{renderTopicIcon('all')}</span>
-                <span>ALL</span>
+                {renderTopicIcon('all')}
+                <span>All Topics</span>
               </button>
 
-              {TOPICS.map((t) => {
-                const isActive = selectedTopic === t.slug;
+              {TOPICS.map((topic) => {
+                const isActive = selectedTopic === topic.slug;
                 return (
                   <button
-                    key={t.slug}
+                    key={topic.slug}
                     type="button"
-                    onClick={() => setSelectedTopic(t.slug)}
-                    className={`${styles.domainPill} ${isActive ? styles.domainPillActive : ''}`}
+                    onClick={() => setSelectedTopic(topic.slug)}
+                    className={`${styles.topicPill} ${isActive ? styles.topicPillActive : ''}`}
                   >
-                    <span className={styles.pillIcon}>{renderTopicIcon(t.slug)}</span>
-                    <span>{t.name.toUpperCase()}</span>
+                    {renderTopicIcon(topic.slug)}
+                    <span>{topic.name}</span>
                   </button>
                 );
               })}
-
-              {/* Instant Filter Reset */}
-              {isFiltered && (
-                <button
-                  type="button"
-                  onClick={handleResetFilters}
-                  className={styles.resetFiltersBtn}
-                  title="Reset active filters"
-                >
-                  <span>RESET FILTERS</span>
-                  <X size={11} />
-                </button>
-              )}
             </div>
           </div>
 
-          {/* Live System Telemetry Status Bar */}
-          <div className={styles.telemetryStatusBar}>
+          {/* Clean Telemetry Bar */}
+          <div className={styles.commandTelemetry}>
             <div className={styles.telemetryLeft}>
               <span className={styles.telemetryDot} />
               <span className={styles.telemetryText}>
-                {filteredArticles.length} PRODUCTION {filteredArticles.length === 1 ? 'SYSTEM' : 'SYSTEMS'} AVAILABLE
+                {filteredArticles.length} {filteredArticles.length === 1 ? 'ARTICLE' : 'ARTICLES'} AVAILABLE
               </span>
               <span className={styles.telemetryDivider}>//</span>
               <span className={styles.telemetryScope}>
-                {selectedTopic === 'all' ? 'ALL DISCIPLINES' : selectedTopic.toUpperCase().replace('-', ' ')}
+                {selectedTopic === 'all' ? 'ALL TOPICS' : selectedTopic.toUpperCase().replace('-', ' ')}
               </span>
             </div>
             <div className={styles.telemetryRight}>
-              <span className={styles.telemetryTag}>100% SPEC VERIFIED</span>
+              <span className={styles.telemetryTag}>CLEAR & ACCESSIBLE</span>
             </div>
           </div>
         </div>
       </section>
 
       {/* =========================================================================
-          SECTION B: FEATURED FIELD GUIDE MARQUEE SLAB (Foundational Pillar)
+          SECTION B: FEATURED SPOTLIGHT (Clean Cinematic Showcase)
           ========================================================================= */}
-      {featuredFieldGuide && (
-        <section className={styles.marqueeSection} ref={marqueeRef}>
+      {featuredArticle && !isFiltered && (
+        <section className={styles.spotlightSection} ref={spotlightRef}>
           <div className={styles.sectionHeader}>
             <div className={styles.sectionEyebrow}>
               <Sparkles size={13} />
-              <span>FOUNDATIONAL ARCHITECTURE // FIELD GUIDE</span>
+              <span>FEATURED SPOTLIGHT</span>
             </div>
             <h2 className={styles.sectionHeading}>
-              System Anchor Guide.
+              Spotlight.
             </h2>
             <p className={styles.sectionSub}>
-              Foundational mental models and primary execution contracts before diving into individual mechanism edge cases.
+              A great place to start: see how core systems connect and operate in real life.
             </p>
           </div>
 
           <div
-            className={styles.marqueeSlab}
-            onMouseMove={handleCardMouseMove}
-            onMouseLeave={handleCardMouseLeave}
+            className={styles.spotlightSlab}
+            onMouseEnter={() => setSpotlightHovered(true)}
+            onMouseMove={handleSpotlightMouseMove}
+            onMouseLeave={handleSpotlightMouseLeave}
           >
-            {/* Specular scanline & 4-corner reticles */}
             <div className={styles.cardTopScanline} />
-            <div className={styles.cardCornerReticleTl} aria-hidden="true" />
-            <div className={styles.cardCornerReticleBr} aria-hidden="true" />
             <div className={styles.cardSpotlight} />
 
-            <div className={styles.marqueeGrid}>
-              {/* Left Column: Editorial Primacy */}
-              <div className={styles.marqueeLeft}>
-                <div className={styles.marqueeBadges}>
-                  <span className={styles.topicBadge}>{featuredFieldGuide.topic}</span>
-                  <span className={styles.fieldGuideHeroBadge}>
+            <div className={styles.spotlightGrid}>
+              {/* Left Column: Clear Text */}
+              <div className={styles.spotlightLeft}>
+                <div className={styles.spotlightBadges}>
+                  <span className={styles.spotlightBadgePill}>
                     <Sparkles size={11} />
-                    <span>FIELD GUIDE · START HERE</span>
+                    <span>FEATURED</span>
                   </span>
-                  <span className={styles.readingTimePill}>
-                    <Clock size={11} />
-                    <span>{featuredFieldGuide.readingTime || '10 min read'}</span>
+                  <span className={styles.topicBadge}>{featuredArticle.topic}</span>
+                  <span className={styles.spotlightTimePill}>
+                    <Clock size={10} />
+                    <span>{featuredArticle.readingTime || '9 min read'}</span>
                   </span>
                 </div>
 
-                <h3 className={styles.marqueeTitle}>
-                  {featuredFieldGuide.title}
+                <h3 className={styles.spotlightTitle}>
+                  {featuredArticle.title}
                 </h3>
 
-                <p className={styles.marqueeStandfirst}>
-                  {featuredFieldGuide.beginnerStandfirst || featuredFieldGuide.standfirst}
+                <p className={styles.spotlightStandfirst}>
+                  {featuredArticle.beginnerStandfirst || featuredArticle.standfirst}
                 </p>
 
-                <div className={styles.marqueeFooter}>
-                  <div className={styles.liveBeacon}>
-                    <span className={styles.liveDot} />
-                    <span>PRIMARY BLUEPRINT READY</span>
-                  </div>
-
+                <div className={styles.spotlightFooter}>
                   <Link
-                    to={`/articles/${featuredFieldGuide.slug}`}
-                    className={styles.marqueeActionBtn}
+                    to={`/articles/${featuredArticle.slug}`}
+                    className={styles.spotlightActionBtn}
                   >
-                    <span>Read Foundational Guide</span>
-                    <span className={styles.marqueeActionIcon}>
-                      <ArrowRight size={13} />
-                    </span>
+                    <span>Read article</span>
+                    <ArrowRight size={14} />
                   </Link>
                 </div>
               </div>
 
-              {/* Right Column: System Blueprint Telemetry */}
-              <div className={styles.marqueeRight}>
-                <div className={styles.blueprintChassis}>
-                  <div className={styles.blueprintHeader}>
-                    <SlidersHorizontal size={13} />
-                    <span>THREE-STAGE EXECUTION CONTRACT</span>
-                  </div>
-
-                  {featuredFieldGuide.focusQuestion && (
-                    <div className={styles.blueprintQuestionBox}>
-                      <span className={styles.blueprintQuestionLabel}>✦ THE CORE SYSTEM QUESTION</span>
-                      <p className={styles.blueprintQuestionText}>
-                        "{featuredFieldGuide.focusQuestion}"
-                      </p>
-                    </div>
-                  )}
-
-                  <div className={styles.blueprintStages}>
-                    <div className={styles.blueprintStageItem}>
-                      <span className={styles.stageNum}>01</span>
-                      <div className={styles.stageText}>
-                        <div className={styles.stageTitle}>Boundary Conditions</div>
-                        <div className={styles.stageDesc}>Inputs, outputs, and network trust assumptions</div>
-                      </div>
-                    </div>
-                    <div className={styles.blueprintStageItem}>
-                      <span className={styles.stageNum}>02</span>
-                      <div className={styles.stageText}>
-                        <div className={styles.stageTitle}>State Machine Execution</div>
-                        <div className={styles.stageDesc}>Worker pools, retries, idempotency & backoff physics</div>
-                      </div>
-                    </div>
-                    <div className={styles.blueprintStageItem}>
-                      <span className={styles.stageNum}>03</span>
-                      <div className={styles.stageText}>
-                        <div className={styles.stageTitle}>Extreme Load Verification</div>
-                        <div className={styles.stageDesc}>Cascade failure prevention under high concurrency</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className={styles.blueprintFooter}>
-                    <span className={styles.blueprintCheck}>
-                      <CheckCircle2 size={12} />
-                      <span>PRIMARY SOURCE VERIFIED</span>
-                    </span>
-                    <span className={styles.blueprintScope}>FOUNDATIONAL OVERVIEW</span>
+              {/* Right Column: Animated Topic Schematic */}
+              <div className={styles.spotlightRight}>
+                <div className={styles.spotlightVisualStage}>
+                  <div className={styles.visualGridPattern} />
+                  <div className={styles.visualVignette} />
+                  <div className={styles.spotlightSchematicWrapper}>
+                    <TopicSchematic
+                      topicSlug={featuredArticle.topicSlug}
+                      isHovered={spotlightHovered}
+                      isRevealed={false}
+                    />
                   </div>
                 </div>
               </div>
@@ -477,28 +487,28 @@ export const ArticlesPage: React.FC = () => {
       )}
 
       {/* =========================================================================
-          SECTION C: SYSTEMS ARCHIVE GRID (Technical Mechanism Deep Dives)
+          SECTION C: ARTICLES LIBRARY GRID (Clean Cinematic Cards)
           ========================================================================= */}
       <section className={styles.articlesGridSection}>
         <div className={styles.sectionHeader}>
           <div className={styles.sectionEyebrow}>
             <Radio size={13} />
-            <span>TECHNICAL SPECIFICATIONS // MECHANISMS</span>
+            <span>ARTICLES COLLECTION</span>
           </div>
           <h2 className={styles.sectionHeading}>
-            Component Specifications.
+            Explore Articles.
           </h2>
           <p className={styles.sectionSub}>
-            Deep dive breakdowns dissecting the mechanics of individual pipelines, bidding engines, render trees, and queues.
+            Visual, easy-to-understand explanations of modern software and business systems.
           </p>
         </div>
 
-        {deepDiveArticles.length === 0 ? (
+        {gridArticles.length === 0 ? (
           <div className={styles.emptyStateChassis}>
             <Search size={28} className={styles.emptyIcon} />
-            <h3 className={styles.emptyHeading}>No Production Systems Found</h3>
+            <h3 className={styles.emptyHeading}>No Articles Found</h3>
             <p className={styles.emptyDesc}>
-              No articles match the current filter criteria. Reset your search query or topic filter to browse the entire archive.
+              No articles match your current search. Try resetting your search query or selecting another topic.
             </p>
             <button
               type="button"
@@ -510,149 +520,28 @@ export const ArticlesPage: React.FC = () => {
           </div>
         ) : (
           <div className={styles.articlesGrid} ref={gridRef}>
-            {deepDiveArticles.map((article) => {
-              const isLive = article.status === 'published';
-              const isFieldGuide = article.type === 'Pillar';
-              const readingTime = article.readingTime || (isFieldGuide ? '10 min read' : '6 min read');
-              const standfirstText = article.beginnerStandfirst || article.standfirst;
-
-              const cardContent = (
-                <>
-                  {/* Luminous top-edge scanline */}
-                  <div className={styles.cardTopScanline} />
-                  {/* 4-corner micro hardware reticles */}
-                  <div className={styles.cardCornerReticleTl} aria-hidden="true" />
-                  <div className={styles.cardCornerReticleBr} aria-hidden="true" />
-                  {/* Interactive cursor spotlight */}
-                  <div className={styles.cardSpotlight} />
-
-                  <div className={styles.cardContent}>
-                    {/* Card Header: Topic Badge + Type Distinction + Reading Time */}
-                    <div className={styles.cardHeader}>
-                      <span className={styles.topicBadge}>{article.topic}</span>
-                      <div className={styles.cardHeaderMeta}>
-                        <span className={styles.typeBadgeDeepDive}>
-                          {isFieldGuide ? 'FIELD GUIDE' : 'DEEP DIVE · MECHANISM'}
-                        </span>
-                        <span className={styles.readingTimePillSmall}>
-                          <Clock size={10} />
-                          <span>{readingTime}</span>
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Title */}
-                    <h3 className={styles.cardTitle}>{article.title}</h3>
-
-                    {/* Beginner-Friendly Standfirst */}
-                    <p className={styles.cardStandfirst}>{standfirstText}</p>
-
-                    {/* Elevated Big Question Callout */}
-                    {article.focusQuestion && (
-                      <div className={styles.questionCallout}>
-                        <span className={styles.questionPrefix}>✦ THE BIG QUESTION</span>
-                        <p className={styles.questionQuote}>{article.focusQuestion}</p>
-                      </div>
-                    )}
-
-                    {/* Reading Circuit Stepper */}
-                    <div className={styles.metaRow}>
-                      <span className={styles.levelPill}>
-                        {isFieldGuide ? 'Overview' : 'Focused'}
-                      </span>
-
-                      <div
-                        className={styles.readingStepper}
-                        title={isLive ? '3-step mechanism: What it is, How it works, Why it matters' : 'Drafting roadmap'}
-                      >
-                        <span className={`${styles.stepDot} ${isLive ? styles.stepDotActive : ''}`} />
-                        <span className={`${styles.stepConnector} ${isLive ? styles.stepConnectorActive : ''}`} />
-                        <span className={`${styles.stepDot} ${isLive ? styles.stepDotActive : ''}`} />
-                        <span className={`${styles.stepConnector} ${isLive ? styles.stepConnectorActive : ''}`} />
-                        <span className={`${styles.stepDot} ${isLive ? styles.stepDotActive : ''}`} />
-                      </div>
-                    </div>
-
-                    {/* Card Footer: Living Action vs Roadmap Preview */}
-                    <div className={styles.cardFooter}>
-                      {isLive ? (
-                        <>
-                          <div className={styles.liveBeacon}>
-                            <span className={styles.liveDot} />
-                            <span>AVAILABLE NOW</span>
-                          </div>
-                          <div className={styles.buttonInButton}>
-                            <span>Read Guide</span>
-                            <span className={styles.buttonIconCircle}>
-                              <ArrowRight size={12} />
-                            </span>
-                          </div>
-                        </>
-                      ) : (
-                        <>
-                          <div className={styles.comingSoonBeacon}>
-                            <span className={styles.comingSoonDot} />
-                            <span>DRAFT IN PROGRESS</span>
-                          </div>
-                          <span className={styles.roadmapTag}>ROADMAP</span>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                </>
-              );
-
-              if (isLive) {
-                return (
-                  <Link
-                    key={article.slug}
-                    to={`/articles/${article.slug}`}
-                    className={`${styles.articleCard} ${styles.articleCardLive}`}
-                    onMouseMove={handleCardMouseMove}
-                    onMouseLeave={handleCardMouseLeave}
-                  >
-                    {cardContent}
-                  </Link>
-                );
-              }
-
-              return (
-                <div
-                  key={article.slug}
-                  className={`${styles.articleCard} ${styles.articleCardPlanned}`}
-                  onMouseMove={handleCardMouseMove}
-                  onMouseLeave={handleCardMouseLeave}
-                >
-                  {cardContent}
-                </div>
-              );
-            })}
+            {gridArticles.map((article) => (
+              <ArticleCard key={article.slug} article={article} />
+            ))}
           </div>
         )}
       </section>
 
       {/* =========================================================================
-          SECTION D: THE THREE-QUESTION EDITORIAL PROTOCOL BAND
+          SECTION D: BUILT FOR CLARITY (Our Approach)
           ========================================================================= */}
       <section className={styles.protocolSection} ref={protocolRef}>
         <div className={styles.protocolChassis}>
-          {/* Subtle reticles */}
-          <div className={styles.chassisReticleTl} aria-hidden="true" />
-          <div className={styles.chassisReticleTr} aria-hidden="true" />
-          <div className={styles.chassisReticleBl} aria-hidden="true" />
-          <div className={styles.chassisReticleBr} aria-hidden="true" />
-
           <div className={styles.protocolHeader}>
             <div className={styles.protocolEyebrow}>
               <Radio size={13} />
-              <span>EDITORIAL PROTOCOL // ZERO MARKETING JARGON</span>
+              <span>HOW WE EXPLAIN SYSTEMS</span>
             </div>
             <h2 className={styles.protocolTitle}>
-              The Three-Question Standard.
+              Built for clarity.
             </h2>
             <p className={styles.protocolSub}>
-              Every system documented in this archive is held to a strict engineering standard.
-              Before anything publishes, it must pass primary source verification across all three dimensions.
+              Every article is written to make complex concepts intuitive and practical, without overwhelming you with buzzwords.
             </p>
           </div>
 
@@ -661,15 +550,15 @@ export const ArticlesPage: React.FC = () => {
             <div className={styles.protocolCard}>
               <div className={styles.protocolCardTop}>
                 <span className={styles.protocolNum}>01</span>
-                <span className={styles.protocolTag}>BOUNDARY CONDITIONS</span>
+                <span className={styles.protocolTag}>PLAIN LANGUAGE</span>
               </div>
-              <h3 className={styles.protocolCardHeading}>What is the mechanism?</h3>
+              <h3 className={styles.protocolCardHeading}>No confusing buzzwords</h3>
               <p className={styles.protocolCardBody}>
-                Define the system's exact inputs, outputs, and constraints without marketing metaphors or hand-waving assumptions.
+                Every concept is explained step by step in clear, everyday language so anyone can understand the core mechanism.
               </p>
               <div className={styles.protocolPills}>
-                <span>Zero Jargon</span>
-                <span>Primary Specs</span>
+                <span>Simple Terms</span>
+                <span>Zero Fluff</span>
               </div>
             </div>
 
@@ -677,15 +566,15 @@ export const ArticlesPage: React.FC = () => {
             <div className={styles.protocolCard}>
               <div className={styles.protocolCardTop}>
                 <span className={styles.protocolNum}>02</span>
-                <span className={styles.protocolTag}>PHYSICAL EXECUTION</span>
+                <span className={styles.protocolTag}>VISUAL MECHANICS</span>
               </div>
-              <h3 className={styles.protocolCardHeading}>How does it physically work?</h3>
+              <h3 className={styles.protocolCardHeading}>See how it works</h3>
               <p className={styles.protocolCardBody}>
-                Deconstruct the execution path down to the wire: worker pools, network timeouts, idempotency keys, and state transitions.
+                Interactive diagrams and moving schematics show you exactly what is happening under the surface as data flows through the system.
               </p>
               <div className={styles.protocolPills}>
-                <span>State Machines</span>
-                <span>Failure Mode Analysis</span>
+                <span>Animated Flows</span>
+                <span>Visual Clarity</span>
               </div>
             </div>
 
@@ -693,32 +582,31 @@ export const ArticlesPage: React.FC = () => {
             <div className={styles.protocolCard}>
               <div className={styles.protocolCardTop}>
                 <span className={styles.protocolNum}>03</span>
-                <span className={styles.protocolTag}>PRODUCTION IMPACT</span>
+                <span className={styles.protocolTag}>PRACTICAL VALUE</span>
               </div>
-              <h3 className={styles.protocolCardHeading}>Why does it matter under load?</h3>
+              <h3 className={styles.protocolCardHeading}>Real-world principles</h3>
               <p className={styles.protocolCardBody}>
-                Quantify what cascades when traffic surges or upstream APIs fail. What breaks if you engineer this improperly?
+                Understand what breaks when traffic surges, why certain designs matter, and practical rules you can actually apply.
               </p>
               <div className={styles.protocolPills}>
-                <span>High Concurrency</span>
-                <span>Architectural Tradeoffs</span>
+                <span>Practical Insight</span>
+                <span>Reliable Systems</span>
               </div>
             </div>
           </div>
 
           <div className={styles.protocolFooter}>
             <span className={styles.protocolFootprint}>
-              PRIMARY SOURCES ONLY // SPEC VERIFIED // ZERO PSEUDONYMS // PRODUCTION TESTED
+              CLEAR EXPLANATIONS // VISUAL SCHEMATICS // REAL-WORLD EXAMPLES
             </span>
           </div>
         </div>
       </section>
 
       {/* =========================================================================
-          SECTION E: CROSS-TOPIC HORIZON PORTAL (Next Horizon Navigation)
+          SECTION E: CROSS-TOPIC HORIZON PORTAL (Explore Topics Navigation)
           ========================================================================= */}
       <section className={styles.horizonSection}>
-        {/* Curvature seam matching AboutPage */}
         <div className={styles.seamCurveContainer}>
           <svg viewBox="0 0 1440 44" fill="none" preserveAspectRatio="none" className={styles.seamSvg}>
             <path d="M0,0 C480,44 960,44 1440,0 L1440,44 L0,44 Z" fill="#0C0E10" />
@@ -732,15 +620,15 @@ export const ArticlesPage: React.FC = () => {
                 <Layers size={22} />
               </div>
               <div>
-                <h3 className={styles.horizonTitle}>Explore Core Engineering Disciplines</h3>
+                <h3 className={styles.horizonTitle}>Explore by topic</h3>
                 <p className={styles.horizonDesc}>
-                  Systems to Scale structures its research across eight foundational areas, each featuring an interactive browser simulation of the underlying mechanism.
+                  Browse interactive simulations and articles across our eight core areas.
                 </p>
               </div>
             </div>
 
             <Link to="/topics" className={styles.horizonBtn}>
-              <span>Explore Topics Hub</span>
+              <span>Explore all topics</span>
               <ArrowRight size={14} />
             </Link>
           </div>
@@ -749,4 +637,3 @@ export const ArticlesPage: React.FC = () => {
     </div>
   );
 };
-

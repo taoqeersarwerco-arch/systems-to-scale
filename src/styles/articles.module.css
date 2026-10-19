@@ -600,9 +600,9 @@
 }
 
 /* --------------------------------------------------------------------------
-   Section B: Featured Field Guide Marquee (Foundational Pillar Slab)
+   Section B: Spotlight Feature (Cinematic Showcase)
    -------------------------------------------------------------------------- */
-.marqueeSection {
+.spotlightSection {
   max-width: 1240px;
   margin: 0 auto;
   padding: 0 24px 64px 24px;
@@ -610,52 +610,54 @@
   z-index: 5;
 }
 
-.marqueeSlab {
+.spotlightSlab {
   position: relative;
-  background: linear-gradient(135deg, rgba(16, 18, 22, 0.88) 0%, rgba(10, 11, 14, 0.96) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.11);
+  background: linear-gradient(135deg, rgba(14, 16, 20, 0.92) 0%, rgba(9, 10, 13, 0.98) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 20px;
-  padding: 36px 36px 32px 36px;
+  padding: 32px 36px;
   box-shadow: 
     0 28px 64px -16px rgba(0, 0, 0, 0.9),
-    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
   overflow: hidden;
-  transition: border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform, box-shadow;
 }
 
-.marqueeSlab:hover {
-  border-color: rgba(255, 255, 255, 0.28);
+.spotlightSlab:hover {
+  border-color: rgba(255, 255, 255, 0.24);
   box-shadow: 
     0 36px 80px -16px rgba(0, 0, 0, 0.95),
     0 0 32px -4px rgba(255, 255, 255, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
-.marqueeGrid {
+.spotlightGrid {
   display: grid;
-  grid-template-columns: 1.15fr 0.85fr;
-  gap: 40px;
-  align-items: stretch;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 36px;
+  align-items: center;
   position: relative;
   z-index: 2;
 }
 
-.marqueeLeft {
+.spotlightLeft {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
 }
 
-.marqueeBadges {
+.spotlightBadges {
   display: flex;
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 
-.fieldGuideHeroBadge {
+.spotlightBadgePill {
   display: inline-flex;
   align-items: center;
   gap: 5px;
@@ -670,203 +672,102 @@
   box-shadow: 0 2px 8px rgba(255, 255, 255, 0.2);
 }
 
-.marqueeTitle {
+.spotlightTimePill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--sts-font-mono);
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.spotlightTitle {
   font-family: var(--sts-font-display);
-  font-size: clamp(24px, 2.6vw, 34px);
+  font-size: clamp(24px, 2.6vw, 32px);
   font-weight: 600;
   color: #FFFFFF;
   letter-spacing: -0.025em;
   line-height: 1.25;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 
-.marqueeStandfirst {
+.spotlightStandfirst {
   font-family: var(--sts-font-body);
   font-size: 15px;
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.72);
-  margin-bottom: 28px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 24px;
 }
 
-.marqueeFooter {
+.spotlightFooter {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-top: auto;
-  padding-top: 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  flex-wrap: wrap;
-  gap: 14px;
+  gap: 16px;
 }
 
-.marqueeActionBtn {
+.spotlightActionBtn {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   background: #FFFFFF;
   color: #000000;
-  padding: 6px 8px 6px 18px;
+  padding: 9px 20px;
   border-radius: 9999px;
   font-family: var(--sts-font-body);
   font-size: 13px;
   font-weight: 600;
   text-decoration: none;
   transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 2px 10px rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 16px rgba(255, 255, 255, 0.2);
 }
 
-.marqueeActionIcon {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.08);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-  color: #000000;
-}
-
-.marqueeActionBtn:hover {
+.spotlightActionBtn:hover {
   background: #EDEDED;
-  box-shadow: 0 4px 18px rgba(255, 255, 255, 0.35);
+  box-shadow: 0 6px 24px rgba(255, 255, 255, 0.35);
   transform: translateY(-1px);
 }
 
-.marqueeActionBtn:hover .marqueeActionIcon {
-  background: #000000;
-  color: #FFFFFF;
+.spotlightActionBtn:hover svg {
   transform: translateX(3px);
 }
 
-/* Blueprint Column on Right */
-.marqueeRight {
-  display: flex;
+.spotlightActionBtn svg {
+  transition: transform 0.22s ease;
 }
 
-.blueprintChassis {
-  background: rgba(0, 0, 0, 0.45);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+.spotlightRight {
+  position: relative;
   border-radius: 14px;
-  padding: 22px 24px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  overflow: hidden;
+  background: #060709;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.8);
+}
+
+.spotlightVisualStage {
   width: 100%;
-  box-sizing: border-box;
-}
-
-.blueprintHeader {
-  font-family: var(--sts-font-mono);
-  font-size: 10.5px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  color: rgba(255, 255, 255, 0.5);
+  height: 220px;
   display: flex;
   align-items: center;
-  gap: 7px;
-  margin-bottom: 14px;
+  justify-content: center;
+  position: relative;
+  padding: 16px 20px;
 }
 
-.blueprintQuestionBox {
-  background: rgba(255, 255, 255, 0.03);
-  border-left: 2px solid #FFFFFF;
-  padding: 10px 14px;
-  border-radius: 0 8px 8px 0;
-  margin-bottom: 16px;
-}
-
-.blueprintQuestionLabel {
-  font-family: var(--sts-font-mono);
-  font-size: 9px;
-  letter-spacing: 0.08em;
-  color: rgba(255, 255, 255, 0.45);
-  font-weight: 600;
-  display: block;
-  margin-bottom: 4px;
-}
-
-.blueprintQuestionText {
-  font-family: var(--sts-font-body);
-  font-size: 13px;
-  line-height: 1.45;
-  color: rgba(255, 255, 255, 0.9);
-  font-style: italic;
-  margin: 0;
-}
-
-.blueprintStages {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 16px;
-}
-
-.blueprintStageItem {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 8px 10px;
-  background: rgba(255, 255, 255, 0.02);
-  border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.04);
-}
-
-.stageNum {
-  font-family: var(--sts-font-mono);
-  font-size: 11px;
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.9);
-  background: rgba(255, 255, 255, 0.08);
-  padding: 2px 6px;
-  border-radius: 4px;
-  flex-shrink: 0;
-}
-
-.stageText {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.stageTitle {
-  font-family: var(--sts-font-display);
-  font-size: 12.5px;
-  font-weight: 600;
-  color: #FFFFFF;
-}
-
-.stageDesc {
-  font-family: var(--sts-font-body);
-  font-size: 11.5px;
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.blueprintFooter {
+.spotlightSchematicWrapper {
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  font-family: var(--sts-font-mono);
-  font-size: 10px;
-  color: rgba(255, 255, 255, 0.4);
-  padding-top: 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.blueprintCheck {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.blueprintScope {
-  letter-spacing: 0.08em;
-  color: rgba(255, 255, 255, 0.5);
+  justify-content: center;
 }
 
 /* --------------------------------------------------------------------------
-   Section C: Systems Archive Grid (Technical Mechanism Deep Dives)
+   Section C: Articles Library Grid
    -------------------------------------------------------------------------- */
 .articlesGridSection {
   max-width: 1240px;
@@ -934,27 +835,46 @@
   background: #EDEDED;
 }
 
-/* Individual Deep Dive Card */
+/* --------------------------------------------------------------------------
+   New Cinematic Article Card
+   -------------------------------------------------------------------------- */
 .articleCard {
   position: relative;
-  background: #090B0D;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #090B0E;
+  border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 18px;
-  padding: 24px 22px 20px 22px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   text-decoration: none;
   outline: none;
   overflow: hidden;
-  perspective: 1000px;
-  transform: perspective(1000px) rotateX(var(--card-rotate-x, 0deg)) rotateY(var(--card-rotate-y, 0deg));
-  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 14px 34px -10px rgba(0, 0, 0, 0.85);
   will-change: transform, box-shadow;
 }
 
-/* Top luminous scanline */
+.articleCardLive:hover {
+  transform: translateY(-6px);
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 
+    0 26px 60px -14px rgba(0, 0, 0, 0.95),
+    0 0 24px -4px rgba(255, 255, 255, 0.08);
+}
+
+.articleCardPlanned {
+  opacity: 0.65;
+  cursor: default;
+}
+
+.articleCardPlanned:hover {
+  opacity: 0.85;
+  border-color: rgba(255, 255, 255, 0.16);
+  transform: translateY(-2px);
+}
+
+/* Top Luminous Scanline */
 .cardTopScanline {
   position: absolute;
   top: 0;
@@ -970,373 +890,215 @@
   );
   transition: background 0.25s ease, box-shadow 0.25s ease;
   pointer-events: none;
-}
-
-/* 4-corner micro hardware reticles */
-.cardCornerReticleTl,
-.cardCornerReticleBr {
-  position: absolute;
-  width: 7px;
-  height: 7px;
-  border-color: rgba(255, 255, 255, 0.16);
-  border-style: solid;
-  pointer-events: none;
-  transition: border-color 0.25s ease;
-}
-
-.cardCornerReticleTl {
-  top: 8px;
-  left: 8px;
-  border-width: 1px 0 0 1px;
-}
-
-.cardCornerReticleBr {
-  bottom: 8px;
-  right: 8px;
-  border-width: 0 1px 1px 0;
-}
-
-.articleCardLive:hover {
-  border-color: rgba(255, 255, 255, 0.26);
-  transform: perspective(1000px) rotateX(var(--card-rotate-x, 0deg)) rotateY(var(--card-rotate-y, 0deg)) translateY(-4px);
-  box-shadow: 
-    0 24px 56px -12px rgba(0, 0, 0, 0.95),
-    0 0 24px -4px rgba(255, 255, 255, 0.07),
-    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  z-index: 3;
 }
 
 .articleCardLive:hover .cardTopScanline {
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(255, 255, 255, 0.7) 30%,
-    rgba(255, 255, 255, 0.7) 70%,
+    rgba(255, 255, 255, 0.8) 30%,
+    rgba(255, 255, 255, 0.8) 70%,
     transparent 100%
   );
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.35);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.45);
 }
 
-.articleCardLive:hover .cardCornerReticleTl,
-.articleCardLive:hover .cardCornerReticleBr {
-  border-color: rgba(255, 255, 255, 0.4);
-}
-
-.articleCardPlanned {
-  opacity: 0.65;
-  cursor: default;
-}
-
-.articleCardPlanned:hover {
-  opacity: 0.85;
-  border-color: rgba(255, 255, 255, 0.16);
-  transform: perspective(1000px) rotateX(var(--card-rotate-x, 0deg)) rotateY(var(--card-rotate-y, 0deg)) translateY(-2px);
-}
-
-/* Interactive Cursor-following Spotlight */
+/* Cursor Spotlight */
 .cardSpotlight {
   position: absolute;
   inset: 0;
   pointer-events: none;
   background: radial-gradient(
-    400px circle at var(--spotlight-x, 50%) var(--spotlight-y, 50%),
+    380px circle at var(--spotlight-x, 50%) var(--spotlight-y, 50%),
     rgba(255, 255, 255, 0.05),
     transparent 70%
   );
   transition: opacity 0.2s ease;
+  z-index: 2;
+}
+
+/* Visual Motion Stage */
+.cardVisualStage {
+  position: relative;
+  width: 100%;
+  height: 142px;
+  background: #060709;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 16px;
+  overflow: hidden;
+}
+
+.visualGridPattern {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 16px 16px;
+  pointer-events: none;
+}
+
+.visualVignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(6, 7, 9, 0.75) 100%);
+  pointer-events: none;
+}
+
+.schematicWrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   z-index: 1;
 }
 
-.cardContent {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.cardHeader {
+/* Floating Badges Overlay */
+.visualBadges {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  right: 12px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 14px;
+  z-index: 2;
+  pointer-events: none;
 }
 
-.topicBadge {
+.visualTopicBadge {
   font-family: var(--sts-font-mono);
-  font-size: 10px;
+  font-size: 9.5px;
   font-weight: 500;
   letter-spacing: 0.08em;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.75);
   text-transform: uppercase;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  padding: 3px 10px;
+  background: rgba(14, 16, 20, 0.85);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 3px 9px;
   border-radius: 9999px;
 }
 
-.cardHeaderMeta {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.typeBadgeDeepDive {
-  font-family: var(--sts-font-mono);
-  font-size: 9px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  color: rgba(255, 255, 255, 0.5);
-  background: rgba(255, 255, 255, 0.035);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  padding: 2.5px 8px;
-  border-radius: 4px;
-  text-transform: uppercase;
-}
-
-.readingTimePillSmall {
+.visualTimeBadge {
   display: inline-flex;
   align-items: center;
   gap: 4px;
   font-family: var(--sts-font-mono);
   font-size: 9.5px;
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(255, 255, 255, 0.6);
+  background: rgba(14, 16, 20, 0.85);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 3px 8px;
+  border-radius: 9999px;
+}
+
+/* Card Body Content */
+.cardBody {
+  padding: 20px 22px 16px 22px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  position: relative;
+  z-index: 1;
 }
 
 .cardTitle {
   font-family: var(--sts-font-display);
-  font-size: 18.5px;
+  font-size: 17.5px;
   font-weight: 600;
   color: #FFFFFF;
   line-height: 1.35;
   letter-spacing: -0.015em;
   margin-bottom: 10px;
+  transition: color 0.2s ease;
 }
 
-.cardStandfirst {
+.articleCardLive:hover .cardTitle {
+  color: #FFFFFF;
+}
+
+.cardSummary {
   font-family: var(--sts-font-body);
-  font-size: 13.5px;
+  font-size: 13px;
   line-height: 1.55;
-  color: var(--sts-muted);
-  margin-bottom: 16px;
-}
-
-/* De-cluttered Editorial Question Callout */
-.questionCallout {
-  background: rgba(255, 255, 255, 0.025);
-  border-left: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 0 6px 6px 0;
-  padding: 9px 12px;
-  margin-bottom: 16px;
-  transition: border-left-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease;
-}
-
-.articleCardLive:hover .questionCallout {
-  border-left-color: #FFFFFF;
-  background: rgba(255, 255, 255, 0.04);
-}
-
-.questionPrefix {
-  display: block;
-  font-family: var(--sts-font-mono);
-  font-size: 8.5px;
-  letter-spacing: 0.1em;
-  color: rgba(255, 255, 255, 0.45);
-  text-transform: uppercase;
-  margin-bottom: 3px;
-  font-weight: 600;
-}
-
-.questionQuote {
-  font-family: var(--sts-font-body);
-  font-size: 12.5px;
-  line-height: 1.45;
-  color: rgba(255, 255, 255, 0.85);
-  font-style: italic;
+  color: rgba(255, 255, 255, 0.6);
   margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-/* Metadata & Reading Stepper Row */
-.metaRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 18px;
-  gap: 12px;
-}
-
-.levelPill {
-  font-family: var(--sts-font-mono);
-  font-size: 10px;
-  color: rgba(255, 255, 255, 0.45);
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  padding: 2.5px 7px;
-  border-radius: 4px;
-}
-
-.readingTimePill {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-family: var(--sts-font-mono);
-  font-size: 10.5px;
-  color: rgba(255, 255, 255, 0.65);
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 3px 8px;
-  border-radius: 5px;
-}
-
-/* 3-Step Reading Stepper */
-.readingStepper {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.stepDot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.18);
-  transition: all 0.25s ease;
-}
-
-.stepDotActive {
-  background: rgba(255, 255, 255, 0.65);
-  box-shadow: 0 0 5px rgba(255, 255, 255, 0.35);
-}
-
-.stepConnector {
-  width: 8px;
-  height: 1px;
-  background: rgba(255, 255, 255, 0.12);
-  transition: all 0.25s ease;
-}
-
-.stepConnectorActive {
-  background: rgba(255, 255, 255, 0.4);
-}
-
-.articleCardLive:hover .stepDotActive {
-  background: #FFFFFF;
-  box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
-}
-
-.articleCardLive:hover .stepConnectorActive {
-  background: rgba(255, 255, 255, 0.8);
-}
-
+/* Card Footer */
 .cardFooter {
+  padding: 14px 22px 18px 22px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-top: 14px;
-  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
   margin-top: auto;
+  position: relative;
+  z-index: 1;
 }
 
-/* Living Beacon */
-.liveBeacon {
+.statusIndicator {
   display: inline-flex;
   align-items: center;
   gap: 7px;
   font-family: var(--sts-font-mono);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  color: #FFFFFF;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.55);
 }
 
-.liveDot {
+.statusDotLive {
   width: 6px;
   height: 6px;
   border-radius: 50%;
   background-color: #22c55e;
-  box-shadow: 0 0 8px #22c55e;
-  animation: beaconPulse 2s infinite ease-in-out;
+  box-shadow: 0 0 6px rgba(34, 197, 94, 0.8);
 }
 
-@keyframes beaconPulse {
-  0%, 100% {
-    opacity: 0.6;
-    transform: scale(0.9);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.2);
-  }
-}
-
-/* Button-in-Button CTA */
-.buttonInButton {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: #FFFFFF;
-  color: #000000;
-  padding: 5px 6px 5px 14px;
-  border-radius: 9999px;
-  font-family: var(--sts-font-body);
-  font-size: 12px;
-  font-weight: 600;
-  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 2px 10px rgba(255, 255, 255, 0.15);
-}
-
-.buttonIconCircle {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.08);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-  color: #000000;
-}
-
-.articleCardLive:hover .buttonInButton {
-  box-shadow: 0 4px 18px rgba(255, 255, 255, 0.35);
-  transform: scale(1.02);
-}
-
-.articleCardLive:hover .buttonIconCircle {
-  background: #000000;
-  color: #FFFFFF;
-  transform: translateX(3px);
-}
-
-/* Upcoming Quiet Beacon */
-.comingSoonBeacon {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-family: var(--sts-font-mono);
-  font-size: 10.5px;
-  color: rgba(255, 255, 255, 0.45);
-  letter-spacing: 0.04em;
-}
-
-.comingSoonDot {
+.statusDotDraft {
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0.25);
 }
 
-.roadmapTag {
+.readAction {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--sts-font-display);
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #FFFFFF;
+}
+
+.readArrow {
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.articleCardLive:hover .readArrow {
+  transform: translateX(4px);
+}
+
+.inProgressLabel {
   font-family: var(--sts-font-mono);
-  font-size: 9.5px;
-  letter-spacing: 0.08em;
+  font-size: 10.5px;
   color: rgba(255, 255, 255, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 3px 8px;
-  border-radius: 4px;
+  letter-spacing: 0.04em;
 }
 
 /* --------------------------------------------------------------------------
-   Section D: Three-Question Editorial Protocol Band
+   Section D: Built for Clarity (Our Approach)
    -------------------------------------------------------------------------- */
 .protocolSection {
   max-width: 1240px;
@@ -1592,7 +1354,7 @@
    Responsive Breakpoints
    -------------------------------------------------------------------------- */
 @media (max-width: 1100px) {
-  .marqueeGrid {
+  .spotlightGrid {
     grid-template-columns: 1fr;
     gap: 28px;
   }
@@ -1628,7 +1390,7 @@
     padding: 16px 14px 14px 14px;
     border-radius: 14px;
   }
-  .marqueeSlab {
+  .spotlightSlab {
     padding: 24px 20px;
   }
   .protocolChassis {
@@ -1646,7 +1408,7 @@
     font-size: 15px;
     padding: 0 12px;
   }
-  .marqueeFooter {
+  .spotlightFooter {
     flex-direction: column;
     align-items: flex-start;
   }
@@ -1660,11 +1422,8 @@
     animation: none;
   }
   .articleCard:hover,
-  .marqueeSlab:hover,
+  .spotlightSlab:hover,
   .protocolCard:hover {
     transform: none;
-  }
-  .liveDot {
-    animation: none;
   }
 }
