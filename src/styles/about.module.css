@@ -55,14 +55,16 @@
 .heroSection {
   position: relative;
   width: 100%;
-  min-height: 96vh;
+  height: 100vh;
+  min-height: 660px;
+  max-height: 1100px;
   background-color: var(--sts-ground);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  padding: 130px 24px 70px 24px;
+  padding: 0 24px;
 }
 
 /* Three.js Canvas Container */
@@ -77,78 +79,57 @@
 }
 
 /* Reading Pocket for crystal-clear typographic readability */
-/* Translucent reading pocket guaranteeing prominent orbital background visibility behind title */
 .readingPocket {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
   z-index: 2;
   pointer-events: none;
   background: radial-gradient(
-    ellipse 72% 58% at 50% 50%,
-    rgba(8, 8, 8, 0.45) 0%,
-    rgba(8, 8, 8, 0.20) 50%,
-    transparent 100%
+    ellipse 76% 62% at 50% 50%,
+    rgba(8, 8, 8, 0.90) 0%,
+    rgba(8, 8, 8, 0.65) 50%,
+    rgba(8, 8, 8, 0) 100%
   );
 }
 
-/* Observatory Telemetry HUD Overlay */
-.observatoryHudTop {
+/* 4-Corner Reticle Accents (Precision Telescope Framing) */
+.heroReticleTl,
+.heroReticleTr,
+.heroReticleBl,
+.heroReticleBr {
   position: absolute;
-  top: 88px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 6;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  font-family: 'DM Mono', monospace;
-  font-size: 10.5px;
-  letter-spacing: 0.16em;
-  color: rgba(255, 255, 255, 0.35);
-  text-transform: uppercase;
-  pointer-events: none;
-  width: max-content;
-  max-width: calc(100vw - 32px);
-  padding: 0 12px;
-  box-sizing: border-box;
-}
-
-.observatoryHudDivider {
-  color: rgba(255, 255, 255, 0.15);
-  flex-shrink: 0;
-}
-
-.observatoryHudItem {
-  white-space: nowrap;
-}
-
-/* Corner Reticle Accents */
-.heroReticleTl {
-  position: absolute;
-  top: 92px;
-  left: 32px;
   width: 14px;
   height: 14px;
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
-  border-left: 1px solid rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.2);
+  border-style: solid;
   pointer-events: none;
   z-index: 6;
+}
+
+.heroReticleTl {
+  top: 84px;
+  left: 28px;
+  border-width: 1px 0 0 1px;
 }
 
 .heroReticleTr {
-  position: absolute;
-  top: 92px;
-  right: 32px;
-  width: 14px;
-  height: 14px;
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
-  border-right: 1px solid rgba(255, 255, 255, 0.2);
-  pointer-events: none;
-  z-index: 6;
+  top: 84px;
+  right: 28px;
+  border-width: 1px 1px 0 0;
+}
+
+.heroReticleBl {
+  bottom: 36px;
+  left: 28px;
+  border-width: 0 0 1px 1px;
+}
+
+.heroReticleBr {
+  bottom: 36px;
+  right: 28px;
+  border-width: 0 1px 1px 0;
 }
 
 /* Interactive 3D Proximity Telemetry HUD Pill */
@@ -246,7 +227,7 @@
   position: relative;
   z-index: 5;
   text-align: center;
-  max-width: 680px;
+  max-width: 760px;
   margin: 0 auto;
   pointer-events: none;
 }
@@ -259,69 +240,121 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-family: 'DM Mono', monospace;
+  font-family: 'Space Grotesk', 'DM Mono', monospace;
   font-size: 11px;
-  letter-spacing: 0.18em;
+  font-weight: 500;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.45);
-  margin-bottom: 20px;
-  padding: 4px 12px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 22px;
+  padding: 5px 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 9999px;
 }
 
+.eyebrowIcon {
+  color: rgba(255, 255, 255, 0.85);
+  flex-shrink: 0;
+}
+
 .heroHeading {
-  font-family: 'Bricolage Grotesque', sans-serif;
-  font-size: clamp(44px, 6vw, 66px);
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: clamp(44px, 5.8vw, 72px);
   font-weight: 700;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.035em;
   line-height: 1.08;
-  margin-bottom: 22px;
-  background: linear-gradient(180deg, #FFFFFF 0%, #A3A3A3 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 0 4px 28px rgba(0, 0, 0, 0.95);
+  color: #FFFFFF;
+  margin-bottom: 20px;
+  text-shadow: 0 4px 32px rgba(0, 0, 0, 0.95);
 }
 
 .heroDescription {
-  font-family: 'Instrument Sans', sans-serif;
-  font-size: 16px;
+  font-family: 'Instrument Sans', system-ui, -apple-system, sans-serif;
+  font-size: 16.5px;
   line-height: 1.65;
-  color: var(--sts-muted);
-  max-width: 520px;
-  margin: 0 auto 36px auto;
+  color: rgba(255, 255, 255, 0.72);
+  max-width: 620px;
+  margin: 0 auto 34px auto;
   text-shadow: 0 2px 16px rgba(0, 0, 0, 0.95);
 }
 
-/* KPI Telemetry Strip */
-.kpiStrip {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-top: 8px;
-}
-
-.kpiChip {
+/* Editorial Standard Frosted Glass Capsule */
+.editorialStandardCapsule {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  background: rgba(255, 255, 255, 0.025);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 6px;
-  padding: 6px 12px;
-  font-family: 'DM Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.08em;
-  color: rgba(255, 255, 255, 0.45);
-  backdrop-filter: blur(8px);
+  justify-content: center;
+  gap: 14px;
+  background: rgba(12, 14, 17, 0.75);
+  backdrop-filter: blur(28px) saturate(160%);
+  -webkit-backdrop-filter: blur(28px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 9999px;
+  padding: 10px 24px;
+  box-shadow: 
+    0 16px 36px -10px rgba(0, 0, 0, 0.85),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  margin-top: 4px;
+  max-width: calc(100vw - 32px);
+  flex-wrap: wrap;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.kpiChip strong {
+.editorialStandardCapsule:hover {
+  border-color: rgba(255, 255, 255, 0.22);
+  box-shadow: 
+    0 20px 44px -10px rgba(0, 0, 0, 0.95),
+    0 0 20px rgba(255, 255, 255, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  transform: translateY(-1px);
+}
+
+.capsuleItem {
+  font-family: 'Space Grotesk', 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.85);
+  white-space: nowrap;
+}
+
+.capsuleDot {
+  color: rgba(255, 255, 255, 0.25);
+  font-size: 12px;
+}
+
+/* Bottom Animated Scroll Indicator */
+.scrollIndicator {
+  position: absolute;
+  bottom: 34px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.4);
+  font-family: 'Space Grotesk', 'DM Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.15em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  animation: bounceSlow 2.4s ease-in-out infinite;
+}
+
+.scrollIndicator:hover {
   color: #FFFFFF;
-  font-weight: 600;
+}
+
+@keyframes bounceSlow {
+  0%, 100% {
+    transform: translate(-50%, 0);
+  }
+  50% {
+    transform: translate(-50%, 6px);
+  }
 }
 
 /* --------------------------------------------------------------------------

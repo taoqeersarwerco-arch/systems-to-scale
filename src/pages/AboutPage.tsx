@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { TOPICS } from '../data/topics';
 import { ALL_ARTICLES } from '../data/slug-registry';
 import { OrbitalSystem } from '../components/about/OrbitalSystem';
-import { ArrowRight, ArrowUpRight, ShieldCheck, Radio, Sparkles } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, ShieldCheck, Radio, Sparkles, ChevronDown } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import styles from '../styles/about.module.css';
@@ -159,9 +159,11 @@ export const AboutPage: React.FC = () => {
         <div className={styles.readingPocket} />
 
 
-        {/* Reticle Corner Accents */}
-        <div className={styles.heroReticleTl} />
-        <div className={styles.heroReticleTr} />
+        {/* 4-Corner Reticle Hardware Accents */}
+        <div className={styles.heroReticleTl} aria-hidden="true" />
+        <div className={styles.heroReticleTr} aria-hidden="true" />
+        <div className={styles.heroReticleBl} aria-hidden="true" />
+        <div className={styles.heroReticleBr} aria-hidden="true" />
 
         {/* Living Three.js Background: Central Core + 8 Orbiting Topic Bodies */}
         <OrbitalSystem />
@@ -169,8 +171,8 @@ export const AboutPage: React.FC = () => {
         {/* Centered Content Overlay */}
         <div className={styles.heroContent}>
           <div className={styles.heroEyebrow}>
-            <Radio size={12} />
-            <span>About this publication</span>
+            <Sparkles size={12} className={styles.eyebrowIcon} />
+            <span>ABOUT THIS PUBLICATION</span>
           </div>
 
           <h1 className={styles.heroHeading}>
@@ -182,26 +184,23 @@ export const AboutPage: React.FC = () => {
             knowing why something works is what lets you build the next thing yourself.
           </p>
 
-          {/* KPI Strip */}
-          <div className={styles.kpiStrip}>
-            <div className={styles.kpiChip}>
-              <span>COVERAGE:</span>
-              <strong>8 FIELDS</strong>
-            </div>
-            <div className={styles.kpiChip}>
-              <span>STANDARD:</span>
-              <strong>3 QUESTIONS</strong>
-            </div>
-            <div className={styles.kpiChip}>
-              <span>CITATIONS:</span>
-              <strong>PRIMARY DOCS ONLY</strong>
-            </div>
-            <div className={styles.kpiChip}>
-              <span>COMMERCIAL BIAS:</span>
-              <strong>ZERO</strong>
-            </div>
+          {/* Sleek Frosted Editorial Standard Capsule */}
+          <div className={styles.editorialStandardCapsule}>
+            <span className={styles.capsuleItem}>8 CORE DISCIPLINES</span>
+            <span className={styles.capsuleDot} aria-hidden="true">•</span>
+            <span className={styles.capsuleItem}>3-QUESTION STANDARD</span>
+            <span className={styles.capsuleDot} aria-hidden="true">•</span>
+            <span className={styles.capsuleItem}>PRIMARY DOCS ONLY</span>
+            <span className={styles.capsuleDot} aria-hidden="true">•</span>
+            <span className={styles.capsuleItem}>ZERO COMMERCIAL BIAS</span>
           </div>
         </div>
+
+        {/* Bottom Animated Scroll Indicator */}
+        <a href="#what-we-cover" className={styles.scrollIndicator}>
+          <span>EXPLORE PUBLICATION</span>
+          <ChevronDown size={15} />
+        </a>
       </section>
 
       {/* CURVE SEAM 1: Ground (#080808) -> Panel (#0D0F10) */}
@@ -214,7 +213,7 @@ export const AboutPage: React.FC = () => {
       {/* =========================================================================
           SECTION 2: WHAT WE COVER (Cinematic Staggered Field Cards)
           ========================================================================= */}
-      <section className={styles.whatWeCoverSection}>
+      <section className={styles.whatWeCoverSection} id="what-we-cover">
         <div className={styles.whatWeCoverContainer}>
           <div className={styles.sectionHeaderCenter}>
             <div className={styles.sectionEyebrow}>

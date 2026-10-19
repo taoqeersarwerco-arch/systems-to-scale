@@ -102,7 +102,7 @@ export const OrbitalSystem: React.FC = () => {
 
     // Deep-space perspective vantage point matching Topics Hub
     const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000);
-    camera.position.set(0, -5.5, 29);
+    camera.position.set(0, -3.8, 31);
     camera.lookAt(0, 0, 0);
 
     let renderer: THREE.WebGLRenderer;
@@ -125,8 +125,8 @@ export const OrbitalSystem: React.FC = () => {
     // ROOT CELESTIAL GROUPS
     // -------------------------------------------------------------------------
     const orbitalGroup = new THREE.Group();
-    orbitalGroup.position.set(0, 0.8, 0);
-    orbitalGroup.rotation.x = Math.PI * 0.24; // ~44 deg inclination
+    orbitalGroup.position.set(0, 0.35, 0);
+    orbitalGroup.rotation.x = Math.PI * 0.21; // ~38 deg cinematic inclination
     orbitalGroup.rotation.y = -Math.PI * 0.05;
     orbitalGroup.rotation.z = Math.PI * 0.04;
     scene.add(orbitalGroup);
@@ -365,7 +365,7 @@ export const OrbitalSystem: React.FC = () => {
       const traceMat = new THREE.LineBasicMaterial({
         color: 0xE2E8F0,
         transparent: true,
-        opacity: 0.045, // Faint and harmonious matching Topics Hub
+        opacity: 0.065, // Harmonious luminous trace
         blending: THREE.AdditiveBlending,
         depthWrite: false,
       });
@@ -386,7 +386,7 @@ export const OrbitalSystem: React.FC = () => {
       const glowMat = new THREE.MeshBasicMaterial({
         color: body.colorHex,
         transparent: true,
-        opacity: 0.18,
+        opacity: 0.24,
         blending: THREE.AdditiveBlending,
         depthWrite: false,
       });
@@ -564,15 +564,15 @@ export const OrbitalSystem: React.FC = () => {
       starMaterial.uniforms.uMouseVel.value.copy(mouseVel);
       starMaterial.uniforms.uMouseActive.value = isMouseActive ? 1.0 : 0.0;
 
-      // Scroll response: Tilt from face-on (0.24 rad) to edge-on (1.18 rad) & translate camera
+      // Scroll response: Tilt from face-on (0.21 rad) to edge-on (0.76 rad) & translate camera
       const scrollRatio = Math.min(scrollY / (height || 750), 1.0);
-      const tiltAngle = (Math.PI * 0.24) + scrollRatio * 0.60;
-      orbitalGroup.rotation.x = tiltAngle + currentMouseY * 0.10;
-      orbitalGroup.rotation.y = -Math.PI * 0.05 + currentMouseX * 0.15;
+      const tiltAngle = (Math.PI * 0.21) + scrollRatio * 0.55;
+      orbitalGroup.rotation.x = tiltAngle + currentMouseY * 0.08;
+      orbitalGroup.rotation.y = -Math.PI * 0.05 + currentMouseX * 0.12;
       orbitalGroup.rotation.z = Math.PI * 0.04 + Math.sin(elapsedTime * 0.15) * 0.02;
 
-      camera.position.z = 29 + scrollRatio * 3.5;
-      camera.position.y = -5.5 + scrollRatio * 2.0;
+      camera.position.z = 31 + scrollRatio * 3.5;
+      camera.position.y = -3.8 + scrollRatio * 2.0;
 
       // Fade canvas out smoothly as user scrolls past hero
       const fadeOpacity = Math.max(1.0 - scrollRatio * 1.3, 0.0);
