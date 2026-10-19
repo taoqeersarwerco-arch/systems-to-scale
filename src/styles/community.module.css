@@ -340,6 +340,193 @@
   gap: 24px;
 }
 
+.cinematicRequestCard {
+  position: relative;
+  border-radius: 20px;
+  background: #090B0D;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 
+    0 16px 36px -12px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: 
+    border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.3s ease;
+  transform: perspective(1000px) rotateX(var(--card-rotate-x, 0deg)) rotateY(var(--card-rotate-y, 0deg));
+}
+
+.cinematicRequestCard:hover,
+.cinematicRequestCardHover {
+  border-color: rgba(255, 255, 255, 0.28);
+  transform: perspective(1000px) rotateX(var(--card-rotate-x, 0deg)) rotateY(var(--card-rotate-y, 0deg)) translateY(-4px);
+  box-shadow: 
+    0 28px 56px -12px rgba(0, 0, 0, 0.9),
+    0 0 32px rgba(255, 255, 255, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* Luminous top border accent */
+.cardScanline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0) 100%);
+  opacity: 0.4;
+  transition: opacity 0.3s ease;
+  z-index: 4;
+}
+
+.cinematicRequestCard:hover .cardScanline {
+  opacity: 1;
+}
+
+/* Cursor-following radial spotlight */
+.cardCursorSpotlight {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    380px circle at var(--spotlight-x, 50%) var(--spotlight-y, 50%),
+    rgba(255, 255, 255, 0.06),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.cinematicRequestCard:hover .cardCursorSpotlight {
+  opacity: 1;
+}
+
+/* Corner Reticle Crosses */
+.cardReticleTL,
+.cardReticleTR {
+  position: absolute;
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.2);
+  pointer-events: none;
+  z-index: 5;
+}
+
+.cardReticleTL { top: 12px; left: 14px; }
+.cardReticleTR { top: 12px; right: 14px; }
+
+/* Living Canvas Stage at Top of Card */
+.cardCanvasStage {
+  position: relative;
+  width: 100%;
+  height: 148px;
+  background: #080808;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.cardCanvasWrap {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.cardGridTexture {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 20px 20px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.cardCanvasVignette {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(8, 8, 8, 0.2) 0%, rgba(8, 8, 8, 0) 40%, rgba(9, 11, 13, 0.95) 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.cardHeaderStrip {
+  position: absolute;
+  top: 14px;
+  left: 18px;
+  right: 18px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.topicBadgeWrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background: rgba(14, 16, 18, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.topicVectorIcon {
+  color: #FFFFFF;
+}
+
+.topicBadgeText {
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 10px;
+  font-weight: 600;
+  color: #EDE9E3;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Card Body Content */
+.cardBodyContent {
+  padding: 22px 24px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+  position: relative;
+  z-index: 3;
+}
+
+/* Mechanism Pipeline Node Trace */
+.mechanismPipelineRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.mechanismNodePill {
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 3px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.mechanismArrow {
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.25);
+}
+
+/* Legacy Card Class Support */
 .requestCard {
   position: relative;
   padding: 28px;
@@ -484,31 +671,88 @@
 .demandProgressCol {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
   align-items: flex-end;
   flex: 1;
 }
 
+.demandLabelRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 160px;
+}
+
+.demandTargetLabel {
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+}
+
 .demandLabel {
   font-family: var(--sts-font-mono, monospace);
-  font-size: 11px;
-  color: #737373;
+  font-size: 10px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.75);
 }
 
 .demandBarTrack {
+  position: relative;
   width: 100%;
-  max-width: 140px;
+  max-width: 160px;
   height: 4px;
   border-radius: 9999px;
   background: rgba(255, 255, 255, 0.08);
-  overflow: hidden;
+  overflow: visible;
 }
 
 .demandBarFill {
+  position: relative;
   height: 100%;
   border-radius: 9999px;
   background: #FFFFFF;
-  transition: width 0.4s ease;
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.demandGlowTip {
+  position: absolute;
+  right: -2px;
+  top: -2px;
+  bottom: -2px;
+  width: 5px;
+  border-radius: 999px;
+  background: #FFFFFF;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 1);
+  animation: beaconPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes beaconPulse {
+  0%, 100% { opacity: 0.5; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+/* Upvote Button Kinetic Burst */
+.upvoteButtonBurst {
+  transform: scale(1.08) !important;
+  background: rgba(255, 255, 255, 0.2) !important;
+  border-color: #FFFFFF !important;
+}
+
+.burstRing {
+  position: absolute;
+  inset: -6px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  animation: expandBurst 0.55s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes expandBurst {
+  0% { transform: scale(0.9); opacity: 1; }
+  100% { transform: scale(1.4); opacity: 0; }
 }
 
 /* ==========================================================================

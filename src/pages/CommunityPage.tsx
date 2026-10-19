@@ -12,19 +12,9 @@ import {
 } from 'lucide-react';
 import { ConstellationMesh } from '../components/community/ConstellationMesh';
 import { ProtocolReactor } from '../components/community/ProtocolReactor';
+import { RequestLeaderboardCard, RequestItem } from '../components/community/RequestLeaderboardCard';
 import { ArticleRequestModal } from '../components/topics/ArticleRequestModal';
 import styles from '../styles/community.module.css';
-
-interface RequestItem {
-  id: string;
-  topic: string;
-  topicSlug: string;
-  query: string;
-  scope: string;
-  votes: number;
-  maxTarget: number;
-  status: 'In Active Research' | 'Specification Outline' | 'Reviewing Draft' | 'Scheduled for November';
-}
 
 const INITIAL_REQUESTS: RequestItem[] = [
   {
@@ -35,7 +25,8 @@ const INITIAL_REQUESTS: RequestItem[] = [
     scope: 'Examining idempotency key retention, exponential backoff with full jitter, and dead-letter queue overflow handling when upstream third-party endpoints experience extended outages.',
     votes: 42,
     maxTarget: 50,
-    status: 'In Active Research'
+    status: 'In Active Research',
+    mechanismNodes: ['Idempotency WAL', 'Exponential Jitter', 'DLQ Overflow']
   },
   {
     id: 'req-2',
@@ -45,7 +36,8 @@ const INITIAL_REQUESTS: RequestItem[] = [
     scope: 'How distributed checkout clusters handle high-velocity flash sales across multi-region databases without table deadlocks or overselling reservations.',
     votes: 38,
     maxTarget: 50,
-    status: 'Specification Outline'
+    status: 'Specification Outline',
+    mechanismNodes: ['Checkout Arbiter', 'Saga Coordinator', 'Sharded State']
   },
   {
     id: 'req-3',
@@ -55,7 +47,8 @@ const INITIAL_REQUESTS: RequestItem[] = [
     scope: 'Dissecting how conversion modeling recovers attribution gaps through statistical Bayesian regression when users decline third-party cookies.',
     votes: 31,
     maxTarget: 50,
-    status: 'Scheduled for November'
+    status: 'Scheduled for November',
+    mechanismNodes: ['Bayesian Prior', 'State Estimator', 'Attribution Gap']
   },
   {
     id: 'req-4',
@@ -65,7 +58,8 @@ const INITIAL_REQUESTS: RequestItem[] = [
     scope: 'Auditing main-thread blocking time during high-frame-rate canvas renders, compositor offloading via OffscreenCanvas, and requestAnimationFrame queue hygiene.',
     votes: 27,
     maxTarget: 50,
-    status: 'Reviewing Draft'
+    status: 'Reviewing Draft',
+    mechanismNodes: ['Compositor Thread', 'OffscreenCanvas', 'Frame Budget']
   },
   {
     id: 'req-5',
@@ -75,7 +69,8 @@ const INITIAL_REQUESTS: RequestItem[] = [
     scope: 'How automated triage arbiters score semantic intent, isolate cascade escalations, and protect human tiers from denial-of-service surges.',
     votes: 23,
     maxTarget: 50,
-    status: 'Specification Outline'
+    status: 'Specification Outline',
+    mechanismNodes: ['Semantic Arbiter', 'Cascade Isolator', 'Tier Guard']
   },
   {
     id: 'req-6',
@@ -85,7 +80,8 @@ const INITIAL_REQUESTS: RequestItem[] = [
     scope: 'Analyzing crash resilience, state replication protocols, and zero-data-loss reconciliation when workflow worker pods terminate mid-execution.',
     votes: 19,
     maxTarget: 50,
-    status: 'In Active Research'
+    status: 'In Active Research',
+    mechanismNodes: ['Raft Log Sync', 'Snapshot Epoch', 'State Reconciliation']
   }
 ];
 
@@ -96,12 +92,12 @@ export const CommunityPage: React.FC = () => {
   const [votedIds, setVotedIds] = useState<Set<string>>(new Set());
 
   const filterTabs = [
-    'All',
-    'AI & Automation',
-    'E-commerce',
-    'Marketing & Ads',
-    'Web Design',
-    'Customer Service'
+    { label: 'All', count: requests.length },
+    { label: 'AI & Automation', count: requests.filter(r => r.topic === 'AI & Automation').length },
+    { label: 'E-commerce', count: requests.filter(r => r.topic === 'E-commerce').length },
+    { label: 'Marketing & Ads', count: requests.filter(r => r.topic === 'Marketing & Ads').length },
+    { label: 'Web Design', count: requests.filter(r => r.topic === 'Web Design').length },
+    { label: 'Customer Service', count: requests.filter(r => r.topic === 'Customer Service').length }
   ];
 
   const handleUpvote = (id: string) => {
@@ -123,15 +119,6 @@ export const CommunityPage: React.FC = () => {
   const filteredRequests = activeFilter === 'All'
     ? requests
     : requests.filter(r => r.topic === activeFilter);
-
-  const getStatusClass = (status: RequestItem['status']) => {
-    switch (status) {
-      case 'In Active Research': return styles.statusActive;
-      case 'Specification Outline': return styles.statusOutline;
-      case 'Reviewing Draft': return styles.statusReview;
-      case 'Scheduled for November': return styles.statusScheduled;
-    }
-  };
 
   return (
     <div className={styles.pageContainer}>
@@ -213,71 +200,26 @@ export const CommunityPage: React.FC = () => {
           <div className={styles.filterRow}>
             {filterTabs.map((tab) => (
               <button
-                key={tab}
-                onClick={() => setActiveFilter(tab)}
-                className={`${styles.filterPill} ${activeFilter === tab ? styles.filterPillActive : ''}`}
+                key={tab.label}
+                onClick={() => setActiveFilter(tab.label)}
+                className={`${styles.filterPill} ${activeFilter === tab.label ? styles.filterPillActive : ''}`}
               >
-                {tab}
+                <span>{tab.label}</span>
+                <span style={{ opacity: 0.5, fontSize: '10.5px', marginLeft: 4 }}>({tab.count})</span>
               </button>
             ))}
           </div>
 
-          {/* 2-Column Bento Matrix */}
+          {/* 2-Column Bento Matrix with Living Canvases */}
           <div className={styles.matrixGrid}>
-            {filteredRequests.map((item) => {
-              const hasVoted = votedIds.has(item.id);
-              const progressPct = Math.min(100, Math.round((item.votes / item.maxTarget) * 100));
-
-              return (
-                <div key={item.id} className={styles.requestCard}>
-                  <div>
-                    {/* Top row: Topic badge + status */}
-                    <div className={styles.requestTopRow}>
-                      <span className={styles.requestTopicBadge}>
-                        {item.topic}
-                      </span>
-
-                      <span className={`${styles.statusIndicator} ${getStatusClass(item.status)}`}>
-                        {item.status === 'In Active Research' && <span className={styles.beaconDot} />}
-                        {item.status}
-                      </span>
-                    </div>
-
-                    <h3 className={styles.requestTitle}>
-                      "{item.query}"
-                    </h3>
-
-                    <p className={styles.requestScope}>
-                      {item.scope}
-                    </p>
-                  </div>
-
-                  {/* Bottom row: Upvote button & demand bar */}
-                  <div className={styles.requestBottomRow}>
-                    <button
-                      onClick={() => handleUpvote(item.id)}
-                      className={`${styles.upvoteButton} ${hasVoted ? styles.upvoteButtonVoted : ''}`}
-                      aria-label={`Upvote request: ${item.query}`}
-                    >
-                      {hasVoted ? <Check size={14} /> : <ChevronUp size={14} />}
-                      <span>{item.votes} votes</span>
-                    </button>
-
-                    <div className={styles.demandProgressCol}>
-                      <span className={styles.demandLabel}>
-                        {progressPct}% to editorial lock
-                      </span>
-                      <div className={styles.demandBarTrack}>
-                        <div
-                          className={styles.demandBarFill}
-                          style={{ width: `${progressPct}%` }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+            {filteredRequests.map((item) => (
+              <RequestLeaderboardCard
+                key={item.id}
+                item={item}
+                hasVoted={votedIds.has(item.id)}
+                onUpvote={handleUpvote}
+              />
+            ))}
           </div>
         </div>
       </section>
