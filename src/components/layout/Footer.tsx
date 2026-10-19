@@ -1,10 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { StsLogo } from '../ui/StsLogo';
+import { ArrowUp, ArrowRight, Check } from 'lucide-react';
+import { CinematicLogoEngine } from '../ui/CinematicLogoEngine';
+import styles from '../../styles/footer.module.css';
 
 export const Footer: React.FC = () => {
+  const [email, setEmail] = useState('');
+  const [subscribed, setSubscribed] = useState(false);
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleSubscribe = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || !email.includes('@')) return;
+    setSubscribed(true);
   };
 
   const topicsList = [
@@ -19,236 +30,230 @@ export const Footer: React.FC = () => {
   ];
 
   const publicationList = [
-    { name: 'About', path: '/about' },
-    { name: 'Contact', path: '/contact' },
-    { name: 'Community', path: '/community' },
-    { name: 'Subscribe', path: '/subscribe' },
-    { name: 'Articles', path: '/articles' }
+    { name: 'About Editorial', path: '/about' },
+    { name: 'Articles Archive', path: '/articles' },
+    { name: 'Topics Hub', path: '/topics' },
+    { name: 'Community Hub', path: '/community' },
+    { name: 'Contact Editors', path: '/contact' }
+  ];
+
+  const standardsList = [
+    { name: 'Verified Practitioners', path: '/about#standards' },
+    { name: 'Publisher Independence', path: '/about#standards' },
+    { name: 'Primary Documentation', path: '/about#standards' },
+    { name: 'Open Revision History', path: '/about#standards' }
   ];
 
   const legalList = [
-    { name: 'Privacy', path: '/privacy' },
-    { name: 'Terms', path: '/terms' },
-    { name: 'Cookies', path: '/cookies' }
+    { name: 'Privacy Policy', path: '/privacy' },
+    { name: 'Terms of Service', path: '/terms' },
+    { name: 'Cookie Settings', path: '/cookies' }
   ];
 
   return (
-    <footer
-      style={{
-        background: 'var(--sts-ground)',
-        borderTop: '1px solid var(--sts-rule-dark)',
-        position: 'relative',
-        zIndex: 10
-      }}
-    >
-      <div
-        style={{
-          maxWidth: 'var(--sts-max-width)',
-          margin: '0 auto',
-          padding: '64px clamp(16px, 4vw, 32px) 32px'
-        }}
-      >
-        {/* 4-Column Grid: 1.5fr 1fr 1fr 1fr */}
-        <div
-          className="sts-footer-grid"
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1.5fr 1fr 1fr 1fr',
-            gap: '48px'
-          }}
-        >
-          {/* Column 1 — Brand */}
-          <div>
-            <div style={{ marginBottom: '16px' }}>
-              <StsLogo size={40} color="var(--sts-bone)" />
-            </div>
-            <p
-              style={{
-                fontFamily: 'var(--sts-font-body)',
-                fontSize: '14px',
-                color: 'var(--sts-muted)',
-                lineHeight: 1.5,
-                maxWidth: '240px',
-                margin: 0
-              }}
-            >
-              Understand the mechanism, not just the steps.
-            </p>
-          </div>
+    <footer className={styles.footerContainer} aria-label="Global Site Footer">
+      {/* 1. Top Horizon Atmospheric Light Bar & Traveling Photon Beam */}
+      <div className={styles.horizonLightBar} />
+      <div className={styles.horizonTravelingBeam} />
 
-          {/* Column 2 — Topics */}
-          <div>
-            <h4
-              style={{
-                fontFamily: 'var(--sts-font-body)',
-                fontSize: '13px',
-                fontWeight: 600,
-                color: 'var(--sts-bone)',
-                textTransform: 'uppercase',
-                letterSpacing: '0.08em',
-                marginBottom: '16px'
-              }}
-            >
-              Topics
-            </h4>
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              {topicsList.map((t) => (
-                <Link
-                  key={t.path}
-                  to={t.path}
-                  style={{
-                    fontSize: '14px',
-                    color: 'var(--sts-muted)',
-                    textDecoration: 'none',
-                    lineHeight: '2.0',
-                    transition: 'color var(--sts-dur-in) var(--sts-ease)'
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--sts-bone)')}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--sts-muted)')}
-                >
-                  {t.name}
-                </Link>
-              ))}
+      {/* 2. Ambient Obsidian Radial Bloom */}
+      <div className={styles.ambientRadialGlow} />
+
+      <div className={styles.footerInner}>
+        {/* ==================================================================
+            TOP DECK: BRAND OBSERVATORY STAGE & DISPATCH CONSOLE
+            ================================================================== */}
+        <div className={styles.brandDeck}>
+          {/* Left: Cinematic Living Logo Engine + Lockup */}
+          <div className={styles.brandLeftStage}>
+            <CinematicLogoEngine size={84} showRings={true} interactive={true} />
+
+            <div className={styles.brandIdentityLockup}>
+              <div className={styles.observatoryPill}>
+                <span className={styles.radarBeacon} />
+                Observatory Engine Online
+              </div>
+
+              <h3 className={styles.brandTitle}>Systems to Scale</h3>
+
+              <p className={styles.brandTagline}>
+                Understand the mechanism, not just the steps.
+              </p>
+
+              <p className={styles.brandScopeParagraph}>
+                An independent publication dedicated to reverse-engineering how complex engineering systems, automated pipelines, and digital organizations scale.
+              </p>
             </div>
           </div>
 
-          {/* Column 3 — Publication */}
-          <div>
-            <h4
-              style={{
-                fontFamily: 'var(--sts-font-body)',
-                fontSize: '13px',
-                fontWeight: 600,
-                color: 'var(--sts-bone)',
-                textTransform: 'uppercase',
-                letterSpacing: '0.08em',
-                marginBottom: '16px'
-              }}
-            >
-              Publication
-            </h4>
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              {publicationList.map((p) => (
-                <Link
-                  key={p.path}
-                  to={p.path}
-                  style={{
-                    fontSize: '14px',
-                    color: 'var(--sts-muted)',
-                    textDecoration: 'none',
-                    lineHeight: '2.0',
-                    transition: 'color var(--sts-dur-in) var(--sts-ease)'
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--sts-bone)')}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--sts-muted)')}
-                >
-                  {p.name}
-                </Link>
-              ))}
+          {/* Right: The Weekly Dispatch Console */}
+          <div className={styles.dispatchConsole}>
+            <div className={styles.dispatchHeader}>
+              <span className={styles.dispatchEyebrow}>Weekly Dispatch</span>
+              <h4 className={styles.dispatchTitle}>Direct mechanism breakdowns in your inbox</h4>
             </div>
-          </div>
 
-          {/* Column 4 — Legal */}
-          <div>
-            <h4
-              style={{
-                fontFamily: 'var(--sts-font-body)',
-                fontSize: '13px',
-                fontWeight: 600,
-                color: 'var(--sts-bone)',
-                textTransform: 'uppercase',
-                letterSpacing: '0.08em',
-                marginBottom: '16px'
-              }}
-            >
-              Legal
-            </h4>
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              {legalList.map((l) => (
-                <Link
-                  key={l.path}
-                  to={l.path}
-                  style={{
-                    fontSize: '14px',
-                    color: 'var(--sts-muted)',
-                    textDecoration: 'none',
-                    lineHeight: '2.0',
-                    transition: 'color var(--sts-dur-in) var(--sts-ease)'
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--sts-bone)')}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--sts-muted)')}
-                >
-                  {l.name}
-                </Link>
-              ))}
+            {subscribed ? (
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '12px 16px',
+                  borderRadius: '9999px',
+                  background: 'rgba(16, 185, 129, 0.1)',
+                  border: '1px solid rgba(16, 185, 129, 0.3)',
+                  color: '#10B981',
+                  fontSize: '13px',
+                  fontWeight: 500
+                }}
+              >
+                <Check size={16} />
+                <span>You're subscribed. Welcome to the observatory dispatch.</span>
+              </div>
+            ) : (
+              <form onSubmit={handleSubscribe} className={styles.dispatchForm}>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email"
+                  required
+                  className={styles.dispatchInput}
+                  aria-label="Email address for dispatch"
+                />
+                <button type="submit" className={styles.dispatchSubmitBtn}>
+                  <span>Join</span>
+                  <ArrowRight size={13} />
+                </button>
+              </form>
+            )}
+
+            <div className={styles.dispatchTrustRow}>
+              <span className={styles.dispatchTrustPill}>
+                <span className={styles.dispatchTrustCheck}>✓</span> One email per breakdown
+              </span>
+              <span className={styles.dispatchTrustPill}>
+                <span className={styles.dispatchTrustCheck}>✓</span> Zero spam
+              </span>
+              <span className={styles.dispatchTrustPill}>
+                <span className={styles.dispatchTrustCheck}>✓</span> One-click unsubscribe
+              </span>
             </div>
           </div>
         </div>
 
-        {/* Uniqentic Disclosure & Back to Top Line */}
-        <div
-          style={{
-            borderTop: '1px solid var(--sts-rule-dark)',
-            paddingTop: '24px',
-            marginTop: '32px',
-            display: 'flex',
-            flexWrap: 'wrap',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: '16px'
-          }}
-        >
-          <div style={{ flex: 1, minWidth: '240px' }} />
+        {/* ==================================================================
+            MIDDLE DECK: 4-COLUMN ARCHITECTURAL DIRECTORY
+            ================================================================== */}
+        <div className={styles.directoryDivider} />
 
-          <div
-            style={{
-              fontFamily: 'var(--sts-font-body)',
-              fontSize: '13px',
-              color: 'var(--sts-muted)',
-              textAlign: 'center'
-            }}
-          >
-            Systems to Scale is published by Uniqentic.
-            <div style={{ fontSize: '12px', color: 'var(--sts-muted)', marginTop: '8px' }}>
-              © 2026 Systems to Scale. All rights reserved.
+        <div className={styles.directoryGrid}>
+          {/* Column 1 — Disciplines & Systems */}
+          <div className={styles.directoryColumn}>
+            <h5 className={styles.columnHeader}>
+              <span className={styles.columnHeaderDot} />
+              Disciplines & Systems
+            </h5>
+            <div className={styles.linkList}>
+              {topicsList.map((t) => (
+                <Link key={t.path} to={t.path} className={styles.directoryLink}>
+                  <span>{t.name}</span>
+                  <span className={styles.linkArrow}>→</span>
+                </Link>
+              ))}
             </div>
           </div>
 
-          <div style={{ flex: 1, minWidth: '240px', display: 'flex', justifyContent: 'flex-end' }}>
-            <button
-              onClick={scrollToTop}
-              style={{
-                fontFamily: 'var(--sts-font-mono)',
-                fontSize: '12px',
-                color: 'var(--sts-muted)',
-                cursor: 'pointer',
-                border: 'none',
-                background: 'none',
-                transition: 'color var(--sts-dur-in) var(--sts-ease)'
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--sts-bone)')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--sts-muted)')}
-            >
-              ↑ Back to top
-            </button>
+          {/* Column 2 — Publication */}
+          <div className={styles.directoryColumn}>
+            <h5 className={styles.columnHeader}>
+              <span className={styles.columnHeaderDot} />
+              Publication
+            </h5>
+            <div className={styles.linkList}>
+              {publicationList.map((p) => (
+                <Link key={p.path} to={p.path} className={styles.directoryLink}>
+                  <span>{p.name}</span>
+                  <span className={styles.linkArrow}>→</span>
+                </Link>
+              ))}
+            </div>
           </div>
+
+          {/* Column 3 — Standards & Integrity */}
+          <div className={styles.directoryColumn}>
+            <h5 className={styles.columnHeader}>
+              <span className={styles.columnHeaderDot} />
+              Integrity & Standards
+            </h5>
+            <div className={styles.linkList}>
+              {standardsList.map((s) => (
+                <Link key={s.name} to={s.path} className={styles.directoryLink}>
+                  <span>{s.name}</span>
+                  <span className={styles.linkArrow}>→</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* Column 4 — Legal & Colophon */}
+          <div className={styles.directoryColumn}>
+            <h5 className={styles.columnHeader}>
+              <span className={styles.columnHeaderDot} />
+              Legal & Registry
+            </h5>
+            <div className={styles.linkList}>
+              {legalList.map((l) => (
+                <Link key={l.path} to={l.path} className={styles.directoryLink}>
+                  <span>{l.name}</span>
+                  <span className={styles.linkArrow}>→</span>
+                </Link>
+              ))}
+              <a
+                href="https://github.com/taoqeersarwerco-arch/systems-to-scale"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.directoryLink}
+              >
+                <span>GitHub Repository</span>
+                <span className={styles.linkArrow}>↗</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        {/* ==================================================================
+            GIANT ARCHITECTURAL WATERMARK
+            ================================================================== */}
+        <div className={styles.giantWatermarkContainer} aria-hidden="true">
+          <span className={styles.giantWatermarkText}>SYSTEMS TO SCALE</span>
+        </div>
+
+        {/* ==================================================================
+            BOTTOM COLOPHON & RETURN TO ORBIT
+            ================================================================== */}
+        <div className={styles.colophonBar}>
+          <div className={styles.colophonPublisher}>
+            Systems to Scale is published by <strong>Uniqentic</strong>. Researching scalable architecture.
+          </div>
+
+          <div className={styles.colophonCopyright}>
+            © 2026 Systems to Scale. All rights reserved.
+          </div>
+
+          <button
+            onClick={scrollToTop}
+            className={styles.backToTopButton}
+            aria-label="Scroll back to top of page"
+          >
+            <span>Return to top</span>
+            <div className={styles.backToTopCircle}>
+              <ArrowUp size={11} />
+            </div>
+          </button>
         </div>
       </div>
-
-      <style>{`
-        @media (max-width: 760px) {
-          .sts-footer-grid {
-            grid-template-columns: 1fr 1fr !important;
-            gap: 32px !important;
-          }
-        }
-        @media (max-width: 460px) {
-          .sts-footer-grid {
-            grid-template-columns: 1fr !important;
-            gap: 24px !important;
-          }
-        }
-      `}</style>
     </footer>
   );
 };

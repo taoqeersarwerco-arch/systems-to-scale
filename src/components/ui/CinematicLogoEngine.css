@@ -1,0 +1,326 @@
+/* ==========================================================================
+   CINEMATIC LOGO ENGINE — SYSTEMS TO SCALE
+   Living Vector Mechanism & Energy Conduit Motion Design
+   ========================================================================== */
+
+.sts-cinematic-logo-stage {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  perspective: 1000px;
+}
+
+.sts-logo-bezel-outer {
+  position: relative;
+  padding: 12px;
+  border-radius: 24px;
+  background: radial-gradient(
+    140% 140% at 50% 0%,
+    rgba(255, 255, 255, 0.07) 0%,
+    rgba(255, 255, 255, 0.02) 60%,
+    rgba(0, 0, 0, 0.4) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: 
+    0 12px 32px -8px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  transition: 
+    transform 0.4s cubic-bezier(0.22, 1, 0.32, 1),
+    border-color 0.4s ease,
+    box-shadow 0.4s ease;
+  will-change: transform;
+}
+
+.sts-cinematic-logo-stage:hover .sts-logo-bezel-outer {
+  border-color: rgba(255, 255, 255, 0.22);
+  box-shadow: 
+    0 20px 48px -10px rgba(0, 0, 0, 0.9),
+    0 0 30px rgba(255, 255, 255, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.sts-logo-bezel-inner {
+  position: relative;
+  border-radius: 18px;
+  background: #090A0C;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Atmospheric Glow Halo behind SVG */
+.sts-logo-ambient-halo {
+  position: absolute;
+  inset: -20px;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0.03) 40%,
+    transparent 70%
+  );
+  pointer-events: none;
+  opacity: 0.6;
+  transition: opacity 0.5s ease;
+  filter: blur(12px);
+}
+
+.sts-cinematic-logo-stage:hover .sts-logo-ambient-halo {
+  opacity: 0.95;
+}
+
+/* Celestial Orbital Rings */
+.sts-reticle-ring-outer {
+  transform-origin: 32px 32px;
+  animation: stsReticleClockwise 50s linear infinite;
+  opacity: 0.25;
+}
+
+.sts-reticle-ring-inner {
+  transform-origin: 32px 32px;
+  animation: stsReticleCounter 35s linear infinite;
+  opacity: 0.35;
+}
+
+@keyframes stsReticleClockwise {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes stsReticleCounter {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+/* Pipeline Static Tracks */
+.sts-pipe-base {
+  stroke: rgba(255, 255, 255, 0.12);
+  stroke-width: 3.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+/* Conduit Active Glow Current */
+.sts-pipe-current {
+  stroke: rgba(255, 255, 255, 0.85);
+  stroke-width: 3.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+  stroke-dasharray: 8 36;
+  animation: stsFlowCurrent 2.6s linear infinite;
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8));
+}
+
+.sts-cinematic-logo-stage:hover .sts-pipe-current {
+  animation-duration: 1.3s;
+  stroke: #FFFFFF;
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.95));
+}
+
+@keyframes stsFlowCurrent {
+  0% {
+    stroke-dashoffset: 44;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Second staggered pulse */
+.sts-pipe-current-secondary {
+  stroke: rgba(255, 255, 255, 0.45);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+  stroke-dasharray: 4 40;
+  animation: stsFlowCurrent 2.6s linear infinite;
+  animation-delay: -1.3s;
+}
+
+.sts-cinematic-logo-stage:hover .sts-pipe-current-secondary {
+  animation-duration: 1.3s;
+}
+
+/* Node 1: Origin Foundation Circle */
+.sts-node-origin {
+  fill: #FFFFFF;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.7));
+}
+
+.sts-node-origin-ripple {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.6);
+  stroke-width: 1.2;
+  transform-origin: 16px 44px;
+  animation: stsOriginRipple 2.6s cubic-bezier(0.22, 1, 0.32, 1) infinite;
+}
+
+@keyframes stsOriginRipple {
+  0% {
+    r: 4.5;
+    opacity: 0.8;
+    stroke-width: 1.5;
+  }
+  70% {
+    r: 11;
+    opacity: 0;
+    stroke-width: 0.5;
+  }
+  100% {
+    r: 11;
+    opacity: 0;
+    stroke-width: 0;
+  }
+}
+
+/* Node 2: Center Scaling Core */
+.sts-node-core-outer {
+  stroke: #FFFFFF;
+  stroke-width: 3.2;
+  fill: #090A0C;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.5));
+}
+
+.sts-node-core-inner {
+  fill: #FFFFFF;
+  transform-origin: 32px 32px;
+  animation: stsCoreRotate 8s cubic-bezier(0.77, 0, 0.175, 1) infinite;
+}
+
+.sts-cinematic-logo-stage:hover .sts-node-core-inner {
+  animation-duration: 3s;
+}
+
+@keyframes stsCoreRotate {
+  0%, 20% {
+    transform: rotate(0deg);
+  }
+  25%, 45% {
+    transform: rotate(90deg);
+  }
+  50%, 70% {
+    transform: rotate(180deg);
+  }
+  75%, 95% {
+    transform: rotate(270deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Core Energy Shockwave */
+.sts-node-core-pulse {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.4);
+  stroke-width: 1;
+  transform-origin: 32px 32px;
+  animation: stsCorePulse 2.6s cubic-bezier(0.22, 1, 0.32, 1) infinite;
+  animation-delay: 0.65s;
+}
+
+@keyframes stsCorePulse {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.8;
+  }
+  60% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+/* Node 3: Apex Scaling Arrow */
+.sts-node-apex {
+  fill: #FFFFFF;
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8));
+  animation: stsApexShimmer 2.6s ease-in-out infinite;
+  animation-delay: 1.3s;
+}
+
+@keyframes stsApexShimmer {
+  0%, 100% {
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.7));
+  }
+  50% {
+    filter: drop-shadow(0 0 18px rgba(255, 255, 255, 1)) drop-shadow(0 -4px 10px rgba(255, 255, 255, 0.9));
+  }
+}
+
+/* Apex Beacon Flare Beam */
+.sts-apex-flare-beam {
+  stroke: #FFFFFF;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-dasharray: 6 18;
+  animation: stsBeaconBeam 1.3s linear infinite;
+  opacity: 0.7;
+}
+
+@keyframes stsBeaconBeam {
+  0% {
+    stroke-dashoffset: 24;
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.9;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0.2;
+  }
+}
+
+/* Telemetry Baseline Node & Track */
+.sts-telemetry-bus {
+  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 1.5;
+  stroke-dasharray: 2 3;
+}
+
+.sts-telemetry-node {
+  fill: rgba(255, 255, 255, 0.5);
+  animation: stsBlink 1.3s steps(2, start) infinite;
+}
+
+@keyframes stsBlink {
+  to {
+    visibility: hidden;
+  }
+}
+
+/* Floating Photon Particles */
+.sts-photon-packet {
+  fill: #FFFFFF;
+  filter: drop-shadow(0 0 4px #FFFFFF);
+}
+
+/* Reduced Motion Override */
+@media (prefers-reduced-motion: reduce) {
+  .sts-reticle-ring-outer,
+  .sts-reticle-ring-inner,
+  .sts-pipe-current,
+  .sts-pipe-current-secondary,
+  .sts-node-origin-ripple,
+  .sts-node-core-inner,
+  .sts-node-core-pulse,
+  .sts-node-apex,
+  .sts-apex-flare-beam,
+  .sts-telemetry-node {
+    animation: none !important;
+  }
+  .sts-logo-bezel-outer {
+    transition: none !important;
+  }
+}

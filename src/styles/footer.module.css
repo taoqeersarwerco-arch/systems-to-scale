@@ -1,0 +1,548 @@
+/* ==========================================================================
+   SYSTEMS TO SCALE — CINEMATIC FOOTER MODULE
+   Architectural Observatory Deck, Living Logo Engine, & Directory Grid
+   ========================================================================== */
+
+.footerContainer {
+  position: relative;
+  background-color: var(--sts-ground, #080808);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  z-index: 10;
+}
+
+/* Atmospheric Top Horizon Light Bar */
+.horizonLightBar {
+  position: absolute;
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: radial-gradient(
+    ellipse 60% 1px at 50% 0%,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 0.1) 40%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 3;
+}
+
+.horizonTravelingBeam {
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: 140px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.8) 50%,
+    transparent 100%
+  );
+  animation: horizonBeamDrift 10s ease-in-out infinite alternate;
+  pointer-events: none;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.8));
+}
+
+@keyframes horizonBeamDrift {
+  0% {
+    left: 5%;
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.9;
+  }
+  100% {
+    left: 85%;
+    opacity: 0.2;
+  }
+}
+
+/* Ambient Deep Obsidian Radial Glow & Grid */
+.ambientRadialGlow {
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 1200px;
+  height: 340px;
+  background: radial-gradient(
+    ellipse 70% 50% at 50% 0%,
+    rgba(255, 255, 255, 0.04) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.footerInner {
+  position: relative;
+  max-width: var(--sts-max-width, 1280px);
+  margin: 0 auto;
+  padding: 124px clamp(20px, 4vw, 40px) 44px;
+  z-index: 2;
+}
+
+/* ==========================================================================
+   TOP DECK: BRAND OBSERVATORY STAGE & DISPATCH CONSOLE
+   ========================================================================== */
+
+.brandDeck {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 56px;
+  align-items: center;
+  margin-bottom: 64px;
+}
+
+.brandLeftStage {
+  display: flex;
+  align-items: flex-start;
+  gap: 32px;
+}
+
+.brandIdentityLockup {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.observatoryPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--sts-bone, #FFFFFF);
+  text-transform: uppercase;
+}
+
+.radarBeacon {
+  position: relative;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10B981;
+}
+
+.radarBeacon::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 1px solid #10B981;
+  opacity: 0.8;
+  animation: radarPing 2.2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes radarPing {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(2.8);
+    opacity: 0;
+  }
+}
+
+.brandTitle {
+  font-family: var(--sts-font-display, sans-serif);
+  font-size: clamp(22px, 2.4vw, 30px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--sts-bone, #FFFFFF);
+  margin: 0;
+  line-height: 1.15;
+}
+
+.brandTagline {
+  font-family: var(--sts-font-body, sans-serif);
+  font-size: 14px;
+  color: var(--sts-muted, #A3A3A3);
+  line-height: 1.5;
+  margin: 0;
+  max-width: 420px;
+}
+
+.brandScopeParagraph {
+  font-family: var(--sts-font-body, sans-serif);
+  font-size: 13px;
+  color: var(--sts-dim, #737373);
+  line-height: 1.6;
+  margin: 0;
+  max-width: 440px;
+}
+
+/* Dispatch Console (Right Side) */
+.dispatchConsole {
+  position: relative;
+  padding: 24px 28px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 
+    0 16px 36px -12px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dispatchConsole:hover {
+  border-color: rgba(255, 255, 255, 0.16);
+  box-shadow: 
+    0 24px 44px -12px rgba(0, 0, 0, 0.8),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.dispatchHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dispatchEyebrow {
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--sts-dim, #737373);
+}
+
+.dispatchTitle {
+  font-family: var(--sts-font-display, sans-serif);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--sts-bone, #FFFFFF);
+  margin: 0;
+}
+
+.dispatchForm {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+}
+
+.dispatchInput {
+  width: 100%;
+  padding: 12px 116px 12px 16px;
+  border-radius: 9999px;
+  background: #0D0F12;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+  font-family: var(--sts-font-body, sans-serif);
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.dispatchInput::placeholder {
+  color: #666666;
+}
+
+.dispatchInput:focus {
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.08);
+}
+
+.dispatchSubmitBtn {
+  position: absolute;
+  right: 4px;
+  padding: 8px 18px;
+  border-radius: 9999px;
+  background: #FFFFFF;
+  border: none;
+  color: #080808;
+  font-family: var(--sts-font-body, sans-serif);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: transform 0.2s cubic-bezier(0.22, 1, 0.32, 1), background-color 0.2s ease;
+}
+
+.dispatchSubmitBtn:hover {
+  background: #EAEAEA;
+  transform: translateX(1px);
+}
+
+.dispatchSubmitBtn:active {
+  transform: scale(0.97);
+}
+
+.dispatchTrustRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-family: var(--sts-font-body, sans-serif);
+  font-size: 11px;
+  color: var(--sts-dim, #737373);
+}
+
+.dispatchTrustPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.dispatchTrustCheck {
+  color: var(--sts-bone, #FFFFFF);
+  font-size: 10px;
+}
+
+/* ==========================================================================
+   MIDDLE DECK: 4-COLUMN ARCHITECTURAL DIRECTORY
+   ========================================================================== */
+
+.directoryDivider {
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.08) 15%,
+    rgba(255, 255, 255, 0.08) 85%,
+    transparent 100%
+  );
+  margin-bottom: 56px;
+}
+
+.directoryGrid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1.1fr 1fr;
+  gap: 48px;
+}
+
+.directoryColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.columnHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--sts-bone, #FFFFFF);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin: 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.columnHeaderDot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.linkList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.directoryLink {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 0;
+  font-family: var(--sts-font-body, sans-serif);
+  font-size: 13.5px;
+  color: var(--sts-muted, #A3A3A3);
+  text-decoration: none;
+  transition: 
+    color 0.2s cubic-bezier(0.22, 1, 0.32, 1),
+    transform 0.2s cubic-bezier(0.22, 1, 0.32, 1);
+}
+
+.directoryLink:hover {
+  color: var(--sts-bone, #FFFFFF);
+  transform: translateX(4px);
+}
+
+.linkArrow {
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: opacity 0.2s ease, transform 0.2s cubic-bezier(0.22, 1, 0.32, 1);
+  font-size: 12px;
+  color: var(--sts-bone, #FFFFFF);
+}
+
+.directoryLink:hover .linkArrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ==========================================================================
+   GIANT ARCHITECTURAL WATERMARK
+   ========================================================================== */
+
+.giantWatermarkContainer {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  margin-top: 56px;
+  margin-bottom: -12px;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  user-select: none;
+}
+
+.giantWatermarkText {
+  font-family: var(--sts-font-display, sans-serif);
+  font-size: clamp(2.6rem, 6.8vw, 6.4rem);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.06);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0.01) 80%,
+    transparent 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  line-height: 0.95;
+}
+
+/* ==========================================================================
+   BOTTOM COLOPHON & RETURN TO ORBIT
+   ========================================================================== */
+
+.colophonBar {
+  position: relative;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  padding-top: 28px;
+  margin-top: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.colophonPublisher {
+  font-family: var(--sts-font-body, sans-serif);
+  font-size: 13px;
+  color: var(--sts-muted, #A3A3A3);
+}
+
+.colophonPublisher strong {
+  color: var(--sts-bone, #FFFFFF);
+  font-weight: 600;
+}
+
+.colophonCopyright {
+  font-family: var(--sts-font-body, sans-serif);
+  font-size: 12px;
+  color: var(--sts-dim, #737373);
+}
+
+.backToTopButton {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  color: var(--sts-muted, #A3A3A3);
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: 
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease,
+    transform 0.25s cubic-bezier(0.22, 1, 0.32, 1);
+}
+
+.backToTopButton:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: var(--sts-bone, #FFFFFF);
+  transform: translateY(-2px);
+}
+
+.backToTopCircle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.32, 1);
+}
+
+.backToTopButton:hover .backToTopCircle {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* ==========================================================================
+   RESPONSIVE BREAKPOINTS
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+  .brandDeck {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .directoryGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+}
+
+@media (max-width: 640px) {
+  .footerInner {
+    padding-top: 60px;
+  }
+  .brandLeftStage {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  .directoryGrid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .dispatchTrustRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .colophonBar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
