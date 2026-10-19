@@ -180,15 +180,15 @@ export const ArticlesPage: React.FC = () => {
       if (protocolRef.current) {
         gsap.fromTo(
           protocolRef.current,
-          { opacity: 0, y: isReduced ? 0 : 24 },
+          { opacity: 0, y: isReduced ? 0 : 20 },
           {
             opacity: 1,
             y: 0,
-            duration: isReduced ? 0.2 : 0.7,
+            duration: isReduced ? 0.2 : 0.6,
             ease: 'cubic-bezier(0.16, 1, 0.3, 1)',
             scrollTrigger: {
               trigger: protocolRef.current,
-              start: 'top 80%',
+              start: 'top 85%',
               once: true
             }
           }
@@ -284,123 +284,154 @@ export const ArticlesPage: React.FC = () => {
   }, []);
 
   return (
-    <div className={styles.articlesPageContainer}>
+    <div className={styles.articlesPage}>
       {/* =========================================================================
-          HERO SECTION: Cosmic structures background & Command Deck
+          HERO SECTION: 3D Cosmic Web Macro-Structure (Exact Match to Topics Hub)
           ========================================================================= */}
       <section className={styles.heroSection}>
-        <CosmicWeb />
-
-        <div className={styles.observatoryHudTop}>
-          <span className={styles.observatoryHudLabel}>SYSTEMS TO SCALE</span>
-          <span className={styles.observatoryHudDivider}>/</span>
-          <span className={styles.observatoryHudCoordinates}>ARTICLES</span>
-          <span className={styles.observatoryHudDivider}>/</span>
-          <span className={styles.observatoryHudStatus}>INDEX</span>
+        {/* Living 3D Cosmic Web: Macro-structure of all production systems */}
+        <div className={styles.canvasWrapper}>
+          <CosmicWeb />
         </div>
 
-        <div className={styles.heroReticleTl} aria-hidden="true" />
-        <div className={styles.heroReticleTr} aria-hidden="true" />
+        {/* Typographic Readability Pocket */}
+        <div className={styles.readingPocket} />
 
-        <div className={styles.heroInner}>
+        {/* Observatory Reticle Corner Brackets (Exact 4-Corner Topics Hub Layout) */}
+        <div className={styles.observatoryReticleTl} aria-hidden="true" />
+        <div className={styles.observatoryReticleTr} aria-hidden="true" />
+        <div className={styles.observatoryReticleBl} aria-hidden="true" />
+        <div className={styles.observatoryReticleBr} aria-hidden="true" />
+
+        {/* Content Overlay Centred Vertically Over Flow Field (Exact Topics Hub Specs) */}
+        <div className={styles.heroContentOverlay}>
           <div className={styles.heroEyebrow}>
-            <span className={styles.eyebrowIconWrapper}>
-              <Radio size={14} className={styles.eyebrowIcon} />
-            </span>
-            <span className={styles.eyebrowText}>KNOWLEDGE BASE</span>
+            <Radio size={14} />
+            <span>PRODUCTION ARTICLES & EXPLANATIONS</span>
           </div>
 
           <h1 className={styles.heroHeading}>
-            Understand the system.
+            All Production Systems.
           </h1>
 
           <p className={styles.heroSublead}>
-            Clear, visual breakdowns of how modern software, payments, and automation pipelines actually work under the hood.
+            Every article is built on the three-question standard: What it is, How it physically works,
+            and Why it matters under extreme production load. Designed for founders, operators, and systems engineers.
           </p>
-
-          <a
-            href="#command-deck"
-            onClick={handleScrollToDeck}
-            className={styles.scrollIndicator}
-            aria-label="Scroll down to search articles"
-          >
-            <ChevronDown size={18} />
-          </a>
         </div>
 
-        {/* Command Deck Console */}
-        <div className={styles.commandDeckContainer} id="command-deck">
-          <div className={styles.commandChassis}>
-            <div className={styles.searchConsoleRow}>
-              <div className={styles.searchIconCol}>
-                <Search size={17} className={styles.searchConsoleIcon} />
-              </div>
+        {/* Scroll Indicator matching Topics Hub */}
+        <a
+          href="#command-deck"
+          onClick={handleScrollToDeck}
+          className={styles.scrollIndicator}
+          aria-label="Scroll to articles archive"
+        >
+          <span>EXPLORE ARCHIVE</span>
+          <ChevronDown size={16} />
+        </a>
+      </section>
+
+      {/* =========================================================================
+          SECTION A: OBSERVATORY COMMAND DECK (Search & Topics Console)
+          ========================================================================= */}
+      <section className={styles.commandDeckSection} id="command-deck">
+        <div className={styles.commandChassis}>
+          {/* Subtle 4-Corner Reticle Hardware Accents */}
+          <div className={styles.chassisReticleTl} aria-hidden="true" />
+          <div className={styles.chassisReticleTr} aria-hidden="true" />
+          <div className={styles.chassisReticleBl} aria-hidden="true" />
+          <div className={styles.chassisReticleBr} aria-hidden="true" />
+
+          {/* Full-Width Cinematic Search Bar */}
+          <div className={styles.searchRow}>
+            <div className={styles.searchContainer}>
+              <Search size={15} className={styles.searchIcon} />
               <input
                 ref={searchInputRef}
                 type="text"
-                placeholder="Search articles by title, topic, or keyword..."
+                placeholder="Search articles, topics, or key production questions..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className={styles.searchConsoleInput}
-                aria-label="Search articles"
+                className={styles.searchInput}
               />
-              {searchQuery && (
-                <button
-                  type="button"
-                  onClick={() => setSearchQuery('')}
-                  className={styles.searchConsoleClear}
-                  aria-label="Clear search query"
-                >
-                  <X size={15} />
-                </button>
-              )}
-              <div className={styles.searchKeyboardCue} aria-hidden="true">
-                <kbd>/</kbd>
-              </div>
-            </div>
-
-            {/* Filter pills */}
-            <div className={styles.topicsFilterRow}>
-              <button
-                type="button"
-                onClick={() => setSelectedTopic('all')}
-                className={`${styles.topicPill} ${selectedTopic === 'all' ? styles.topicPillActive : ''}`}
-              >
-                {renderTopicIcon('all')}
-                <span>All Topics</span>
-              </button>
-
-              {TOPICS.map((topic) => {
-                const isActive = selectedTopic === topic.slug;
-                return (
+              <div className={styles.searchActions}>
+                {searchQuery && (
+                  <span className={styles.searchMatchPill}>
+                    {filteredArticles.length} MATCHING
+                  </span>
+                )}
+                {searchQuery && (
                   <button
-                    key={topic.slug}
                     type="button"
-                    onClick={() => setSelectedTopic(topic.slug)}
-                    className={`${styles.topicPill} ${isActive ? styles.topicPillActive : ''}`}
+                    onClick={() => setSearchQuery('')}
+                    className={styles.searchClearBtn}
+                    title="Clear search"
                   >
-                    {renderTopicIcon(topic.slug)}
-                    <span>{topic.name}</span>
+                    <X size={13} />
                   </button>
-                );
-              })}
+                )}
+                <span className={styles.searchKbd} title="Press / to search">/</span>
+              </div>
             </div>
           </div>
 
-          {/* Clean Telemetry Bar */}
-          <div className={styles.commandTelemetry}>
+          {/* Horizontal Topics Rail (Zero Wrap, Pure Fluid Track with Monochrome Vector Icons) */}
+          <div className={styles.domainRailWrapper}>
+            <div className={styles.domainRailTrack}>
+              <button
+                type="button"
+                onClick={() => setSelectedTopic('all')}
+                className={`${styles.domainPill} ${selectedTopic === 'all' ? styles.domainPillActive : ''}`}
+              >
+                <span className={styles.pillIcon}>{renderTopicIcon('all')}</span>
+                <span>ALL</span>
+              </button>
+
+              {TOPICS.map((t) => {
+                const isActive = selectedTopic === t.slug;
+                return (
+                  <button
+                    key={t.slug}
+                    type="button"
+                    onClick={() => setSelectedTopic(t.slug)}
+                    className={`${styles.domainPill} ${isActive ? styles.domainPillActive : ''}`}
+                  >
+                    <span className={styles.pillIcon}>{renderTopicIcon(t.slug)}</span>
+                    <span>{t.name.toUpperCase()}</span>
+                  </button>
+                );
+              })}
+
+              {/* Instant Filter Reset */}
+              {isFiltered && (
+                <button
+                  type="button"
+                  onClick={handleResetFilters}
+                  className={styles.resetFiltersBtn}
+                  title="Reset active filters"
+                >
+                  <span>RESET FILTERS</span>
+                  <X size={11} />
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Live System Telemetry Status Bar */}
+          <div className={styles.telemetryStatusBar}>
             <div className={styles.telemetryLeft}>
               <span className={styles.telemetryDot} />
               <span className={styles.telemetryText}>
-                {filteredArticles.length} {filteredArticles.length === 1 ? 'ARTICLE' : 'ARTICLES'} AVAILABLE
+                {filteredArticles.length} PRODUCTION {filteredArticles.length === 1 ? 'SYSTEM' : 'SYSTEMS'} AVAILABLE
               </span>
               <span className={styles.telemetryDivider}>//</span>
               <span className={styles.telemetryScope}>
-                {selectedTopic === 'all' ? 'ALL TOPICS' : selectedTopic.toUpperCase().replace('-', ' ')}
+                {selectedTopic === 'all' ? 'ALL DISCIPLINES' : selectedTopic.toUpperCase().replace('-', ' ')}
               </span>
             </div>
             <div className={styles.telemetryRight}>
-              <span className={styles.telemetryTag}>CLEAR & ACCESSIBLE</span>
+              <span className={styles.telemetryTag}>100% SPEC VERIFIED</span>
             </div>
           </div>
         </div>
