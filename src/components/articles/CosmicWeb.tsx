@@ -256,22 +256,23 @@ export const CosmicWeb: React.FC = () => {
       starColors[i3 + 1] = mixedColor.g;
       starColors[i3 + 2] = mixedColor.b;
 
-      // Subtle, non-intrusive alpha and size matching Topics Hub and Homepage
+      // Contrast settings: exact high-contrast match to Topics Hub hero section
       const pRand = Math.random();
       let pSize: number;
       let pAlpha: number;
 
-      if (pRand > 0.97) {
-        // Rare accent pinpoint
-        pSize = 0.9 + Math.random() * 0.4;
-        pAlpha = 0.72;
-      } else if (pRand > 0.85) {
-        pSize = 0.55 + Math.random() * 0.3;
-        pAlpha = 0.52;
+      if (pRand > 0.95) {
+        // High-luminance stellar beacon
+        pSize = 1.4 + Math.random() * 0.8;
+        pAlpha = 0.98;
+      } else if (pRand > 0.80) {
+        // Bright secondary stellar node
+        pSize = 0.9 + Math.random() * 0.5;
+        pAlpha = 0.82;
       } else {
-        // Delicate background crystalline pinpoint
-        pSize = 0.25 + Math.random() * 0.28;
-        pAlpha = 0.18 + Math.random() * 0.32;
+        // Crisp crystalline pinpoint
+        pSize = 0.35 + Math.random() * 0.45;
+        pAlpha = 0.42 + Math.random() * 0.45;
       }
 
       starSizes[i] = pSize;
@@ -308,7 +309,7 @@ export const CosmicWeb: React.FC = () => {
     // -------------------------------------------------------------
     // 5. DISTANT DEEP-SPACE FIELD STARS (Infinite Depth Layer)
     // -------------------------------------------------------------
-    const bgStarCount = 1800;
+    const bgStarCount = 2000;
     const bgGeo = new THREE.BufferGeometry();
     const bgPositions = new Float32Array(bgStarCount * 3);
     const bgColors = new Float32Array(bgStarCount * 3);
@@ -322,20 +323,21 @@ export const CosmicWeb: React.FC = () => {
       const v = Math.random();
       const phi = Math.acos(2 * v - 1);
       const lam = 2 * Math.PI * u;
-      const rad = 42 + Math.random() * 38;
+      const rad = 40 + Math.random() * 38;
 
       bgPositions[i3] = rad * Math.sin(phi) * Math.cos(lam);
       bgPositions[i3 + 1] = rad * Math.sin(phi) * Math.sin(lam);
       bgPositions[i3 + 2] = rad * Math.cos(phi);
 
-      const isSubtleSilver = Math.random() > 0.45;
-      const c = isSubtleSilver ? colorSilver : colorDarkSlate;
+      const isSubtleSilver = Math.random() > 0.40;
+      const c = isSubtleSilver ? colorSilver : colorSlate;
       bgColors[i3] = c.r;
       bgColors[i3 + 1] = c.g;
       bgColors[i3 + 2] = c.b;
 
-      bgSizes[i] = 0.22 + Math.random() * 0.35;
-      bgAlphas[i] = 0.14 + Math.random() * 0.35;
+      // Exact match to Topics Hub background star contrast
+      bgSizes[i] = 0.28 + Math.random() * 0.42;
+      bgAlphas[i] = 0.25 + Math.random() * 0.45;
       bgTwinkles[i] = Math.random();
     }
 
@@ -366,9 +368,9 @@ export const CosmicWeb: React.FC = () => {
     scene.add(bgPoints);
 
     // -------------------------------------------------------------
-    // 6. DELICATE NEBULAR DUST HAZE (Subtle Ethereal Atmosphere)
+    // 6. PROMINENT NEBULAR DUST CLOUDS (Visibly Luminous to Naked Eye)
     // -------------------------------------------------------------
-    const dustCount = 1300;
+    const dustCount = 2000;
     const dustGeo = new THREE.BufferGeometry();
     const dustPositions = new Float32Array(dustCount * 3);
     const dustColors = new Float32Array(dustCount * 3);
@@ -377,24 +379,53 @@ export const CosmicWeb: React.FC = () => {
 
     for (let i = 0; i < dustCount; i++) {
       const i3 = i * 3;
-      const sign = Math.random() > 0.5 ? 1 : -1;
-      const u = Math.pow(Math.random(), 0.85);
-      const h = u * 14.0;
-      const lobeRadius = 2.4 + Math.sin(u * Math.PI * 0.85) * 5.2 + u * 2.5;
-      const phi = Math.random() * Math.PI * 2;
-      const rad = lobeRadius * (0.8 + Math.random() * 0.35);
+      const layer = Math.random();
+      let x: number;
+      let y: number;
+      let z: number;
 
-      dustPositions[i3] = Math.cos(phi) * rad;
-      dustPositions[i3 + 1] = sign * (h + 1.0);
-      dustPositions[i3 + 2] = Math.sin(phi) * rad * 0.7;
+      if (layer < 0.45) {
+        // Equatorial waist ring dust layer - frames around the reading sanctuary
+        const theta = Math.random() * Math.PI * 2;
+        const rad = 3.2 + Math.pow(Math.random(), 1.1) * 9.5;
+        x = Math.cos(theta) * rad;
+        y = Math.sin(theta) * rad * 0.52 + (Math.random() - 0.5) * 1.6;
+        z = (Math.random() - 0.5) * 3.8;
+      } else if (layer < 0.82) {
+        // Dual expanding hourglass lobes dust layer
+        const sign = Math.random() > 0.5 ? 1 : -1;
+        const u = Math.pow(Math.random(), 0.78);
+        const h = u * 11.5;
+        const lobeRadius = 3.0 + Math.sin(u * Math.PI * 0.88) * 6.2 + u * 2.5;
+        const phi = Math.random() * Math.PI * 2;
+        const rad = lobeRadius * (0.70 + Math.random() * 0.50);
 
-      const c = Math.random() > 0.5 ? colorSilver : colorDarkSlate;
+        x = Math.cos(phi) * rad;
+        y = sign * (h + 0.9) + (Math.random() - 0.5) * 1.4;
+        z = Math.sin(phi) * rad * 0.75 + (Math.random() - 0.5) * 2.2;
+      } else {
+        // Surrounding volumetric cosmic envelope
+        const rad = Math.pow(Math.random(), 0.6) * 25.0;
+        const theta = Math.random() * Math.PI * 2;
+        x = Math.cos(theta) * rad;
+        y = Math.sin(theta) * rad * 0.75;
+        z = (Math.random() - 0.5) * 8.5;
+      }
+
+      dustPositions[i3] = x;
+      dustPositions[i3 + 1] = y;
+      dustPositions[i3 + 2] = z;
+
+      // Color grading: luminous pure white, radiant silver, and slate clouds
+      const cRand = Math.random();
+      const c = cRand > 0.55 ? colorWhite : (cRand > 0.22 ? colorSilver : colorSlate);
       dustColors[i3] = c.r;
       dustColors[i3 + 1] = c.g;
       dustColors[i3 + 2] = c.b;
 
-      dustSizes[i] = 2.4 + Math.random() * 3.8;
-      dustAlphas[i] = 0.04 + Math.random() * 0.09; // Whisper-faint, subtle haze
+      // Contrast: prominently visible to the naked eye with lush volumetric presence
+      dustSizes[i] = 4.0 + Math.random() * 6.2;
+      dustAlphas[i] = 0.14 + Math.random() * 0.22;
     }
 
     dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPositions, 3));
@@ -414,7 +445,7 @@ export const CosmicWeb: React.FC = () => {
         vAlpha = aAlpha;
         vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
         gl_Position = projectionMatrix * mvPosition;
-        gl_PointSize = max(2.0, aSize * (150.0 / -mvPosition.z) * uPixelRatio);
+        gl_PointSize = max(3.0, aSize * (180.0 / -mvPosition.z) * uPixelRatio);
       }
     `;
 
@@ -425,8 +456,9 @@ export const CosmicWeb: React.FC = () => {
       void main() {
         float dist = length(gl_PointCoord - vec2(0.5));
         if (dist > 0.5) discard;
-        float intensity = exp(-dist * dist * 14.0);
-        gl_FragColor = vec4(vColor, vAlpha * intensity);
+        // Soft volumetric Gaussian envelope with luminous core
+        float intensity = exp(-dist * dist * 9.0);
+        gl_FragColor = vec4(vColor, vAlpha * intensity * 1.35);
       }
     `;
 
