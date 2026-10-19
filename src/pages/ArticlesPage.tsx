@@ -24,7 +24,7 @@ import {
 } from 'lucide-react';
 import { CosmicWeb } from '../components/articles/CosmicWeb';
 import { ArticleCard } from '../components/articles/ArticleCard';
-import { TopicSchematic } from '../components/ui/TopicSchematics';
+import { CinematicCardCanvas } from '../components/articles/CinematicCardCanvas';
 import styles from '../styles/articles.module.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -504,10 +504,9 @@ export const ArticlesPage: React.FC = () => {
                   <div className={styles.visualGridPattern} />
                   <div className={styles.visualVignette} />
                   <div className={styles.spotlightSchematicWrapper}>
-                    <TopicSchematic
+                    <CinematicCardCanvas
                       topicSlug={featuredArticle.topicSlug}
                       isHovered={spotlightHovered}
-                      isRevealed={false}
                     />
                   </div>
                 </div>

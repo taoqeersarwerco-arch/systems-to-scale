@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Clock, ArrowRight } from 'lucide-react';
 import { ArticleEntry } from '../../data/slug-registry';
-import { TopicSchematic } from '../ui/TopicSchematics';
+import { CinematicCardCanvas } from './CinematicCardCanvas';
 import styles from '../../styles/articles.module.css';
 
 interface ArticleCardProps {
@@ -46,12 +46,11 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({ article }) => {
         <div className={styles.visualGridPattern} />
         <div className={styles.visualVignette} />
 
-        {/* Dynamic Topic Schematic Animation */}
+        {/* Dynamic Atmospheric Canvas Animation */}
         <div className={styles.schematicWrapper}>
-          <TopicSchematic
+          <CinematicCardCanvas
             topicSlug={article.topicSlug}
             isHovered={isHovered}
-            isRevealed={false}
           />
         </div>
 
