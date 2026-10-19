@@ -10,7 +10,7 @@ import {
   Cpu, 
   Share2 
 } from 'lucide-react';
-import { ConstellationMesh } from '../components/community/ConstellationMesh';
+import { CommunityHero } from '../components/community/CommunityHero';
 import { ProtocolReactor } from '../components/community/ProtocolReactor';
 import { RequestLeaderboardCard, RequestItem } from '../components/community/RequestLeaderboardCard';
 import { ArticleRequestModal } from '../components/topics/ArticleRequestModal';
@@ -123,53 +123,9 @@ export const CommunityPage: React.FC = () => {
   return (
     <div className={styles.pageContainer}>
       {/* =====================================================================
-          SECTION 1: HERO & LIVING CONSTELLATION NODE MESH
+          SECTION 1: CINEMATIC OBSERVATORY GLOBAL DEMAND RADAR HERO
           ===================================================================== */}
-      <section className={styles.heroSection}>
-        {/* Living Constellation Mesh Canvas */}
-        <ConstellationMesh />
-
-        {/* 4-Corner Reticle Crosshairs */}
-        <span className={`${styles.cornerReticle} ${styles.reticleTL}`}>+</span>
-        <span className={`${styles.cornerReticle} ${styles.reticleTR}`}>+</span>
-        <span className={`${styles.cornerReticle} ${styles.reticleBL}`}>+</span>
-        <span className={`${styles.cornerReticle} ${styles.reticleBR}`}>+</span>
-
-        <div className={styles.heroContent}>
-          <div className={styles.heroEyebrow}>
-            <span className={styles.beaconDot} />
-            Observatory Collective • Demand Radar
-          </div>
-
-          <h1 className={styles.heroTitle}>
-            The Systems Community.
-          </h1>
-
-          <p className={styles.heroSubhead}>
-            A gathering of engineers, ops architects, and technical operators shaping the editorial backlog. Vote on upcoming mechanism breakdowns, track research milestones, or submit production architectures for analysis.
-          </p>
-
-          <div className={styles.heroCtaRow}>
-            <button
-              onClick={() => setModalOpen(true)}
-              className={styles.primaryCta}
-            >
-              <PlusCircle size={15} />
-              <span>Submit Architecture Teardown</span>
-            </button>
-
-            <button
-              onClick={() => {
-                const el = document.getElementById('pipeline-section');
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
-              }}
-              className={styles.secondaryCta}
-            >
-              <span>Explore Research Pipeline ↓</span>
-            </button>
-          </div>
-        </div>
-      </section>
+      <CommunityHero onSubmitClick={() => setModalOpen(true)} />
 
       {/* =====================================================================
           SECTION 2: EDITORIAL PROTOCOL REACTOR & VERIFICATION PIPELINE
