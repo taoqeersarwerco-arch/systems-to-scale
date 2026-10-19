@@ -1,0 +1,367 @@
+/* ==========================================================================
+   Systems to Scale — Editorial Protocol Reactor & Verification Pipeline
+   Monochrome Obsidian Palette (#080808 / #FFFFFF)
+   ========================================================================== */
+
+.pipelineSection {
+  padding: 100px clamp(20px, 4vw, 48px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  background: #080808;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Background atmospheric glow */
+.sectionBackdropGlow {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 900px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.03) 0%, rgba(8, 8, 8, 0) 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.sectionHeaderCenter {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.sectionEyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 14px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 11px;
+  font-weight: 600;
+  color: #D4D4D4;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.pulsingDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.9);
+  animation: pulseBeacon 2s infinite ease-in-out;
+}
+
+@keyframes pulseBeacon {
+  0%, 100% { opacity: 0.3; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+.sectionTitle {
+  font-family: var(--sts-font-display, sans-serif);
+  font-size: clamp(2rem, 3.5vw, 2.75rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: #FFFFFF;
+  margin: 0;
+  line-height: 1.15;
+}
+
+.sectionSubhead {
+  font-family: var(--sts-font-body, sans-serif);
+  font-size: 15px;
+  color: rgba(237, 233, 227, 0.65);
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* Interactive Simulation Control Bar */
+.pipelineControlsBar {
+  position: relative;
+  z-index: 1;
+  max-width: 1240px;
+  margin: 0 auto 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.pipelineStatus {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.statusIndicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.statusDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+}
+
+.simulateBtn {
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: #FFFFFF;
+  color: #080808;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 12px rgba(255, 255, 255, 0.15);
+}
+
+.simulateBtn:hover {
+  background: #E5E5E5;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 18px rgba(255, 255, 255, 0.25);
+}
+
+.simulateBtnActive {
+  background: #D4D4D4;
+}
+
+/* 4-Pod Grid Container */
+.reactorGrid {
+  position: relative;
+  z-index: 1;
+  max-width: 1240px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+/* Connecting flow track behind cards */
+.flowTrackLine {
+  position: absolute;
+  top: 105px;
+  left: 60px;
+  right: 60px;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0.15) 50%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  z-index: 0;
+  pointer-events: none;
+}
+
+.travelingPulse {
+  position: absolute;
+  top: -3px;
+  width: 24px;
+  height: 8px;
+  border-radius: 999px;
+  background: #FFFFFF;
+  box-shadow: 0 0 16px rgba(255, 255, 255, 1);
+  animation: travelRail 6s ease-in-out infinite;
+}
+
+@keyframes travelRail {
+  0% { left: 0%; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { left: 98%; opacity: 0; }
+}
+
+/* Reactor Stage Card Pod */
+.reactorPod {
+  position: relative;
+  z-index: 1;
+  background: rgba(14, 16, 18, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.reactorPod:hover {
+  border-color: rgba(255, 255, 255, 0.28);
+  background: rgba(20, 23, 26, 0.95);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6), 0 0 24px rgba(255, 255, 255, 0.04);
+}
+
+.reactorPodActive {
+  border-color: rgba(255, 255, 255, 0.45);
+  background: rgba(22, 26, 29, 0.98);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 30px rgba(255, 255, 255, 0.08);
+}
+
+/* Card Header with Stage Tag and Live State Badge */
+.podHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stagePill {
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.modeBadge {
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
+}
+
+/* Canvas Viewport inside each card */
+.canvasContainer {
+  position: relative;
+  width: 100%;
+  height: 140px;
+  background: #080808;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.stageCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Reticles in canvas corners */
+.cornerPlusTL,
+.cornerPlusBR {
+  position: absolute;
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.2);
+  pointer-events: none;
+}
+
+.cornerPlusTL { top: 6px; left: 8px; }
+.cornerPlusBR { bottom: 6px; right: 8px; }
+
+/* Text Content */
+.podBody {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.podTitle {
+  font-family: var(--sts-font-display, sans-serif);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: #FFFFFF;
+  margin: 0;
+  line-height: 1.25;
+}
+
+.podDescription {
+  font-family: var(--sts-font-body, sans-serif);
+  font-size: 13px;
+  color: rgba(237, 233, 227, 0.6);
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* Live Telemetry Metric strip inside card */
+.podTelemetry {
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.telemetryVal {
+  color: #FFFFFF;
+  font-weight: 500;
+}
+
+/* Responsive Styles */
+@media (max-width: 1100px) {
+  .reactorGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .flowTrackLine {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .pipelineSection {
+    padding: 60px 16px;
+  }
+  .reactorGrid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .pipelineControlsBar {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pulsingDot, .travelingPulse {
+    animation: none !important;
+  }
+}

@@ -11,6 +11,7 @@ import {
   Share2 
 } from 'lucide-react';
 import { ConstellationMesh } from '../components/community/ConstellationMesh';
+import { ProtocolReactor } from '../components/community/ProtocolReactor';
 import { ArticleRequestModal } from '../components/topics/ArticleRequestModal';
 import styles from '../styles/community.module.css';
 
@@ -184,62 +185,9 @@ export const CommunityPage: React.FC = () => {
       </section>
 
       {/* =====================================================================
-          SECTION 2: EDITORIAL PRODUCTION PIPELINE TIMELINE
+          SECTION 2: EDITORIAL PROTOCOL REACTOR & VERIFICATION PIPELINE
           ===================================================================== */}
-      <section id="pipeline-section" className={styles.pipelineSection}>
-        <div className={styles.sectionHeaderCenter}>
-          <div className={styles.sectionEyebrow}>
-            <Microscope size={12} />
-            <span>The Editorial Protocol</span>
-          </div>
-
-          <h2 className={styles.sectionTitle}>
-            How community requests become verified specs.
-          </h2>
-
-          <p className={styles.sectionSubhead}>
-            Every breakdown undergoes rigorous primary-source investigation and physical stress-testing before publication.
-          </p>
-        </div>
-
-        <div className={styles.timelineGrid}>
-          {/* Stage 1 */}
-          <div className={styles.timelineCard}>
-            <span className={styles.stageNumberBadge}>Stage 01</span>
-            <h3 className={styles.stageTitle}>Community Demand Signal</h3>
-            <p className={styles.stageDescription}>
-              Subscribers vote and register demand for mission-critical architectures, failure edge cases, and distributed bottlenecks.
-            </p>
-          </div>
-
-          {/* Stage 2 */}
-          <div className={styles.timelineCard}>
-            <span className={styles.stageNumberBadge}>Stage 02</span>
-            <h3 className={styles.stageTitle}>Primary Source Audit</h3>
-            <p className={styles.stageDescription}>
-              Direct examination of open RFCs, official specifications, vendor API documentation, and engine source code. Zero synthetic fluff.
-            </p>
-          </div>
-
-          {/* Stage 3 */}
-          <div className={styles.timelineCard}>
-            <span className={styles.stageNumberBadge}>Stage 03</span>
-            <h3 className={styles.stageTitle}>Failure Reproduction</h3>
-            <p className={styles.stageDescription}>
-              Simulating production limits, testing recovery mechanisms under fault conditions, and compiling physical benchmark logs.
-            </p>
-          </div>
-
-          {/* Stage 4 */}
-          <div className={styles.timelineCard}>
-            <span className={styles.stageNumberBadge}>Stage 04</span>
-            <h3 className={styles.stageTitle}>Published Spec</h3>
-            <p className={styles.stageDescription}>
-              Releasing the long-form mechanical teardown complete with living interactive canvas simulators and failure mode playbooks.
-            </p>
-          </div>
-        </div>
-      </section>
+      <ProtocolReactor />
 
       {/* =====================================================================
           SECTION 3: LIVE MECHANISM REQUEST MATRIX
