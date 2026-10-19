@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlowFieldHero } from '../components/hero/FlowFieldHero';
+import { GalaxyHero } from '../components/galaxy/GalaxyHero';
 import { TopicTrailers } from '../components/sections/TopicTrailers';
 import { FeaturedArticles } from '../components/sections/FeaturedArticles';
 import { Misconceptions } from '../components/sections/Misconceptions';
@@ -9,8 +9,8 @@ import { NewsletterCta } from '../components/sections/NewsletterCta';
 export const HomePage: React.FC = () => {
   return (
     <main>
-      {/* Section 01: Multi-Layer Perlin Vector Flow Field Hero */}
-      <FlowFieldHero />
+      {/* Section 01: Galaxy Hero */}
+      <GalaxyHero />
 
       {/* Section 02: Topic Trailers (8 Bento Cards) */}
       <TopicTrailers />
