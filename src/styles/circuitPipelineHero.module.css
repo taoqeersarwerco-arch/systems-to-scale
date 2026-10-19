@@ -1,0 +1,715 @@
+/* ==========================================================================
+   Systems to Scale — Cinematic Circuit Pipeline Reactor Hero
+   Obsidian Palette (#080808 / #FFFFFF)
+   Unified Topic Archive Header + Interactive Circuit Pipeline State Machine
+   ========================================================================== */
+
+.heroContainer {
+  position: relative;
+  width: 100%;
+  background-color: #080808;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  overflow: hidden;
+  padding-top: calc(var(--sts-header-height) + 2rem);
+  padding-bottom: 4rem;
+}
+
+/* Background PCB Circuit Trace Canvas */
+.circuitCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+/* Atmospheric Reading Contrast Vignette */
+.vignetteOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 85% 70% at 50% 30%,
+    rgba(8, 8, 8, 0.82) 0%,
+    rgba(8, 8, 8, 0.60) 50%,
+    rgba(8, 8, 8, 0.95) 100%
+  );
+}
+
+/* Main Content Layer */
+.contentWrapper {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* Breadcrumb Navigation */
+.breadcrumbRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 2rem;
+}
+
+.breadcrumbLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(237, 233, 227, 0.45);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.breadcrumbLink:hover {
+  color: #FFFFFF;
+  transform: translateX(-2px);
+}
+
+.breadcrumbDivider {
+  color: rgba(255, 255, 255, 0.18);
+  font-size: 11px;
+}
+
+.breadcrumbTag {
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.04);
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Header Grid: Left Headline & Scope, Right Verified Fact & Stats */
+.headerGrid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 48px;
+  align-items: flex-start;
+  margin-bottom: 3.5rem;
+}
+
+.titleArea {
+  display: flex;
+  flex-direction: column;
+}
+
+.eyebrowBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: fit-content;
+  margin-bottom: 1.25rem;
+}
+
+.beaconDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.9);
+  animation: beaconBlink 2.5s ease-in-out infinite;
+}
+
+@keyframes beaconBlink {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; }
+}
+
+.eyebrowText {
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.headline {
+  font-family: var(--sts-font-display, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
+  font-size: clamp(38px, 5vw, 62px);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.08;
+  margin: 0 0 1rem 0;
+  background: linear-gradient(180deg, #FFFFFF 30%, rgba(255, 255, 255, 0.7) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hookText {
+  font-family: var(--sts-font-body, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
+  font-size: clamp(16px, 2vw, 19px);
+  font-weight: 400;
+  color: #EDE9E3;
+  line-height: 1.5;
+  margin: 0 0 1.25rem 0;
+  max-width: 780px;
+}
+
+.scopeText {
+  font-family: var(--sts-font-body, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: rgba(237, 233, 227, 0.6);
+  margin: 0 0 1.75rem 0;
+  max-width: 740px;
+}
+
+.tagsRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tagPill {
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  color: rgba(237, 233, 227, 0.55);
+}
+
+/* Right Fact Card */
+.factCard {
+  position: relative;
+  padding: 24px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.factCornerTL,
+.factCornerBR {
+  position: absolute;
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.25);
+}
+.factCornerTL { top: 8px; left: 10px; }
+.factCornerBR { bottom: 8px; right: 10px; }
+
+.factHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 12px;
+}
+
+.factPulseDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
+}
+
+.factMetric {
+  font-family: var(--sts-font-display, sans-serif);
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: #FFFFFF;
+  margin-bottom: 8px;
+  line-height: 1;
+}
+
+.factMetricLabel {
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(237, 233, 227, 0.45);
+  margin-bottom: 12px;
+}
+
+.factBody {
+  font-family: var(--sts-font-body, sans-serif);
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: rgba(237, 233, 227, 0.65);
+}
+
+/* ==========================================================================
+   THE CIRCUIT PIPELINE REACTOR CONSOLE
+   ========================================================================== */
+
+.reactorConsole {
+  position: relative;
+  width: 100%;
+  background: rgba(14, 16, 18, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 28px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+/* Console Toolbar */
+.consoleToolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 30px;
+}
+
+.consoleTitleArea {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.consoleBadge {
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #080808;
+  background: #FFFFFF;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.consoleTitle {
+  font-family: var(--sts-font-display, sans-serif);
+  font-size: 15px;
+  font-weight: 600;
+  color: #FFFFFF;
+  letter-spacing: -0.01em;
+}
+
+.consoleControls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Mechanical Hardware Toggle Switch for Fault Injection */
+.mechanicalToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s ease;
+}
+
+.mechanicalToggle:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+.toggleSwitchTrack {
+  position: relative;
+  width: 32px;
+  height: 18px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  transition: background 0.2s ease;
+}
+
+.toggleTrackActive {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.toggleThumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #EDE9E3;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.toggleThumbActive {
+  transform: translateX(14px);
+  background: #FFFFFF;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.9);
+}
+
+.toggleLabel {
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: rgba(237, 233, 227, 0.7);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.toggleDiode {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transition: all 0.2s ease;
+}
+
+.toggleDiodeActive {
+  background: #FFFFFF;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 1);
+}
+
+/* Action Buttons */
+.triggerBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: #FFFFFF;
+  color: #080808;
+  font-family: var(--sts-font-body, sans-serif);
+  font-size: 13px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 14px rgba(255, 255, 255, 0.15);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.triggerBtn:hover:not(:disabled) {
+  background: #EDEDED;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.28);
+}
+
+.triggerBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.resetBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(237, 233, 227, 0.6);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.resetBtn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.24);
+  color: #FFFFFF;
+}
+
+/* ==========================================================================
+   CIRCUIT DIAGRAM & NODES STAGE
+   ========================================================================== */
+
+.circuitStageContainer {
+  position: relative;
+  width: 100%;
+  margin-bottom: 28px;
+}
+
+/* SVG Circuit Conduit Bus Lines */
+.conduitSvgLayer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Grid of 4 Stage Nodes */
+.stageCardsGrid {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.stageCard {
+  position: relative;
+  background: rgba(18, 20, 22, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 10px;
+  padding: 20px;
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.stageCardActive {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 24px rgba(255, 255, 255, 0.12), inset 0 0 16px rgba(255, 255, 255, 0.04);
+  transform: translateY(-2px);
+}
+
+.stageCardSettled {
+  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.stageCardFault {
+  border-color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.08);
+  animation: faultPulse 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes faultPulse {
+  0% { box-shadow: 0 0 10px rgba(255, 255, 255, 0.1); }
+  100% { box-shadow: 0 0 26px rgba(255, 255, 255, 0.35); }
+}
+
+.stageTopRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.stageNumberBadge {
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: rgba(237, 233, 227, 0.5);
+  text-transform: uppercase;
+}
+
+.stageIconWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.stageTitle {
+  font-family: var(--sts-font-display, sans-serif);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: #EDE9E3;
+  margin: 0 0 8px 0;
+}
+
+.stageDesc {
+  font-family: var(--sts-font-body, sans-serif);
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: rgba(237, 233, 227, 0.5);
+  margin-bottom: 14px;
+  flex: 1;
+}
+
+.stageMetaRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.stageStatusPill {
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 9.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: rgba(237, 233, 227, 0.4);
+}
+
+.statusPillActive {
+  color: #FFFFFF;
+}
+
+.statusPillSettled {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.statusPillFault {
+  color: #FFFFFF;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+}
+
+.stageLatency {
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 9.5px;
+  color: rgba(237, 233, 227, 0.35);
+}
+
+/* ==========================================================================
+   PHYSICAL EXPONENTIAL BACKOFF LOOP CONDUIT
+   ========================================================================== */
+
+.backoffLoopBanner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14px;
+  padding: 10px 18px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px dashed rgba(255, 255, 255, 0.12);
+}
+
+.backoffBannerActive {
+  border-color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.backoffLoopLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.backoffIcon {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.backoffLabel {
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(237, 233, 227, 0.6);
+}
+
+.backoffFormula {
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* ==========================================================================
+   STREAM TELEMETRY CONSOLE
+   ========================================================================== */
+
+.terminalConsole {
+  background: #060708;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 14px 18px;
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 11px;
+  line-height: 1.65;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+.terminalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.terminalTitle {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(237, 233, 227, 0.4);
+}
+
+.terminalStatusBadge {
+  font-size: 9.5px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.terminalLogs {
+  max-height: 140px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.logEntry {
+  display: flex;
+  gap: 12px;
+  color: rgba(237, 233, 227, 0.7);
+}
+
+.logTimestamp {
+  color: rgba(255, 255, 255, 0.35);
+  user-select: none;
+}
+
+.logMessage {
+  flex: 1;
+}
+
+.logMessageAlert {
+  color: #FFFFFF;
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.6);
+}
+
+.logMessageSuccess {
+  color: #FFFFFF;
+}
+
+/* Responsive Overrides */
+@media (max-width: 960px) {
+  .headerGrid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .stageCardsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .stageCardsGrid {
+    grid-template-columns: 1fr;
+  }
+  .consoleToolbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

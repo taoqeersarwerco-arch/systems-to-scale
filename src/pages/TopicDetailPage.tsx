@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { TOPIC_MAP, TOPICS } from '../data/topics';
 import { ALL_ARTICLES, ArticleEntry } from '../data/slug-registry';
-import { PipelineSim } from '../components/topics/PipelineSim';
+import { CircuitPipelineHero } from '../components/topics/CircuitPipelineHero';
 import { AuctionSim } from '../components/topics/AuctionSim';
 import { RenderSim } from '../components/topics/RenderSim';
 import { TransactionSim } from '../components/topics/TransactionSim';
@@ -49,7 +49,7 @@ export const TopicDetailPage: React.FC = () => {
   const renderSimulation = () => {
     switch (topic.simType) {
       case 'pipeline':
-        return <PipelineSim />;
+        return null; // Rendered directly via CircuitPipelineHero
       case 'auction':
         return <AuctionSim />;
       case 'render':
@@ -65,53 +65,65 @@ export const TopicDetailPage: React.FC = () => {
       case 'calendar':
         return <CalendarSim />;
       default:
-        return <PipelineSim />;
+        return null;
     }
   };
 
+  const isPipelineDomain = topic.simType === 'pipeline';
+
   return (
-    <div style={{ paddingTop: 'calc(var(--sts-header-height) + 2rem)', paddingBottom: '6rem' }}>
-      <div className="sts-container">
-        {/* Navigation Breadcrumb */}
-        <div style={{ marginBottom: '2.5rem' }}>
-          <Link
-            to="/topics"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.4rem',
-              color: 'var(--sts-dim)',
-              fontSize: '0.85rem',
-              transition: 'color 0.2s ease'
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--sts-brass)')}
-            onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--sts-dim)')}
-          >
-            <ArrowLeft size={14} />
-            <span>All Domains</span>
-          </Link>
-        </div>
+    <div style={{ paddingBottom: '6rem' }}>
+      {/* Hero Section */}
+      {isPipelineDomain ? (
+        <CircuitPipelineHero topic={topic} />
+      ) : (
+        <div style={{ paddingTop: 'calc(var(--sts-header-height) + 2rem)', marginBottom: '3.5rem' }}>
+          <div className="sts-container">
+            {/* Navigation Breadcrumb */}
+            <div style={{ marginBottom: '2.5rem' }}>
+              <Link
+                to="/topics"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.4rem',
+                  color: 'var(--sts-dim)',
+                  fontSize: '0.85rem',
+                  transition: 'color 0.2s ease'
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--sts-brass)')}
+                onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--sts-dim)')}
+              >
+                <ArrowLeft size={14} />
+                <span>All Domains</span>
+              </Link>
+            </div>
 
-        {/* Section 1: Hero & Title */}
-        <div style={{ maxWidth: '820px', marginBottom: '3.5rem' }}>
-          <div className="sts-badge sts-badge-steel" style={{ marginBottom: '1rem' }}>
-            <span>Topic Overview</span>
+            {/* Section 1: Hero & Title */}
+            <div style={{ maxWidth: '820px', marginBottom: '3.5rem' }}>
+              <div className="sts-badge sts-badge-steel" style={{ marginBottom: '1rem' }}>
+                <span>Topic Overview</span>
+              </div>
+              <h1 style={{ fontSize: 'clamp(2.4rem, 4.5vw, 3.8rem)', lineHeight: 1.1, marginBottom: '1.25rem' }}>
+                {topic.name}
+              </h1>
+              <p style={{ fontSize: '1.15rem', color: 'var(--sts-bone)', lineHeight: 1.6, marginBottom: '1.5rem', fontWeight: 500 }}>
+                {topic.hook}
+              </p>
+              <p style={{ fontSize: '1rem', color: 'var(--sts-muted)', lineHeight: 1.65 }}>
+                {topic.scopeParagraph}
+              </p>
+            </div>
+
+            {/* Interactive Centerpiece Simulation */}
+            <div style={{ marginBottom: '5rem' }}>
+              {renderSimulation()}
+            </div>
           </div>
-          <h1 style={{ fontSize: 'clamp(2.4rem, 4.5vw, 3.8rem)', lineHeight: 1.1, marginBottom: '1.25rem' }}>
-            {topic.name}
-          </h1>
-          <p style={{ fontSize: '1.15rem', color: 'var(--sts-bone)', lineHeight: 1.6, marginBottom: '1.5rem', fontWeight: 500 }}>
-            {topic.hook}
-          </p>
-          <p style={{ fontSize: '1rem', color: 'var(--sts-muted)', lineHeight: 1.65 }}>
-            {topic.scopeParagraph}
-          </p>
         </div>
+      )}
 
-        {/* Interactive Centerpiece Simulation */}
-        <div style={{ marginBottom: '5rem' }}>
-          {renderSimulation()}
-        </div>
+      <div className="sts-container" style={{ marginTop: isPipelineDomain ? '4rem' : '0' }}>
 
         {/* Section 3: Article Repository Grid */}
         <div style={{ marginBottom: '5rem' }}>
