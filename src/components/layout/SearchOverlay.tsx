@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Fuse from 'fuse.js';
-import { Search, X, ArrowRight, Clock, FileText, Compass, Send } from 'lucide-react';
-import { ALL_ARTICLES, ArticleEntry } from '../../data/slug-registry';
-import { TOPICS, TopicData } from '../../data/topics';
+import { Search, X, ArrowRight, ArrowUpRight, FileText, Compass, Sparkles, BookOpen } from 'lucide-react';
+import { ALL_ARTICLES, SLUG_REGISTRY, ArticleEntry } from '../../data/slug-registry';
+import styles from '../../styles/search.module.css';
 
 interface SearchOverlayProps {
   isOpen: boolean;
@@ -17,75 +17,124 @@ export const SearchOverlay: React.FC<SearchOverlayProps> = ({
   onRequestArticle
 }) => {
   const [query, setQuery] = useState('');
-  const [articleResults, setArticleResults] = useState<ArticleEntry[]>([]);
-  const [topicResults, setTopicResults] = useState<TopicData[]>([]);
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
-  // Initialize Fuse.js index for articles
-  const articleFuse = useRef(
-    new Fuse(ALL_ARTICLES, {
-      keys: ['title', 'focusKeyword', 'topic', 'standfirst', 'focusQuestion'],
-      threshold: 0.35,
+  // Initialize Fuse.js with weighted article keys & lenient threshold for relatable terms
+  const articleFuse = useMemo(() => {
+    return new Fuse(ALL_ARTICLES, {
+      keys: [
+        { name: 'title', weight: 0.5 },
+        { name: 'focusKeyword', weight: 0.25 },
+        { name: 'beginnerStandfirst', weight: 0.2 },
+        { name: 'standfirst', weight: 0.15 },
+        { name: 'focusQuestion', weight: 0.15 },
+        { name: 'topic', weight: 0.1 }
+      ],
+      threshold: 0.45,
+      ignoreLocation: true,
+      minMatchCharLength: 2,
       includeScore: true
-    })
-  );
+    });
+  }, []);
 
-  // Initialize Fuse.js index for topics
-  const topicFuse = useRef(
-    new Fuse(TOPICS, {
-      keys: ['name', 'scopeParagraph', 'badge', 'hook'],
-      threshold: 0.35
-    })
-  );
+  // Compute live search results
+  const results = useMemo<ArticleEntry[]>(() => {
+    if (!query.trim()) {
+      // Default initial view: prioritized published mechanism articles
+      return ALL_ARTICLES.filter(a => a.status === 'published').concat(
+        ALL_ARTICLES.filter(a => a.status !== 'published')
+      ).slice(0, 8);
+    }
+    const fuseMatches = articleFuse.search(query);
+    return fuseMatches.map(m => m.item);
+  }, [query, articleFuse]);
 
-  // Focus input and lock scroll on open
+  // Reset selected index when results change
+  useEffect(() => {
+    setSelectedIndex(0);
+  }, [query]);
+
+  // Focus input and lock document scroll
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
-      setTimeout(() => inputRef.current?.focus(), 50);
+      setTimeout(() => inputRef.current?.focus(), 60);
     } else {
       document.body.style.overflow = 'auto';
       setQuery('');
-      setArticleResults([]);
-      setTopicResults([]);
+      setSelectedIndex(0);
     }
   }, [isOpen]);
 
-  // Global Cmd+K / Ctrl+K and Escape listeners
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
-        e.preventDefault();
-        if (isOpen) onClose();
-      }
-      if (e.key === 'Escape' && isOpen) {
-        onClose();
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose]);
+  // Active selected article for the right-side preview
+  const selectedArticle: ArticleEntry | null = useMemo(() => {
+    if (results.length === 0) return null;
+    return results[Math.min(selectedIndex, results.length - 1)] || results[0];
+  }, [results, selectedIndex]);
 
-  // Execute search queries
-  useEffect(() => {
-    if (!query.trim()) {
-      // Default: show featured published articles + topics
-      setArticleResults(ALL_ARTICLES.slice(0, 6));
-      setTopicResults(TOPICS.slice(0, 4));
-      return;
+  // Compute related articles to explore based on active selection
+  const relatedArticles: ArticleEntry[] = useMemo(() => {
+    if (!selectedArticle) return [];
+
+    // 1. First prioritize explicit ghostLinks from SLUG_REGISTRY
+    const fromGhostLinks = (selectedArticle.ghostLinks || [])
+      .map(slug => SLUG_REGISTRY[slug])
+      .filter((a): a is ArticleEntry => !!a && a.slug !== selectedArticle.slug);
+
+    if (fromGhostLinks.length >= 2) {
+      return fromGhostLinks.slice(0, 3);
     }
 
-    const aRes = articleFuse.current.search(query).map(r => r.item);
-    const tRes = topicFuse.current.search(query).map(r => r.item);
+    // 2. Supplement with other articles from the same topic
+    const fromSameTopic = ALL_ARTICLES.filter(
+      a => a.topicSlug === selectedArticle.topicSlug && a.slug !== selectedArticle.slug && !fromGhostLinks.some(g => g.slug === a.slug)
+    );
 
-    setArticleResults(aRes);
-    setTopicResults(tRes);
-  }, [query]);
+    // 3. Combine and return up to 3 recommendations
+    return [...fromGhostLinks, ...fromSameTopic].slice(0, 3);
+  }, [selectedArticle]);
+
+  // Keyboard navigation (Up, Down, Enter, Esc, Cmd+K)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!isOpen) return;
+
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        onClose();
+        return;
+      }
+
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        onClose();
+        return;
+      }
+
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        setSelectedIndex(prev => (results.length > 0 ? (prev + 1) % results.length : 0));
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        setSelectedIndex(prev => (results.length > 0 ? (prev - 1 + results.length) % results.length : 0));
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        if (selectedArticle) {
+          handleOpenArticle(selectedArticle);
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, results, selectedArticle, onClose]);
 
   if (!isOpen) return null;
 
-  const handleSelectArticle = (article: ArticleEntry) => {
+  const handleOpenArticle = (article: ArticleEntry) => {
     onClose();
     if (article.status === 'published') {
       navigate(`/articles/${article.slug}`);
@@ -94,306 +143,243 @@ export const SearchOverlay: React.FC<SearchOverlayProps> = ({
     }
   };
 
-  const handleSelectTopic = (topic: TopicData) => {
-    onClose();
-    navigate(`/topics/${topic.slug}`);
-  };
-
-  const totalResults = articleResults.length + topicResults.length;
-
   return (
     <div
-      className="sts-search-overlay"
+      id="sts-search-overlay"
+      className={styles.overlay}
       onClick={onClose}
-      style={{
-        position: 'fixed',
-        inset: 0,
-        zIndex: 200,
-        background: 'rgba(14, 17, 18, 0.88)',
-        backdropFilter: 'blur(24px)',
-        WebkitBackdropFilter: 'blur(24px)',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        padding: '5vh 1.5rem 2rem 1.5rem',
-        animation: 'searchFadeIn 0.2s var(--sts-ease)'
-      }}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Article mechanism search command console"
     >
-      <div
-        onClick={(e) => e.stopPropagation()}
-        style={{
-          width: '100%',
-          maxWidth: '720px',
-          display: 'flex',
-          flexDirection: 'column',
-          maxHeight: '85vh',
-          background: 'var(--sts-raised)',
-          border: '1px solid var(--sts-border)',
-          borderRadius: 'var(--sts-card-radius)',
-          boxShadow: '0 32px 72px -12px rgba(0, 0, 0, 0.7), 0 0 1px 1px rgba(255, 255, 255, 0.08)',
-          overflow: 'hidden'
-        }}
-      >
-        {/* Search Input Bar */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '1rem',
-            padding: '1.25rem 1.5rem',
-            borderBottom: '1px solid var(--sts-border)',
-            background: 'rgba(255, 255, 255, 0.02)'
-          }}
-        >
-          <Search size={22} color="var(--sts-brass)" />
+      <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+        {/* Top Rim Horizon Ambient Light */}
+        <div className={styles.modalTopRay} />
+
+        {/* 1. Search Bar Header */}
+        <div className={styles.searchHeader}>
+          <div className={styles.searchIconWrapper}>
+            <Search size={20} />
+            <div className={styles.searchIconPulseRing} />
+          </div>
+
           <input
             ref={inputRef}
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search mechanisms, topics, or engineering protocols..."
-            style={{
-              flex: 1,
-              background: 'transparent',
-              border: 'none',
-              outline: 'none',
-              color: 'var(--sts-bone)',
-              fontSize: '1.2rem',
-              fontFamily: 'var(--sts-font-body)'
-            }}
+            placeholder="Type any mechanism, keyword, or architecture topic..."
+            className={styles.searchInput}
+            aria-label="Search articles"
           />
+
           {query && (
             <button
               onClick={() => setQuery('')}
-              style={{ color: 'var(--sts-dim)', padding: '0.2rem' }}
+              className={styles.clearBtn}
+              aria-label="Clear search input"
             >
-              <X size={18} />
+              <X size={16} />
             </button>
           )}
+
           <button
             onClick={onClose}
-            style={{
-              padding: '0.3rem 0.6rem',
-              borderRadius: '6px',
-              background: 'rgba(255, 255, 255, 0.06)',
-              color: 'var(--sts-muted)',
-              fontSize: '0.75rem',
-              fontFamily: 'var(--sts-font-mono)'
-            }}
+            className={styles.escKeyBadge}
+            aria-label="Close search (Esc)"
           >
             ESC
           </button>
         </div>
 
-        {/* Results Container */}
-        <div
-          style={{
-            overflowY: 'auto',
-            padding: '1.5rem',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '1.5rem'
-          }}
-        >
-          {/* Matching Topics Group */}
-          {topicResults.length > 0 && (
-            <div>
-              <div
-                style={{
-                  fontSize: '0.72rem',
-                  fontFamily: 'var(--sts-font-mono)',
-                  color: 'var(--sts-dim)',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.06em',
-                  marginBottom: '0.75rem'
-                }}
-              >
-                Topic Disciplines
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '0.75rem' }}>
-                {topicResults.map((topic) => (
-                  <div
-                    key={topic.slug}
-                    onClick={() => handleSelectTopic(topic)}
-                    style={{
-                      padding: '0.85rem 1rem',
-                      background: 'rgba(255, 255, 255, 0.02)',
-                      border: '1px solid var(--sts-border)',
-                      borderRadius: '8px',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      transition: 'all 0.15s ease'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.borderColor = 'var(--sts-border-hover)';
-                      e.currentTarget.style.background = 'rgba(201, 151, 74, 0.06)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.borderColor = 'var(--sts-border)';
-                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.02)';
-                    }}
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-                      <Compass size={16} color="var(--sts-brass)" />
-                      <span style={{ fontWeight: 600, fontSize: '0.9rem', color: 'var(--sts-bone)' }}>{topic.name}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
+        {/* 2. Dual-Pane Command Viewport */}
+        <div className={styles.viewportBody}>
+          {/* Left Pane: Real-time Matching Articles */}
+          <div className={styles.leftPane} ref={listRef}>
+            <div className={styles.paneEyebrow}>
+              <span>{query.trim() ? 'Matching Mechanisms' : 'Suggested Mechanisms'}</span>
+              <span className={styles.resultsCount}>{results.length} found</span>
             </div>
-          )}
 
-          {/* Matching Articles Group */}
-          {articleResults.length > 0 && (
-            <div>
-              <div
-                style={{
-                  fontSize: '0.72rem',
-                  fontFamily: 'var(--sts-font-mono)',
-                  color: 'var(--sts-dim)',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.06em',
-                  marginBottom: '0.75rem'
-                }}
-              >
-                Articles ({articleResults.length})
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                {articleResults.map((article) => {
+            {results.length > 0 ? (
+              <div className={styles.articlesList}>
+                {results.map((article, idx) => {
+                  const isSelected = idx === selectedIndex;
                   const isPublished = article.status === 'published';
+
                   return (
                     <div
                       key={article.slug}
-                      onClick={() => handleSelectArticle(article)}
-                      style={{
-                        padding: '0.9rem 1.1rem',
-                        background: 'rgba(255, 255, 255, 0.02)',
-                        border: '1px solid var(--sts-border)',
-                        borderRadius: '8px',
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        gap: '1rem',
-                        transition: 'all 0.15s ease'
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.borderColor = 'var(--sts-border-hover)';
-                        e.currentTarget.style.transform = 'translateX(3px)';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.borderColor = 'var(--sts-border)';
-                        e.currentTarget.style.transform = 'translateX(0)';
-                      }}
+                      onClick={() => handleOpenArticle(article)}
+                      onMouseEnter={() => setSelectedIndex(idx)}
+                      className={`${styles.articleCard} ${isSelected ? styles.articleCardSelected : ''}`}
                     >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', overflow: 'hidden' }}>
-                        <FileText size={17} color={isPublished ? 'var(--sts-brass)' : 'var(--sts-dim)'} style={{ flexShrink: 0 }} />
-                        <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
-                          <span
-                            style={{
-                              fontSize: '0.92rem',
-                              fontWeight: 500,
-                              color: isPublished ? 'var(--sts-bone)' : 'var(--sts-muted)',
-                              whiteSpace: 'nowrap',
-                              overflow: 'hidden',
-                              textOverflow: 'ellipsis'
-                            }}
-                          >
+                      <div className={styles.articleCardLeft}>
+                        <div className={styles.articleIconBox}>
+                          <FileText size={15} />
+                        </div>
+                        <div className={styles.articleMetaCol}>
+                          <span className={styles.articleTitle}>
                             {article.title}
                           </span>
-                          <span style={{ fontSize: '0.76rem', color: 'var(--sts-dim)' }}>
-                            {article.topic}
-                          </span>
+                          <div className={styles.articleSubMeta}>
+                            <span>{article.topic}</span>
+                            {article.readingTime && (
+                              <>
+                                <span>•</span>
+                                <span className={styles.readTimeBadge}>{article.readingTime}</span>
+                              </>
+                            )}
+                          </div>
                         </div>
                       </div>
 
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexShrink: 0 }}>
+                      <div className={styles.articleCardRight}>
                         {isPublished ? (
-                          <span
-                            className="sts-badge sts-badge-brass"
-                            style={{ fontSize: '0.65rem', padding: '0.1rem 0.45rem' }}
-                          >
+                          <span className={`${styles.statusPill} ${styles.statusPillPublished}`}>
                             Published
                           </span>
                         ) : (
-                          <span
-                            style={{
-                              fontSize: '0.65rem',
-                              fontFamily: 'var(--sts-font-mono)',
-                              padding: '0.1rem 0.45rem',
-                              borderRadius: '999px',
-                              background: 'rgba(255, 255, 255, 0.04)',
-                              color: 'var(--sts-dim)',
-                              border: '1px solid rgba(255, 255, 255, 0.08)'
-                            }}
-                          >
-                            Coming Soon
+                          <span className={`${styles.statusPill} ${styles.statusPillPlanned}`}>
+                            In Observatory
                           </span>
                         )}
-                        <ArrowRight size={14} color="var(--sts-dim)" />
+                        <ArrowRight size={14} className={styles.cardArrow} />
                       </div>
                     </div>
                   );
                 })}
               </div>
-            </div>
-          )}
-
-          {/* Zero Results / Demand Capture */}
-          {query.trim() && totalResults === 0 && (
-            <div
-              style={{
-                textAlign: 'center',
-                padding: '2.5rem 1.5rem',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                gap: '1rem'
-              }}
-            >
-              <Clock size={36} color="var(--sts-dim)" />
-              <div>
-                <h3 style={{ fontSize: '1.15rem', color: 'var(--sts-bone)', marginBottom: '0.35rem' }}>
-                  We haven't covered "{query}" yet
-                </h3>
-                <p style={{ fontSize: '0.9rem', color: 'var(--sts-muted)', maxWidth: '440px' }}>
-                  Our editorial queue prioritizes reader requests for architectural and engineering breakdowns.
+            ) : (
+              <div className={styles.emptyState}>
+                <BookOpen size={28} color="#737373" />
+                <h4 className={styles.emptyTitle}>No matching mechanism articles</h4>
+                <p className={styles.emptyText}>
+                  Try keywords like "pipeline", "retry", "auction", "idempotency", or "queue".
                 </p>
+                {onRequestArticle && (
+                  <button
+                    onClick={() => {
+                      onClose();
+                      onRequestArticle(query);
+                    }}
+                    style={{
+                      marginTop: '8px',
+                      padding: '8px 16px',
+                      borderRadius: '9999px',
+                      background: 'rgba(255, 255, 255, 0.08)',
+                      border: '1px solid rgba(255, 255, 255, 0.15)',
+                      color: '#FFFFFF',
+                      fontSize: '12px',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    Request this mechanism breakdown →
+                  </button>
+                )}
               </div>
+            )}
+          </div>
 
-              <button
-                onClick={() => {
-                  onClose();
-                  if (onRequestArticle) onRequestArticle(query);
-                }}
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                  padding: '0.6rem 1.25rem',
-                  borderRadius: 'var(--sts-pill-radius)',
-                  background: 'var(--sts-brass)',
-                  color: '#0E1112',
-                  fontWeight: 600,
-                  fontSize: '0.85rem'
-                }}
-              >
-                <Send size={14} />
-                <span>Request an Explanation</span>
-              </button>
-            </div>
-          )}
+          {/* Right Pane: Dynamic Mechanism Intel & Related Articles to Explore */}
+          <div className={styles.rightPane}>
+            {selectedArticle ? (
+              <>
+                {/* Active Mechanism Intel Card */}
+                <div className={styles.previewTopCard}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <span className={styles.previewTopicPill}>
+                      {selectedArticle.topic}
+                    </span>
+                    {selectedArticle.readingTime && (
+                      <span className={styles.readTimeBadge}>
+                        {selectedArticle.readingTime}
+                      </span>
+                    )}
+                  </div>
+
+                  <h3 className={styles.previewTitle}>
+                    {selectedArticle.title}
+                  </h3>
+
+                  <p className={styles.previewExplanation}>
+                    {selectedArticle.beginnerStandfirst || selectedArticle.standfirst}
+                  </p>
+
+                  {selectedArticle.focusQuestion && (
+                    <div className={styles.previewQuestionBox}>
+                      <Sparkles size={14} style={{ flexShrink: 0, marginTop: '2px', color: '#FFFFFF' }} />
+                      <span>{selectedArticle.focusQuestion}</span>
+                    </div>
+                  )}
+
+                  <button
+                    onClick={() => handleOpenArticle(selectedArticle)}
+                    className={styles.openArticleCta}
+                  >
+                    <span>{selectedArticle.status === 'published' ? 'Read Full Mechanism Breakdown' : 'View Topic Observatory'}</span>
+                    <ArrowRight size={14} />
+                  </button>
+                </div>
+
+                {/* Related Articles to Explore */}
+                {relatedArticles.length > 0 && (
+                  <div className={styles.relatedSection}>
+                    <h5 className={styles.relatedHeader}>
+                      Related Articles to Explore
+                    </h5>
+
+                    <div className={styles.relatedList}>
+                      {relatedArticles.map((rel) => (
+                        <div
+                          key={rel.slug}
+                          onClick={() => handleOpenArticle(rel)}
+                          className={styles.relatedCard}
+                        >
+                          <div className={styles.relatedCardTop}>
+                            <span className={styles.relatedCardTitle}>{rel.title}</span>
+                            <ArrowUpRight size={13} className={styles.relatedCardArrow} />
+                          </div>
+                          <span className={styles.relatedCardHook}>
+                            {rel.beginnerStandfirst || rel.standfirst}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className={styles.emptyState}>
+                <p className={styles.emptyText}>Select an article to view mechanism details.</p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* 3. Command Bar Keyboard Shortcuts Footer */}
+        <div className={styles.commandFooter}>
+          <div className={styles.keyboardShortcutsRow}>
+            <span className={styles.shortcutItem}>
+              <span className={styles.shortcutKey}>↑</span>
+              <span className={styles.shortcutKey}>↓</span>
+              <span>to navigate</span>
+            </span>
+            <span className={styles.shortcutItem}>
+              <span className={styles.shortcutKey}>↵</span>
+              <span>to open</span>
+            </span>
+            <span className={styles.shortcutItem}>
+              <span className={styles.shortcutKey}>esc</span>
+              <span>to dismiss</span>
+            </span>
+          </div>
+
+          <span className={styles.engineSpecLabel}>
+            Fuzzy Article Spec Matcher
+          </span>
         </div>
       </div>
-
-      <style>{`
-        @keyframes searchFadeIn {
-          from { opacity: 0; transform: scale(0.98); }
-          to { opacity: 1; transform: scale(1); }
-        }
-      `}</style>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { StsLogo } from '../ui/StsLogo';
-import { Search, Menu, X } from 'lucide-react';
+import { Search, Menu, X, ArrowUpRight } from 'lucide-react';
+import styles from '../../styles/header.module.css';
 
 interface HeaderProps {
   onOpenSearch: () => void;
@@ -15,7 +15,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSearch, onOpenSubscribe })
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      setIsScrolled(window.scrollY > 40);
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
@@ -35,175 +35,150 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSearch, onOpenSubscribe })
   return (
     <>
       <header
-        style={{
-          position: 'fixed',
-          top: '16px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          zIndex: 100,
-          maxWidth: 'fit-content',
-          borderRadius: '999px',
-          background: 'rgba(var(--sts-ground-rgb), 0.8)',
-          backdropFilter: 'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)',
-          border: '1px solid var(--sts-border)',
-          padding: isScrolled ? '6px 20px' : '8px 24px',
-          height: '52px',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '32px',
-          opacity: isScrolled ? 0.95 : 1,
-          transition: 'all var(--sts-dur-panel) var(--sts-ease)'
-        }}
-        className="sts-header-pill"
+        className={`${styles.headerPill} ${isScrolled ? styles.headerPillScrolled : ''}`}
+        aria-label="Primary Navigation"
       >
-        {/* 1. Logo mark only (34px height, fill brass, links to /) */}
+        {/* Top Rim Traveling Horizon Ray */}
+        <div className={styles.headerRay} />
+
+        {/* 1. Cinematic Living Logo Micro-Mark */}
         <Link
           to="/"
-          aria-label="Systems to Scale"
-          style={{ display: 'inline-flex', alignItems: 'center' }}
+          className={styles.logoLink}
+          aria-label="Systems to Scale — Return to Overview"
         >
-          <StsLogo size={34} color="var(--sts-brass)" />
+          <svg
+            width="34"
+            height="34"
+            viewBox="0 0 48 48"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className={styles.logoMicroSvg}
+            aria-hidden="true"
+          >
+            {/* Base Pipeline Conduits */}
+            <path
+              d="M12 36 L12 24 L24 24"
+              stroke="rgba(255, 255, 255, 0.2)"
+              strokeWidth="3.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M28 24 L36 24 L36 12"
+              stroke="rgba(255, 255, 255, 0.2)"
+              strokeWidth="3.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+
+            {/* Living Conduit Currents */}
+            <path
+              d="M12 36 L12 24 L24 24 M28 24 L36 24 L36 12"
+              className={styles.microPipeCurrent}
+            />
+
+            {/* Node 1: Origin Foundation Circle */}
+            <circle cx="12" cy="36" r="4.5" fill="#FFFFFF" className={styles.microNodePulse} />
+
+            {/* Node 2: Center Scaling Core */}
+            <rect
+              x="20"
+              y="20"
+              width="8"
+              height="8"
+              rx="2"
+              fill="#090A0C"
+              stroke="#FFFFFF"
+              strokeWidth="3.2"
+            />
+            {/* Core center dot */}
+            <circle cx="24" cy="24" r="1.5" fill="#FFFFFF" />
+
+            {/* Node 3: Apex High-Scale Arrow */}
+            <polygon
+              points="36,6 42,14 30,14"
+              fill="#FFFFFF"
+              className={styles.microNodePulse}
+            />
+
+            {/* Auxiliary Telemetry Trace */}
+            <circle cx="24" cy="36" r="1.8" fill="rgba(255, 255, 255, 0.5)" />
+            <line
+              x1="16.5"
+              y1="36"
+              x2="22"
+              y2="36"
+              stroke="rgba(255, 255, 255, 0.4)"
+              strokeWidth="1.6"
+              strokeDasharray="2 2"
+            />
+          </svg>
         </Link>
 
-        {/* 2. Nav links */}
-        <nav
-          className="sts-desktop-nav"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '24px'
-          }}
-        >
+        {/* 2. Desktop Navigation Links */}
+        <nav className={styles.desktopNav}>
           {navLinks.map((link) => {
-            const isActive = location.pathname.startsWith(link.path);
+            const isActive = location.pathname === link.path || (link.path !== '/' && location.pathname.startsWith(link.path));
             return (
               <Link
                 key={link.path}
                 to={link.path}
-                style={{
-                  fontFamily: 'var(--sts-font-body)',
-                  fontSize: '14px',
-                  fontWeight: 500,
-                  color: isActive ? 'var(--sts-bone)' : 'var(--sts-muted)',
-                  textDecoration: 'none',
-                  transition: 'color var(--sts-dur-in) var(--sts-ease)'
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--sts-bone)')}
-                onMouseLeave={(e) => (e.currentTarget.style.color = isActive ? 'var(--sts-bone)' : 'var(--sts-muted)')}
+                className={`${styles.navLink} ${isActive ? styles.navLinkActive : ''}`}
               >
-                {link.label}
+                {isActive && <span className={styles.activeDot} />}
+                <span>{link.label}</span>
               </Link>
             );
           })}
         </nav>
 
-        {/* 3. Search icon + ⌘K */}
+        {/* 3. Cinematic Search Trigger Command Capsule */}
         <button
+          id="sts-header-search-btn"
           onClick={onOpenSearch}
-          className="sts-search-trigger"
-          aria-label="Search"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            color: 'var(--sts-muted)',
-            cursor: 'pointer',
-            transition: 'color var(--sts-dur-in) var(--sts-ease)'
-          }}
-          onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--sts-bone)')}
-          onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--sts-muted)')}
+          className={styles.searchTrigger}
+          aria-label="Open search command console"
         >
-          <Search size={20} />
-          <span
-            className="sts-kbd-label"
-            style={{
-              fontFamily: 'var(--sts-font-mono)',
-              fontSize: '11px',
-              color: 'var(--sts-muted)'
-            }}
-          >
-            ⌘K
-          </span>
+          <Search size={15} className={styles.searchIcon} />
+          <span className={styles.searchKbd}>⌘K</span>
         </button>
 
-        {/* 4. Newsletter CTA pill button */}
+        {/* 4. Island CTA Button: Subscribe Dispatch */}
         <button
           onClick={onOpenSubscribe || (() => {
             const el = document.getElementById('newsletter-section');
-            if (el) el.scrollIntoView({ behavior: 'smooth' });
+            if (el) {
+              el.scrollIntoView({ behavior: 'smooth' });
+            } else {
+              window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            }
           })}
-          className="sts-cta-btn"
-          style={{
-            borderRadius: '999px',
-            padding: '6px 18px',
-            color: '#000000',
-            fontSize: '13px',
-            fontWeight: 600,
-            fontFamily: 'var(--sts-font-body)',
-            background: '#FFFFFF',
-            cursor: 'pointer',
-            transition: 'all var(--sts-dur-in) var(--sts-ease)',
-            whiteSpace: 'nowrap'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = '#EDEDED';
-            e.currentTarget.style.transform = 'translateY(-1px)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = '#FFFFFF';
-            e.currentTarget.style.transform = 'translateY(0)';
-          }}
+          className={styles.ctaButton}
         >
-          Subscribe
+          <span>Subscribe</span>
         </button>
 
-        {/* Mobile toggle */}
+        {/* 5. Mobile Menu Toggle */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="sts-mobile-toggle"
+          className={styles.mobileToggle}
           aria-label="Toggle navigation"
-          style={{
-            display: 'none',
-            color: 'var(--sts-muted)',
-            padding: '2px'
-          }}
         >
-          {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+          {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
       </header>
 
-      {/* Mobile full-screen overlay */}
+      {/* Fullscreen Mobile Drawer */}
       {mobileMenuOpen && (
-        <div
-          style={{
-            position: 'fixed',
-            inset: 0,
-            background: 'var(--sts-ground)',
-            zIndex: 99,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '32px'
-          }}
-        >
-          <div style={{ marginBottom: '16px' }}>
-            <StsLogo size={48} color="var(--sts-brass)" />
-          </div>
-
-          <nav style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '24px' }}>
+        <div className={styles.mobileOverlay}>
+          <nav className={styles.mobileNavLinks}>
             {navLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
                 onClick={() => setMobileMenuOpen(false)}
-                style={{
-                  fontFamily: 'var(--sts-font-display)',
-                  fontSize: '24px',
-                  fontWeight: 600,
-                  color: 'var(--sts-bone)'
-                }}
+                className={styles.mobileNavLink}
               >
                 {link.label}
               </Link>
@@ -211,24 +186,6 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSearch, onOpenSubscribe })
           </nav>
         </div>
       )}
-
-      <style>{`
-        @media (max-width: 760px) {
-          .sts-desktop-nav, .sts-cta-btn, .sts-kbd-label {
-            display: none !important;
-          }
-          .sts-mobile-toggle {
-            display: inline-flex !important;
-          }
-          .sts-header-pill {
-            gap: 16px !important;
-            padding: 8px 16px !important;
-            width: calc(100% - 32px);
-            max-width: 100% !important;
-            justify-content: space-between;
-          }
-        }
-      `}</style>
     </>
   );
 };

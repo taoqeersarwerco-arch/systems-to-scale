@@ -1,0 +1,351 @@
+/* ==========================================================================
+   SYSTEMS TO SCALE — CINEMATIC HEADER MODULE
+   Obsidian Glass Capsule, Micro-Living Mark, and Island Navigation
+   ========================================================================== */
+
+.headerPill {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  max-width: fit-content;
+  border-radius: 9999px;
+  background: rgba(10, 11, 14, 0.76);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 
+    0 16px 36px -10px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  padding: 6px 14px 6px 18px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  transition: 
+    padding 0.3s cubic-bezier(0.22, 1, 0.32, 1),
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    gap 0.3s cubic-bezier(0.22, 1, 0.32, 1);
+  overflow: hidden;
+}
+
+.headerPillScrolled {
+  background: rgba(8, 8, 10, 0.9);
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 
+    0 20px 44px -8px rgba(0, 0, 0, 0.88),
+    0 0 20px rgba(255, 255, 255, 0.03),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  gap: 20px;
+  padding: 5px 12px 5px 16px;
+}
+
+/* Traveling Horizon Light Ray across the top edge */
+.headerRay {
+  position: absolute;
+  top: -1px;
+  left: 15%;
+  width: 90px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.8) 50%,
+    transparent 100%
+  );
+  animation: headerRayDrift 8s ease-in-out infinite alternate;
+  pointer-events: none;
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.8));
+}
+
+@keyframes headerRayDrift {
+  0% {
+    left: 10%;
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.95;
+  }
+  100% {
+    left: 75%;
+    opacity: 0.3;
+  }
+}
+
+/* ==========================================================================
+   LIVING LOGO MICRO-MARK
+   ========================================================================== */
+
+.logoLink {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  position: relative;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.32, 1);
+}
+
+.logoLink:hover {
+  transform: scale(1.06);
+}
+
+.logoMicroSvg {
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.4));
+  transition: filter 0.25s ease;
+}
+
+.logoLink:hover .logoMicroSvg {
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.85));
+}
+
+/* Active Conduit Currents on Micro-Mark */
+.microPipeCurrent {
+  stroke: #FFFFFF;
+  stroke-width: 3.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+  stroke-dasharray: 6 28;
+  animation: microFlow 2.4s linear infinite;
+}
+
+@keyframes microFlow {
+  0% {
+    stroke-dashoffset: 34;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.microNodePulse {
+  animation: microPulse 2.4s cubic-bezier(0.22, 1, 0.32, 1) infinite;
+}
+
+@keyframes microPulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.6));
+  }
+  50% {
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 1));
+  }
+}
+
+/* ==========================================================================
+   DESKTOP NAVIGATION LINKS
+   ========================================================================== */
+
+.desktopNav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.navLink {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  font-family: var(--sts-font-body, sans-serif);
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--sts-muted, #A3A3A3);
+  text-decoration: none;
+  transition: 
+    color 0.2s cubic-bezier(0.22, 1, 0.32, 1),
+    background-color 0.2s cubic-bezier(0.22, 1, 0.32, 1);
+}
+
+.navLink:hover {
+  color: var(--sts-bone, #FFFFFF);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.navLinkActive {
+  color: #FFFFFF !important;
+  background: rgba(255, 255, 255, 0.09) !important;
+  font-weight: 600;
+}
+
+.activeDot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  box-shadow: 0 0 6px #FFFFFF;
+}
+
+/* ==========================================================================
+   SEARCH TRIGGER (COMMAND PILL)
+   ========================================================================== */
+
+.searchTrigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  color: var(--sts-muted, #A3A3A3);
+  cursor: pointer;
+  transition: 
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s cubic-bezier(0.22, 1, 0.32, 1);
+}
+
+.searchTrigger:hover {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.22);
+  color: #FFFFFF;
+  transform: translateY(-1px);
+}
+
+.searchIcon {
+  color: var(--sts-muted, #A3A3A3);
+  transition: color 0.2s ease;
+}
+
+.searchTrigger:hover .searchIcon {
+  color: #FFFFFF;
+}
+
+.searchKbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 6px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--sts-dim, #737373);
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.searchTrigger:hover .searchKbd {
+  color: #FFFFFF;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* ==========================================================================
+   SUBSCRIBE CTA (ISLAND ARCHITECTURE)
+   ========================================================================== */
+
+.ctaButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 18px;
+  border-radius: 9999px;
+  background: #FFFFFF;
+  border: none;
+  color: #080808;
+  font-family: var(--sts-font-body, sans-serif);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 0 4px 14px rgba(255, 255, 255, 0.1);
+  transition: 
+    background-color 0.2s ease,
+    transform 0.2s cubic-bezier(0.22, 1, 0.32, 1),
+    box-shadow 0.2s ease;
+}
+
+.ctaButton:hover {
+  background: #EAEAEA;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.25);
+}
+
+.ctaButton:active {
+  transform: scale(0.97);
+}
+
+/* ==========================================================================
+   MOBILE TOGGLE & FULLSCREEN OVERLAY
+   ========================================================================== */
+
+.mobileToggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--sts-muted, #A3A3A3);
+  padding: 4px;
+  cursor: pointer;
+}
+
+.mobileOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 8, 10, 0.95);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  z-index: 99;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 36px;
+  animation: mobileFadeIn 0.25s ease-out;
+}
+
+@keyframes mobileFadeIn {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.mobileNavLinks {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.mobileNavLink {
+  font-family: var(--sts-font-display, sans-serif);
+  font-size: 24px;
+  font-weight: 600;
+  color: #A3A3A3;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.mobileNavLink:hover {
+  color: #FFFFFF;
+}
+
+/* ==========================================================================
+   RESPONSIVE BREAKPOINTS
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  .desktopNav,
+  .ctaButton,
+  .searchKbd {
+    display: none !important;
+  }
+  .mobileToggle {
+    display: inline-flex !important;
+  }
+  .headerPill {
+    gap: 16px !important;
+    padding: 6px 14px !important;
+    width: calc(100% - 32px);
+    max-width: 100% !important;
+    justify-content: space-between;
+  }
+}

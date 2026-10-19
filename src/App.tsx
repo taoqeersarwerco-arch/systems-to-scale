@@ -57,6 +57,18 @@ export const App: React.FC = () => {
     };
   }, []);
 
+  // Global Cmd+K / Ctrl+K listener to toggle search
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setSearchOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   const handleOpenRequest = (query?: string) => {
     setRequestQuery(query || '');
     setRequestModalOpen(true);
