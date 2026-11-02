@@ -4,7 +4,11 @@ import { SLUG_REGISTRY } from '../data/slug-registry';
 import { ARTICLE_CONTENTS } from '../data/article-contents';
 import { GhostLink } from '../components/ui/GhostLink';
 import { NewsletterCta } from '../components/sections/NewsletterCta';
-import { ArrowLeft, Clock, Calendar, CheckCircle2, Shield, AlertCircle, AlertTriangle, ExternalLink, HelpCircle, Layers, Info } from 'lucide-react';
+import { CrmInteractiveWorkbench } from '../components/articles/CrmInteractiveWorkbench';
+import { CrmArchitectureTopology } from '../components/articles/CrmArchitectureTopology';
+import { CrmFailureModesExplorer } from '../components/articles/CrmFailureModesExplorer';
+import { ArticleReadingHud } from '../components/articles/ArticleReadingHud';
+import { ArrowLeft, Clock, Calendar, CheckCircle2, Shield, AlertCircle, AlertTriangle, ExternalLink, HelpCircle, Layers, Info, Activity } from 'lucide-react';
 
 export const ArticleDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -102,23 +106,31 @@ export const ArticleDetailPage: React.FC = () => {
         {/* Detailed Master Article or Standard 3-Question Editorial Body */}
         {detailed ? (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '3.5rem', fontSize: '1.08rem', lineHeight: 1.75, color: '#D4D0C8' }}>
+            {/* Sticky Reading Progress Telemetry Bar */}
+            <ArticleReadingHud />
+
             {/* Answer Island (Direct 2026 Architectural Definition) */}
             <div
               style={{
                 padding: '1.75rem',
                 borderRadius: '8px',
-                background: 'rgba(255, 255, 255, 0.02)',
+                background: 'linear-gradient(135deg, rgba(229, 169, 60, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%), #0A0C0E',
                 border: '1px solid rgba(255, 255, 255, 0.12)',
                 borderLeft: '4px solid var(--sts-brass)',
-                marginBottom: '1rem'
+                boxShadow: '0 10px 30px -10px rgba(0, 0, 0, 0.7)',
+                position: 'relative',
+                overflow: 'hidden'
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem', flexWrap: 'wrap', gap: '0.5rem' }}>
                 <span className="sts-badge sts-badge-brass" style={{ fontSize: '0.72rem' }}>
                   Answer Island // Executive Summary
                 </span>
+                <span style={{ fontFamily: 'var(--sts-font-mono)', fontSize: '0.7rem', color: 'rgba(237, 233, 227, 0.5)' }}>
+                  SYS_STATE: AUDITED // ZERO FLUFF
+                </span>
               </div>
-              <p style={{ margin: 0, fontSize: '1.12rem', color: '#FFFFFF', lineHeight: 1.65, fontWeight: 400 }}>
+              <p style={{ margin: 0, fontSize: '1.14rem', color: '#FFFFFF', lineHeight: 1.65, fontWeight: 400 }}>
                 {detailed.answerIsland}
               </p>
             </div>
@@ -148,9 +160,18 @@ export const ArticleDetailPage: React.FC = () => {
               </div>
             )}
 
+            {/* Interactive Architecture Workbench (Centerpiece Engine) */}
+            <div id="workbench" style={{ scrollMarginTop: '100px' }}>
+              <CrmInteractiveWorkbench />
+            </div>
+
             {/* Sections */}
             {detailed.sections.map((sec, secIdx) => (
-              <section key={secIdx} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+              <section
+                key={secIdx}
+                id={`mechanism-0${secIdx + 1}`}
+                style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', scrollMarginTop: '100px' }}
+              >
                 {sec.badge && (
                   <div className="sts-badge sts-badge-steel" style={{ alignSelf: 'flex-start' }}>
                     <span>{sec.badge}</span>
@@ -181,31 +202,35 @@ export const ArticleDetailPage: React.FC = () => {
                   </div>
                 ))}
 
-                {/* ASCII Diagram */}
+                {/* Architecture Topology / ASCII Diagram */}
                 {sec.diagramAscii && (
-                  <div style={{ marginTop: '1rem', marginBottom: '1rem' }}>
-                    {sec.diagramTitle && (
-                      <div style={{ fontSize: '0.78rem', fontFamily: 'var(--sts-font-mono)', color: 'var(--sts-dim)', textTransform: 'uppercase', marginBottom: '0.4rem' }}>
-                        // {sec.diagramTitle}
-                      </div>
-                    )}
-                    <pre
-                      style={{
-                        background: '#07090A',
-                        border: '1px solid var(--sts-border)',
-                        borderRadius: '8px',
-                        padding: '1.25rem',
-                        fontFamily: 'var(--sts-font-mono)',
-                        fontSize: '0.8rem',
-                        lineHeight: 1.45,
-                        color: 'rgba(237, 233, 227, 0.85)',
-                        overflowX: 'auto',
-                        margin: 0
-                      }}
-                    >
-                      {sec.diagramAscii}
-                    </pre>
-                  </div>
+                  sec.diagramTitle?.includes('Reference Topology') ? (
+                    <CrmArchitectureTopology rawAscii={sec.diagramAscii} />
+                  ) : (
+                    <div style={{ marginTop: '1rem', marginBottom: '1rem' }}>
+                      {sec.diagramTitle && (
+                        <div style={{ fontSize: '0.78rem', fontFamily: 'var(--sts-font-mono)', color: 'var(--sts-dim)', textTransform: 'uppercase', marginBottom: '0.4rem' }}>
+                          // {sec.diagramTitle}
+                        </div>
+                      )}
+                      <pre
+                        style={{
+                          background: '#07090A',
+                          border: '1px solid var(--sts-border)',
+                          borderRadius: '8px',
+                          padding: '1.25rem',
+                          fontFamily: 'var(--sts-font-mono)',
+                          fontSize: '0.8rem',
+                          lineHeight: 1.45,
+                          color: 'rgba(237, 233, 227, 0.85)',
+                          overflowX: 'auto',
+                          margin: 0
+                        }}
+                      >
+                        {sec.diagramAscii}
+                      </pre>
+                    </div>
+                  )
                 )}
 
                 {/* Code Block */}
@@ -258,32 +283,36 @@ export const ArticleDetailPage: React.FC = () => {
                   </div>
                 )}
 
-                {/* Failure Modes / Data Table */}
+                {/* Failure Modes Interactive Explorer or Standard Data Table */}
                 {sec.table && (
-                  <div style={{ marginTop: '1rem', marginBottom: '1rem', overflowX: 'auto' }}>
-                    <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.88rem', textAlign: 'left' }}>
-                      <thead>
-                        <tr style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.16)' }}>
-                          {sec.table.headers.map((h, hIdx) => (
-                            <th key={hIdx} style={{ padding: '0.75rem 1rem', color: 'var(--sts-bone)', fontFamily: 'var(--sts-font-mono)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-                              {h}
-                            </th>
-                          ))}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {sec.table.rows.map((row, rIdx) => (
-                          <tr key={rIdx} style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.05)', background: rIdx % 2 === 0 ? 'rgba(255, 255, 255, 0.015)' : 'transparent' }}>
-                            {row.map((cell, cIdx) => (
-                              <td key={cIdx} style={{ padding: '0.85rem 1rem', color: cIdx === 0 ? 'var(--sts-bone)' : 'var(--sts-muted)', fontWeight: cIdx === 0 ? 600 : 400, verticalAlign: 'top', lineHeight: 1.5 }}>
-                                {cell}
-                              </td>
+                  sec.badge === 'Mechanism 05' ? (
+                    <CrmFailureModesExplorer />
+                  ) : (
+                    <div style={{ marginTop: '1rem', marginBottom: '1rem', overflowX: 'auto' }}>
+                      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.88rem', textAlign: 'left' }}>
+                        <thead>
+                          <tr style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.16)' }}>
+                            {sec.table.headers.map((h, hIdx) => (
+                              <th key={hIdx} style={{ padding: '0.75rem 1rem', color: 'var(--sts-bone)', fontFamily: 'var(--sts-font-mono)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                                {h}
+                              </th>
                             ))}
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+                        </thead>
+                        <tbody>
+                          {sec.table.rows.map((row, rIdx) => (
+                            <tr key={rIdx} style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.05)', background: rIdx % 2 === 0 ? 'rgba(255, 255, 255, 0.015)' : 'transparent' }}>
+                              {row.map((cell, cIdx) => (
+                                <td key={cIdx} style={{ padding: '0.85rem 1rem', color: cIdx === 0 ? 'var(--sts-bone)' : 'var(--sts-muted)', fontWeight: cIdx === 0 ? 600 : 400, verticalAlign: 'top', lineHeight: 1.5 }}>
+                                  {cell}
+                                </td>
+                              ))}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )
                 )}
 
                 {/* Callout */}

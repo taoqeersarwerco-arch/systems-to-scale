@@ -1,0 +1,166 @@
+/* ============================================================================
+   CRM Architecture Topology Styles
+   ============================================================================ */
+
+.topologyContainer {
+  margin: 1.5rem 0 2rem 0;
+  border-radius: 10px;
+  background: #080A0C;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  box-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.8);
+}
+
+.topologyHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1.25rem;
+  background: rgba(16, 20, 24, 0.8);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.topologyTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 0.78rem;
+  color: #EDE9E3;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.viewModeToggle {
+  display: flex;
+  gap: 0.3rem;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 2px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.toggleBtn {
+  background: transparent;
+  border: none;
+  color: rgba(237, 233, 227, 0.6);
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 0.72rem;
+  padding: 0.3rem 0.65rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.toggleBtnActive {
+  background: rgba(255, 255, 255, 0.1);
+  color: #E5A93C;
+  font-weight: 600;
+}
+
+.layersWrapper {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  position: relative;
+}
+
+.layerCard {
+  background: rgba(14, 18, 22, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 7px;
+  padding: 0.85rem 1.1rem;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  position: relative;
+}
+
+.layerCard:hover {
+  background: rgba(20, 26, 32, 0.9);
+  border-color: rgba(229, 169, 60, 0.3);
+  transform: translateX(4px);
+}
+
+.layerCardActive {
+  background: rgba(229, 169, 60, 0.08) !important;
+  border-color: #E5A93C !important;
+  box-shadow: 0 0 20px rgba(229, 169, 60, 0.15);
+  transform: translateX(6px);
+}
+
+.layerTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.layerNumber {
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 0.7rem;
+  color: #E5A93C;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+}
+
+.layerTitle {
+  font-size: 0.9rem;
+  color: #EDE9E3;
+  font-weight: 600;
+}
+
+.layerSpecs {
+  font-size: 0.78rem;
+  color: rgba(237, 233, 227, 0.55);
+  line-height: 1.4;
+}
+
+.layerDrawer {
+  margin-top: 0.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px dashed rgba(255, 255, 255, 0.1);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 0.75rem;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.drawerItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.drawerKey {
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 0.65rem;
+  color: rgba(237, 233, 227, 0.45);
+  text-transform: uppercase;
+}
+
+.drawerVal {
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 0.76rem;
+  color: #EDE9E3;
+}
+
+.asciiPre {
+  background: #050607;
+  padding: 1.25rem;
+  margin: 0;
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: rgba(237, 233, 227, 0.85);
+  overflow-x: auto;
+}
