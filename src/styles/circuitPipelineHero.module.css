@@ -1,48 +1,35 @@
 /* ==========================================================================
-   Systems to Scale — Cinematic Circuit Pipeline Reactor Hero
+   Systems to Scale — Sleek Cinematic Circuit Pipeline Hero
    Obsidian Palette (#080808 / #FFFFFF)
-   Spacious, De-congested Layout + Living Vector Circuit Simulation Stage
+   Ethereal, Borderless Stage + Streamlined Modern Instrument Ribbon
    ========================================================================== */
 
 .heroContainer {
   position: relative;
   width: 100%;
-  min-height: 86vh;
+  min-height: 85vh;
   background-color: #080808;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   overflow: hidden;
-  /* Generous clearance so the floating pill navbar (top: 16px, height: 52px) never touches the content */
-  padding-top: calc(var(--sts-header-height, 52px) + 4.75rem);
-  padding-bottom: 4rem;
+  /* Ample negative space so the floating nav pill (top: 16px, height: 52px) never collides */
+  padding-top: calc(var(--sts-header-height, 52px) + 4.5rem);
+  padding-bottom: 3.5rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
-/* Atmospheric Reading Pocket Vignette */
+/* Atmospheric Subtle Reading Vignette */
 .vignetteOverlay {
   position: absolute;
   inset: 0;
   z-index: 1;
   pointer-events: none;
   background: radial-gradient(
-    ellipse 85% 65% at 50% 20%,
-    rgba(8, 8, 8, 0.88) 0%,
-    rgba(8, 8, 8, 0.6) 45%,
+    ellipse 85% 65% at 50% 25%,
+    rgba(8, 8, 8, 0.82) 0%,
+    rgba(8, 8, 8, 0.5) 50%,
     rgba(8, 8, 8, 0.98) 100%
   );
-}
-
-/* Ambient Circuit Glow Canvas in Background */
-.bgCanvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.45;
 }
 
 /* Main Content Layer */
@@ -50,32 +37,24 @@
   position: relative;
   z-index: 2;
   width: 100%;
-  max-width: 1180px;
+  max-width: 1140px;
   margin: 0 auto;
-  padding: 0 32px;
+  padding: 0 28px;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1.25rem;
   flex: 1;
   justify-content: center;
 }
 
 /* --------------------------------------------------------------------------
-   Top Meta Row: Clean Breadcrumb on Left, Live Telemetry Status on Right
+   Navigation Breadcrumb Trail
    -------------------------------------------------------------------------- */
-.topMetaRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-
 .breadcrumbRow {
   display: flex;
   align-items: center;
   gap: 10px;
+  margin-bottom: 0.25rem;
 }
 
 .breadcrumbLink {
@@ -86,7 +65,7 @@
   font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(237, 233, 227, 0.55);
+  color: rgba(237, 233, 227, 0.5);
   text-decoration: none;
   transition: all 0.2s ease;
 }
@@ -105,237 +84,60 @@
   font-family: var(--sts-font-mono, monospace);
   font-size: 10.5px;
   letter-spacing: 0.12em;
-  color: rgba(255, 255, 255, 0.8);
-}
-
-.liveSystemBadge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 4px 12px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  font-family: var(--sts-font-mono, monospace);
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: rgba(237, 233, 227, 0.65);
-}
-
-.systemStatusDot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.4);
-  transition: all 0.3s ease;
-}
-
-.systemStatusDotActive {
-  background: #FFFFFF;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.9);
-  animation: beaconPulse 1.8s ease-in-out infinite;
-}
-
-@keyframes beaconPulse {
-  0%, 100% { opacity: 0.4; transform: scale(0.9); }
-  50% { opacity: 1; transform: scale(1.15); }
+  color: rgba(255, 255, 255, 0.75);
 }
 
 /* --------------------------------------------------------------------------
-   Command Header: Headline & Hook on Left, Hardware Console on Right
+   Spacious Editorial Hero Header (Clean, Uncrowded)
    -------------------------------------------------------------------------- */
-.commandHeader {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 2rem;
-  flex-wrap: wrap;
-  margin-bottom: 0.25rem;
-}
-
-.titleBlock {
-  max-width: 660px;
+.headerArea {
+  margin-bottom: 0.75rem;
+  max-width: 760px;
 }
 
 .headline {
   font-family: var(--sts-font-display, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
-  font-size: clamp(38px, 5.2vw, 56px);
+  font-size: clamp(36px, 4.8vw, 54px);
   font-weight: 700;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.03em;
   line-height: 1.08;
-  margin: 0 0 0.75rem 0;
-  background: linear-gradient(180deg, #FFFFFF 40%, rgba(255, 255, 255, 0.7) 100%);
+  margin: 0 0 0.65rem 0;
+  background: linear-gradient(180deg, #FFFFFF 40%, rgba(255, 255, 255, 0.72) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .hookText {
   font-family: var(--sts-font-body, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
-  font-size: clamp(15.5px, 1.8vw, 17.5px);
+  font-size: clamp(15px, 1.6vw, 17px);
   font-weight: 400;
-  color: rgba(237, 233, 227, 0.72);
-  line-height: 1.5;
+  color: rgba(237, 233, 227, 0.68);
+  line-height: 1.55;
   margin: 0;
 }
 
-.hardwareConsole {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-bottom: 4px;
-}
-
-/* Sleek Hardware Switch for Fault Injection */
-.faultToggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 7px 14px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.035);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  cursor: pointer;
-  user-select: none;
-  transition: all 0.2s ease;
-}
-
-.faultToggle:hover {
-  background: rgba(255, 255, 255, 0.07);
-  border-color: rgba(255, 255, 255, 0.22);
-}
-
-.toggleTrack {
-  position: relative;
-  width: 28px;
-  height: 16px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.14);
-  transition: background 0.2s ease;
-}
-
-.toggleTrackActive {
-  background: rgba(255, 255, 255, 0.45);
-}
-
-.toggleThumb {
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: #EDE9E3;
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.toggleThumbActive {
-  transform: translateX(12px);
-  background: #FFFFFF;
-  box-shadow: 0 0 8px rgba(255, 255, 255, 1);
-}
-
-.toggleText {
-  font-family: var(--sts-font-mono, monospace);
-  font-size: 11px;
-  color: rgba(237, 233, 227, 0.75);
-  letter-spacing: 0.06em;
-}
-
-/* Action Buttons */
-.executeBtn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 22px;
-  border-radius: 999px;
-  background: #FFFFFF;
-  color: #080808;
-  font-family: var(--sts-font-body, sans-serif);
-  font-size: 13px;
-  font-weight: 600;
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 2px 14px rgba(255, 255, 255, 0.15);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.executeBtn:hover:not(:disabled) {
-  background: #EDEDED;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 22px rgba(255, 255, 255, 0.28);
-}
-
-.executeBtn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.resetBtn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: rgba(237, 233, 227, 0.65);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.resetBtn:hover {
-  background: rgba(255, 255, 255, 0.09);
-  border-color: rgba(255, 255, 255, 0.25);
-  color: #FFFFFF;
-}
-
 /* --------------------------------------------------------------------------
-   THE LIVING VECTOR CIRCUIT STAGE (Precision Instrument Console)
+   THE LIVING VECTOR CIRCUIT STAGE (Ethereal & Borderless)
    -------------------------------------------------------------------------- */
-.circuitStageFrame {
+.circuitStageWrapper {
   position: relative;
   width: 100%;
-  background: rgba(10, 12, 14, 0.72);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
-  padding: 20px 22px 18px 22px;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  box-shadow: 0 24px 64px -12px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 1.5rem 0 1rem 0;
+  background: radial-gradient(
+    ellipse 90% 80% at 50% 50%,
+    rgba(14, 16, 18, 0.45) 0%,
+    rgba(8, 8, 8, 0) 100%
+  );
 }
-
-/* Corner Engineering Reticles (+) */
-.reticleTL,
-.reticleTR,
-.reticleBL,
-.reticleBR {
-  position: absolute;
-  font-family: var(--sts-font-mono, monospace);
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.2);
-  user-select: none;
-  pointer-events: none;
-  line-height: 1;
-}
-
-.reticleTL { top: 8px; left: 10px; }
-.reticleTR { top: 8px; right: 10px; }
-.reticleBL { bottom: 8px; left: 10px; }
-.reticleBR { bottom: 8px; right: 10px; }
 
 /* The Pipeline Vector Simulation Canvas Viewport */
 .canvasViewport {
   position: relative;
   width: 100%;
-  height: 255px;
-  border-radius: 8px;
-  background: rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  height: 240px;
   overflow: hidden;
-  margin-bottom: 12px;
 }
 
 .pipelineCanvas {
@@ -347,65 +149,189 @@
   display: block;
 }
 
-/* Compact Monospace Telemetry Ticker Strip */
-.tickerStrip {
+/* --------------------------------------------------------------------------
+   Integrated Modern Instrument Ribbon (Telemetry & Precision Controls)
+   -------------------------------------------------------------------------- */
+.instrumentRibbon {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  padding: 10px 16px;
-  border-radius: 6px;
-  background: rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  background: rgba(14, 16, 18, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 8px 32px -8px rgba(0, 0, 0, 0.5);
+}
+
+.telemetryArea {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   font-family: var(--sts-font-mono, monospace);
   font-size: 11px;
+  color: rgba(237, 233, 227, 0.65);
+  overflow: hidden;
 }
 
-.tickerLeft {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  color: rgba(237, 233, 227, 0.7);
+.telemetryDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  flex-shrink: 0;
+  transition: all 0.3s ease;
 }
 
-.tickerStageToken {
+.telemetryDotActive {
+  background: #FFFFFF;
+  box-shadow: 0 0 8px #FFFFFF;
+  animation: beaconPulse 1.8s infinite ease-in-out;
+}
+
+@keyframes beaconPulse {
+  0%, 100% { opacity: 0.4; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+
+.telemetryToken {
   color: #FFFFFF;
-  background: rgba(255, 255, 255, 0.08);
-  padding: 2px 8px;
-  border-radius: 4px;
   letter-spacing: 0.08em;
+  font-weight: 500;
   text-transform: uppercase;
+  flex-shrink: 0;
 }
 
-.tickerMessage {
+.telemetryDivider {
+  color: rgba(255, 255, 255, 0.2);
+  flex-shrink: 0;
+}
+
+.telemetryText {
   color: rgba(237, 233, 227, 0.85);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 480px;
 }
 
-.tickerMessageAlert {
+.telemetryTextAlert {
   color: #FFFFFF;
-  text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
 }
 
-.tickerMetricsRight {
+.controlsArea {
   display: flex;
   align-items: center;
-  gap: 16px;
-  color: rgba(237, 233, 227, 0.4);
+  gap: 10px;
+  flex-shrink: 0;
 }
 
-.tickerMetricItem {
-  display: flex;
+/* Sleek 503 Fault Toggle Switch */
+.faultToggleBtn {
+  display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 10.5px;
+  color: rgba(237, 233, 227, 0.65);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
 }
 
-.tickerMetricVal {
+.faultToggleBtn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #FFFFFF;
+}
+
+.faultToggleBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.toggleDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transition: all 0.2s;
+}
+
+.faultToggleActive .toggleDot {
+  background: #FFFFFF;
+  box-shadow: 0 0 6px #FFFFFF;
+}
+
+.faultToggleActive {
+  color: rgba(255, 255, 255, 0.9);
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+/* Action Buttons */
+.executeButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 18px;
+  border-radius: 9999px;
+  background: #FFFFFF;
+  color: #080808;
+  font-family: var(--sts-font-body, sans-serif);
+  font-size: 12px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 14px rgba(255, 255, 255, 0.15);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.executeButton:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.25);
+  background: #EDEDED;
+}
+
+.executeButton:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.executeButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.resetButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(237, 233, 227, 0.55);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.resetButton:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.22);
   color: #FFFFFF;
 }
 
 /* --------------------------------------------------------------------------
-   Subtle Scroll Cue at the base of the Hero
+   Minimal Scroll Cue at the base of the Hero
    -------------------------------------------------------------------------- */
 .scrollCueWrapper {
   display: flex;
@@ -423,10 +349,10 @@
   font-size: 10.5px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(237, 233, 227, 0.45);
+  color: rgba(237, 233, 227, 0.4);
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  padding: 7px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 6px 15px;
   border-radius: 999px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -434,7 +360,7 @@
 
 .scrollCueBtn:hover {
   color: #FFFFFF;
-  border-color: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.2);
   background: rgba(255, 255, 255, 0.035);
 }
 
@@ -449,30 +375,30 @@
 
 /* Responsive adjustments */
 @media (max-width: 900px) {
-  .commandHeader {
+  .instrumentRibbon {
     flex-direction: column;
     align-items: flex-start;
-    gap: 1.25rem;
+    border-radius: 12px;
+    padding: 12px 14px;
   }
-  .hardwareConsole {
+  .telemetryArea {
     width: 100%;
-    justify-content: flex-start;
+  }
+  .controlsArea {
+    width: 100%;
+    justify-content: space-between;
   }
 }
 
 @media (max-width: 768px) {
   .heroContainer {
-    padding-top: calc(var(--sts-header-height, 52px) + 3.5rem);
-    padding-bottom: 3rem;
+    padding-top: calc(var(--sts-header-height, 52px) + 3.25rem);
+    padding-bottom: 2.5rem;
   }
   .headline {
-    font-size: 34px;
+    font-size: 32px;
   }
   .canvasViewport {
-    height: 380px;
-  }
-  .tickerStrip {
-    flex-direction: column;
-    align-items: flex-start;
+    height: 340px;
   }
 }

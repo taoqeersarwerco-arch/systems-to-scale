@@ -448,14 +448,17 @@ export const CircuitPipelineHero: React.FC<CircuitPipelineHeroProps> = ({ topic 
       }
 
       // Label below the loop
-      ctx.font = '9.5px monospace';
-      ctx.textAlign = 'center';
-      ctx.fillStyle = isLoopActive ? '#FFFFFF' : 'rgba(237, 233, 227, 0.45)';
-      ctx.fillText(
-        isLoopActive ? '⚡ ACTIVE EXPONENTIAL BACKPRESSURE QUEUE' : 'RETRY CONDUIT // t = 2^k × 1000ms + JITTER',
-        (loopXStart + loopXEnd) / 2,
-        loopY + 16
-      );
+      if (isLoopActive) {
+        ctx.font = '600 10px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillText('⚡ 503 EXPONENTIAL BACKOFF QUEUE', (loopXStart + loopXEnd) / 2, loopY + 16);
+      } else {
+        ctx.font = '9px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillStyle = 'rgba(237, 233, 227, 0.28)';
+        ctx.fillText('FAULT RETRY CONDUIT', (loopXStart + loopXEnd) / 2, loopY + 16);
+      }
 
       // -------------------------------------------------------------
       // 5. SMOOTH PHYSICAL TRANSIT PACKET ON "INITIATE PIPELINE"
@@ -620,30 +623,21 @@ export const CircuitPipelineHero: React.FC<CircuitPipelineHeroProps> = ({ topic 
         ctx.shadowBlur = 0;
 
         // Stage numerical label in center
-        ctx.font = '600 11.5px monospace';
+        ctx.font = '600 11px monospace';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillStyle = isActive || isDone ? '#FFFFFF' : 'rgba(237, 233, 227, 0.45)';
         ctx.fillText(n.label, n.x, n.y);
 
-        // Header Stage Title above
-        ctx.font = '10px monospace';
-        ctx.fillStyle = 'rgba(237, 233, 227, 0.45)';
-        ctx.fillText(`STAGE ${n.label}`, n.x, baseY - nodeR - 22);
+        // Header Stage Title above (single clean label)
+        ctx.font = '600 11px monospace';
+        ctx.fillStyle = isActive || isDone ? '#FFFFFF' : 'rgba(237, 233, 227, 0.65)';
+        ctx.fillText(n.title, n.x, baseY - nodeR - 12);
 
-        ctx.font = '600 12px sans-serif';
-        ctx.fillStyle = isActive || isDone ? '#FFFFFF' : 'rgba(237, 233, 227, 0.75)';
-        ctx.fillText(n.title, n.x, baseY - nodeR - 8);
-
-        // Description / Subtitle below
-        ctx.font = '10px sans-serif';
-        ctx.fillStyle = 'rgba(237, 233, 227, 0.4)';
-        ctx.fillText(n.sub, n.x, baseY + nodeR + 14);
-
-        // Live Status Text underneath
-        ctx.font = '9.5px monospace';
-        let statusText = 'STANDBY';
-        let statusColor = 'rgba(237, 233, 227, 0.35)';
+        // Live Contextual Subtitle / Status below (single dynamic label)
+        ctx.font = '10.5px -apple-system, sans-serif';
+        let statusText = n.sub;
+        let statusColor = 'rgba(237, 233, 227, 0.4)';
 
         if (isFault) {
           statusText = `503 RETRY (${backoffRemaining}s)`;
@@ -657,7 +651,7 @@ export const CircuitPipelineHero: React.FC<CircuitPipelineHeroProps> = ({ topic 
         }
 
         ctx.fillStyle = statusColor;
-        ctx.fillText(statusText, n.x, baseY + nodeR + 27);
+        ctx.fillText(statusText, n.x, baseY + nodeR + 15);
       });
 
       ctx.restore();
@@ -677,128 +671,99 @@ export const CircuitPipelineHero: React.FC<CircuitPipelineHeroProps> = ({ topic 
       <div className={styles.vignetteOverlay} />
 
       <div className={styles.contentWrapper}>
-        {/* Top Meta & System Breadcrumb */}
-        <div className={styles.topMetaRow}>
-          <div className={styles.breadcrumbRow}>
-            <Link to="/topics" className={styles.breadcrumbLink} title="Return to All Domains">
-              <ArrowLeft size={13} />
-              <span>All Domains</span>
-            </Link>
-            <span className={styles.breadcrumbDivider}>//</span>
-            <span className={styles.breadcrumbTag}>SYS-01: AI & AUTOMATION</span>
-          </div>
-
-          <div className={styles.liveSystemBadge}>
-            <span
-              className={`${styles.systemStatusDot} ${
-                isExecuting ? styles.systemStatusDotActive : ''
-              }`}
-            />
-            <span className={styles.systemStatusText}>
-              {stageState === 'idle'
-                ? 'CIRCUIT IDLE // STANDBY'
-                : stageState === 'completed'
-                ? 'SETTLED // 0 CASCADE'
-                : stageState === 's3_fault_loop'
-                ? '503 BACKOFF // IN FLIGHT'
-                : 'PIPELINE EXECUTING'}
-            </span>
-          </div>
+        {/* Top Breadcrumb & System Identity */}
+        <div className={styles.breadcrumbRow}>
+          <Link to="/topics" className={styles.breadcrumbLink} title="Return to All Domains">
+            <ArrowLeft size={13} />
+            <span>All Domains</span>
+          </Link>
+          <span className={styles.breadcrumbDivider}>//</span>
+          <span className={styles.breadcrumbTag}>SYS-01: AI & AUTOMATION</span>
         </div>
 
-        {/* Unified Command Header: Title & Hook on Left, Hardware Controls on Right */}
-        <div className={styles.commandHeader}>
-          <div className={styles.titleBlock}>
-            <h1 className={styles.headline}>{topic.name}</h1>
-            <p className={styles.hookText}>{topic.hook}</p>
-          </div>
-
-          {/* Dedicated Hardware Controls Bar */}
-          <div className={styles.hardwareConsole}>
-            {/* Hardware Switch for 503 Fault Injection */}
-            <div
-              className={styles.faultToggle}
-              onClick={() => !isExecuting && setIsFaultArmed(!isFaultArmed)}
-              title="Toggle upstream HTTP 503 Service Unavailable fault simulation"
-              style={{ opacity: isExecuting ? 0.6 : 1, cursor: isExecuting ? 'not-allowed' : 'pointer' }}
-            >
-              <div className={`${styles.toggleTrack} ${isFaultArmed ? styles.toggleTrackActive : ''}`}>
-                <div className={`${styles.toggleThumb} ${isFaultArmed ? styles.toggleThumbActive : ''}`} />
-              </div>
-              <span className={styles.toggleText}>
-                503 Fault: <strong>{isFaultArmed ? 'ARMED' : 'BYPASS'}</strong>
-              </span>
-            </div>
-
-            {/* Initiate Pipeline Execution Button */}
-            <button
-              className={styles.executeBtn}
-              onClick={handleInitiate}
-              disabled={isExecuting}
-              title="Execute the living circuit state machine"
-            >
-              {isExecuting ? (
-                <>
-                  <Activity size={14} className="animate-spin" />
-                  <span>Executing...</span>
-                </>
-              ) : (
-                <>
-                  <Play size={13} fill="#080808" />
-                  <span>Initiate Pipeline</span>
-                </>
-              )}
-            </button>
-
-            {/* Reset Button */}
-            <button className={styles.resetBtn} onClick={handleReset} title="Reset pipeline to standby">
-              <RotateCcw size={14} />
-            </button>
-          </div>
+        {/* Clean, Spacious Editorial Hero Title & Hook */}
+        <div className={styles.headerArea}>
+          <h1 className={styles.headline}>{topic.name}</h1>
+          <p className={styles.hookText}>{topic.hook}</p>
         </div>
 
-        {/* Living Vector Circuit Reactor Simulator Stage */}
-        <div className={styles.circuitStageFrame}>
-          {/* Corner Engineering Reticles */}
-          <span className={styles.reticleTL}>+</span>
-          <span className={styles.reticleTR}>+</span>
-          <span className={styles.reticleBL}>+</span>
-          <span className={styles.reticleBR}>+</span>
-
-          {/* Vector Simulation Canvas Viewport */}
+        {/* Ethereal Living Vector Circuit Stage (Sleek & Unboxed) */}
+        <div className={styles.circuitStageWrapper}>
+          {/* Simulation Canvas Viewport */}
           <div className={styles.canvasViewport}>
             <canvas ref={canvasRef} className={styles.pipelineCanvas} />
           </div>
 
-          {/* Compact Telemetry Ticker Strip */}
-          <div className={styles.tickerStrip}>
-            <div className={styles.tickerLeft}>
-              <span className={styles.tickerStageToken}>{activeStageToken}</span>
+          {/* Integrated Modern Instrument Ribbon (Telemetry + Sleek Controls) */}
+          <div className={styles.instrumentRibbon}>
+            <div className={styles.telemetryArea}>
               <span
-                className={`${styles.tickerMessage} ${
-                  stageState === 's3_fault_loop' ? styles.tickerMessageAlert : ''
+                className={`${styles.telemetryDot} ${
+                  isExecuting ? styles.telemetryDotActive : ''
+                }`}
+              />
+              <span className={styles.telemetryToken}>{activeStageToken}</span>
+              <span className={styles.telemetryDivider}>·</span>
+              <span
+                className={`${styles.telemetryText} ${
+                  stageState === 's3_fault_loop' ? styles.telemetryTextAlert : ''
                 }`}
               >
                 {tickerMessage}
               </span>
             </div>
 
-            <div className={styles.tickerMetricsRight}>
-              <div className={styles.tickerMetricItem}>
-                <span>LATENCY:</span>
-                <span className={styles.tickerMetricVal}>{stepLatency}</span>
-              </div>
-              <div className={styles.tickerMetricItem}>
-                <span>CASCADE:</span>
-                <span className={styles.tickerMetricVal}>0</span>
-              </div>
+            <div className={styles.controlsArea}>
+              {/* Sleek 503 Fault Toggle Switch */}
+              <button
+                type="button"
+                className={`${styles.faultToggleBtn} ${isFaultArmed ? styles.faultToggleActive : ''}`}
+                onClick={() => !isExecuting && setIsFaultArmed(!isFaultArmed)}
+                disabled={isExecuting}
+                title="Toggle upstream HTTP 503 Service Unavailable fault simulation"
+              >
+                <span className={styles.toggleDot} />
+                <span>503 Fault: <strong>{isFaultArmed ? 'ARMED' : 'BYPASS'}</strong></span>
+              </button>
+
+              {/* Initiate Pipeline Execution Button */}
+              <button
+                type="button"
+                className={styles.executeButton}
+                onClick={handleInitiate}
+                disabled={isExecuting}
+                title="Execute the living circuit state machine"
+              >
+                {isExecuting ? (
+                  <>
+                    <Activity size={13} className="animate-spin" />
+                    <span>Executing...</span>
+                  </>
+                ) : (
+                  <>
+                    <Play size={12} fill="#080808" />
+                    <span>Initiate Pipeline</span>
+                  </>
+                )}
+              </button>
+
+              {/* Reset Button */}
+              <button
+                type="button"
+                className={styles.resetButton}
+                onClick={handleReset}
+                title="Reset pipeline to standby"
+              >
+                <RotateCcw size={13} />
+              </button>
             </div>
           </div>
         </div>
 
-        {/* Subtle Scroll Cue at the base of the Hero */}
+        {/* Minimal Scroll Cue at the base of the Hero */}
         <div className={styles.scrollCueWrapper}>
           <button
+            type="button"
             className={styles.scrollCueBtn}
             onClick={() => {
               const el = document.getElementById('topic-articles');
@@ -807,7 +772,7 @@ export const CircuitPipelineHero: React.FC<CircuitPipelineHeroProps> = ({ topic 
             title="Scroll to articles"
           >
             <span>Explore 5 Articles</span>
-            <ChevronDown size={14} className={styles.scrollChevron} />
+            <ChevronDown size={13} className={styles.scrollChevron} />
           </button>
         </div>
       </div>
