@@ -571,3 +571,4 @@ export const TicketRoutingHero: React.FC<TicketRoutingHeroProps> = ({ topic }) =
     </section>
   );
 };
+

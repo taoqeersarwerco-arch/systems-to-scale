@@ -7,6 +7,7 @@ import { AuctionExchangeHero } from '../components/topics/AuctionExchangeHero';
 import { BrowserEngineHero } from '../components/topics/BrowserEngineHero';
 import { PaymentSettlementHero } from '../components/topics/PaymentSettlementHero';
 import { TicketRoutingHero } from '../components/topics/TicketRoutingHero';
+import { AsyncHandoffHero } from '../components/topics/AsyncHandoffHero';
 import { AuctionSim } from '../components/topics/AuctionSim';
 import { RenderSim } from '../components/topics/RenderSim';
 import { TransactionSim } from '../components/topics/TransactionSim';
@@ -78,7 +79,8 @@ export const TopicDetailPage: React.FC = () => {
     topic.slug === 'marketing-ads' ||
     topic.slug === 'web-design' ||
     topic.slug === 'e-commerce' ||
-    topic.slug === 'customer-service';
+    topic.slug === 'customer-service' ||
+    topic.slug === 'virtual-assistance';
 
   const renderDedicatedHero = () => {
     if (topic.slug === 'ai-automation') {
@@ -95,6 +97,9 @@ export const TopicDetailPage: React.FC = () => {
     }
     if (topic.slug === 'customer-service') {
       return <TicketRoutingHero topic={topic} />;
+    }
+    if (topic.slug === 'virtual-assistance') {
+      return <AsyncHandoffHero topic={topic} />;
     }
     return null;
   };
