@@ -5,6 +5,7 @@ import { ALL_ARTICLES, ArticleEntry } from '../data/slug-registry';
 import { CircuitPipelineHero } from '../components/topics/CircuitPipelineHero';
 import { AuctionExchangeHero } from '../components/topics/AuctionExchangeHero';
 import { BrowserEngineHero } from '../components/topics/BrowserEngineHero';
+import { PaymentSettlementHero } from '../components/topics/PaymentSettlementHero';
 import { AuctionSim } from '../components/topics/AuctionSim';
 import { RenderSim } from '../components/topics/RenderSim';
 import { TransactionSim } from '../components/topics/TransactionSim';
@@ -74,7 +75,8 @@ export const TopicDetailPage: React.FC = () => {
   const isDedicatedHeroDomain =
     topic.slug === 'ai-automation' ||
     topic.slug === 'marketing-ads' ||
-    topic.slug === 'web-design';
+    topic.slug === 'web-design' ||
+    topic.slug === 'e-commerce';
 
   const renderDedicatedHero = () => {
     if (topic.slug === 'ai-automation') {
@@ -85,6 +87,9 @@ export const TopicDetailPage: React.FC = () => {
     }
     if (topic.slug === 'web-design') {
       return <BrowserEngineHero topic={topic} />;
+    }
+    if (topic.slug === 'e-commerce') {
+      return <PaymentSettlementHero topic={topic} />;
     }
     return null;
   };
