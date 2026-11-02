@@ -127,20 +127,19 @@
   text-transform: uppercase;
 }
 
-/* Parallax-Enabled Content Column */
+/* Anchored Static Hero Content Column */
 .heroContent {
   max-width: 840px;
   margin-bottom: 2.5rem;
   position: relative;
-  transition: transform 0.12s cubic-bezier(0.2, 0, 0, 1);
-  will-change: transform;
+  z-index: 5;
 }
 
 .badgeWrapper {
   margin-bottom: 1.35rem;
   display: inline-block;
-  transition: transform 0.15s cubic-bezier(0.2, 0, 0, 1);
-  will-change: transform;
+  position: relative;
+  z-index: 5;
 }
 
 /* Cinematic Metallic Sheen Gradient Heading (Exact Match to Hub Pages & Homepage) */
@@ -157,8 +156,6 @@
   text-shadow: 0 4px 28px rgba(0, 0, 0, 0.95);
   position: relative;
   z-index: 5;
-  transition: transform 0.1s cubic-bezier(0.2, 0, 0, 1);
-  will-change: transform;
 }
 
 .standfirst {

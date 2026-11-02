@@ -127,11 +127,9 @@ export const HeroDistortionCanvas: React.FC<HeroDistortionCanvasProps> = ({ clas
       mouse.targetY = -9999;
     };
 
-    const parentElem = canvas.parentElement;
-    if (parentElem) {
-      parentElem.addEventListener('mousemove', handleMouseMove);
-      parentElem.addEventListener('mouseleave', handleMouseLeave);
-    }
+    const heroSection = canvas.closest('section') || window;
+    heroSection.addEventListener('mousemove', handleMouseMove as EventListener);
+    heroSection.addEventListener('mouseleave', handleMouseLeave as EventListener);
 
     let time = 0;
 
@@ -282,10 +280,8 @@ export const HeroDistortionCanvas: React.FC<HeroDistortionCanvasProps> = ({ clas
     return () => {
       cancelAnimationFrame(animId);
       window.removeEventListener('resize', handleResize);
-      if (parentElem) {
-        parentElem.removeEventListener('mousemove', handleMouseMove);
-        parentElem.removeEventListener('mouseleave', handleMouseLeave);
-      }
+      heroSection.removeEventListener('mousemove', handleMouseMove as EventListener);
+      heroSection.removeEventListener('mouseleave', handleMouseLeave as EventListener);
     };
   }, []);
 
@@ -312,3 +308,4 @@ export const HeroDistortionCanvas: React.FC<HeroDistortionCanvasProps> = ({ clas
     </div>
   );
 };
+
