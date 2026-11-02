@@ -1,27 +1,87 @@
 /* ============================================================================
    Article Hero Chassis Styles
-   Canonical Monochromatic Design Language Matching Systems to Scale Topic Detail
-   Strict Black & White (#080808 / #111111 / #FFFFFF / #A3A3A3)
+   Cinematic Monochromatic Observatory Stage with Parallax & Metallic Sheen
+   Direct Match to Systems to Scale Homepage & Topics Hub Architecture
+   Strict High-Contrast Black & White (#080808 / #111111 / #FFFFFF / #A3A3A3)
    ============================================================================ */
 
 .heroChassis {
   position: relative;
   width: 100%;
-  padding-top: calc(var(--sts-header-height, 52px) + 2rem);
-  padding-bottom: 2.5rem;
-  background-color: var(--sts-ground, #080808);
+  padding-top: calc(var(--sts-header-height, 52px) + 2.5rem);
+  padding-bottom: 3.75rem;
+  background: radial-gradient(circle at 50% 25%, rgba(255, 255, 255, 0.04) 0%, rgba(8, 8, 8, 0.98) 72%), #050505;
+  border-bottom: 1px solid var(--sts-border, rgba(255, 255, 255, 0.08));
+  overflow: hidden;
+  user-select: none;
+}
+
+/* Atmospheric Reading Pocket: Soft obsidian center ensuring 100% crisp text readability */
+.readingPocket {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 75% 62% at 50% 48%,
+    rgba(8, 8, 8, 0.92) 0%,
+    rgba(8, 8, 8, 0.65) 55%,
+    rgba(8, 8, 8, 0) 100%
+  );
+}
+
+/* 4-Corner Observatory Reticle Brackets (Exact Hub Pages Spec) */
+.reticleTl,
+.reticleTr,
+.reticleBl,
+.reticleBr {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-color: rgba(255, 255, 255, 0.16);
+  border-style: solid;
+  pointer-events: none;
+  z-index: 6;
+  transition: border-color 0.3s ease;
+}
+
+.reticleTl {
+  top: calc(var(--sts-header-height, 52px) + 1.25rem);
+  left: clamp(16px, 3vw, 36px);
+  border-width: 1px 0 0 1px;
+}
+
+.reticleTr {
+  top: calc(var(--sts-header-height, 52px) + 1.25rem);
+  right: clamp(16px, 3vw, 36px);
+  border-width: 1px 1px 0 0;
+}
+
+.reticleBl {
+  bottom: 1.5rem;
+  left: clamp(16px, 3vw, 36px);
+  border-width: 0 0 1px 1px;
+}
+
+.reticleBr {
+  bottom: 1.5rem;
+  right: clamp(16px, 3vw, 36px);
+  border-width: 0 1px 1px 0;
 }
 
 .innerContainer {
+  position: relative;
+  z-index: 5;
   width: 100%;
   max-width: var(--sts-max-width, 1280px);
   margin: 0 auto;
   padding: 0 clamp(16px, 4vw, 32px);
+  pointer-events: auto;
 }
 
-/* Navigation Breadcrumb Row (Direct Match to Topic Detail) */
+/* Top Navigation Breadcrumb Row */
 .breadcrumbRow {
-  margin-bottom: 2.5rem;
+  margin-bottom: 2.25rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -36,11 +96,12 @@
   color: var(--sts-dim, #737373);
   font-size: 0.85rem;
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: color 0.2s ease, transform 0.2s ease;
 }
 
 .backLink:hover {
   color: #FFFFFF;
+  transform: translateX(-2px);
 }
 
 .breadcrumbRight {
@@ -66,39 +127,55 @@
   text-transform: uppercase;
 }
 
-/* Constrained Hero Content Column (Matches Topic Detail max-width: 820px) */
+/* Parallax-Enabled Content Column */
 .heroContent {
-  max-width: 820px;
-  margin-bottom: 3.5rem;
+  max-width: 840px;
+  margin-bottom: 2.5rem;
+  position: relative;
+  transition: transform 0.12s cubic-bezier(0.2, 0, 0, 1);
+  will-change: transform;
 }
 
 .badgeWrapper {
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.35rem;
+  display: inline-block;
+  transition: transform 0.15s cubic-bezier(0.2, 0, 0, 1);
+  will-change: transform;
 }
 
+/* Cinematic Metallic Sheen Gradient Heading (Exact Match to Hub Pages & Homepage) */
 .headline {
   font-family: var(--sts-font-display, sans-serif);
-  font-size: clamp(2.4rem, 4.5vw, 3.8rem);
-  line-height: 1.1;
-  letter-spacing: -0.03em;
-  color: #FFFFFF;
+  font-size: clamp(2.5rem, 5vw, 4.1rem);
+  line-height: 1.08;
+  letter-spacing: -0.035em;
   font-weight: 700;
-  margin: 0 0 1.25rem 0;
+  margin: 0 0 1.35rem 0;
+  background: linear-gradient(180deg, #FFFFFF 0%, #D4D4D4 40%, #888888 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 4px 28px rgba(0, 0, 0, 0.95);
+  position: relative;
+  z-index: 5;
+  transition: transform 0.1s cubic-bezier(0.2, 0, 0, 1);
+  will-change: transform;
 }
 
 .standfirst {
-  font-size: 1.18rem;
-  line-height: 1.6;
+  font-size: 1.2rem;
+  line-height: 1.62;
   color: var(--sts-bone, #FFFFFF);
   margin: 0 0 1.25rem 0;
   font-weight: 500;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9);
 }
 
 .leadParagraph {
   font-size: 1rem;
   line-height: 1.65;
   color: var(--sts-muted, #A3A3A3);
-  margin: 0 0 2rem 0;
+  margin: 0 0 2.25rem 0;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
 }
 
 /* Clean Hairline Metadata Bar */
@@ -106,7 +183,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.1rem 0;
+  padding: 1.15rem 0;
   border-top: 1px solid var(--sts-border, rgba(255, 255, 255, 0.08));
   border-bottom: 1px solid var(--sts-border, rgba(255, 255, 255, 0.08));
   font-family: var(--sts-font-mono, monospace);
@@ -114,6 +191,8 @@
   color: var(--sts-dim, #737373);
   flex-wrap: wrap;
   gap: 1rem;
+  background: rgba(8, 8, 8, 0.35);
+  backdrop-filter: blur(4px);
 }
 
 .metaLeft {

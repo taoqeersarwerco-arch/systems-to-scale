@@ -101,3 +101,4 @@ export const ArticleExecutiveCockpit: React.FC<ArticleExecutiveCockpitProps> = (
     </section>
   );
 };
+
