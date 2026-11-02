@@ -433,3 +433,4 @@ export const DeckNarrativeHero: React.FC<DeckNarrativeHeroProps> = ({ topic }) =
     </section>
   );
 };
+

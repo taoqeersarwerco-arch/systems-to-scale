@@ -9,6 +9,7 @@ import { PaymentSettlementHero } from '../components/topics/PaymentSettlementHer
 import { TicketRoutingHero } from '../components/topics/TicketRoutingHero';
 import { AsyncHandoffHero } from '../components/topics/AsyncHandoffHero';
 import { DeckNarrativeHero } from '../components/topics/DeckNarrativeHero';
+import { CalendarConstraintHero } from '../components/topics/CalendarConstraintHero';
 import { AuctionSim } from '../components/topics/AuctionSim';
 import { RenderSim } from '../components/topics/RenderSim';
 import { TransactionSim } from '../components/topics/TransactionSim';
@@ -82,7 +83,8 @@ export const TopicDetailPage: React.FC = () => {
     topic.slug === 'e-commerce' ||
     topic.slug === 'customer-service' ||
     topic.slug === 'virtual-assistance' ||
-    topic.slug === 'pitch-decks';
+    topic.slug === 'pitch-decks' ||
+    topic.slug === 'personal-assistance';
 
   const renderDedicatedHero = () => {
     if (topic.slug === 'ai-automation') {
@@ -105,6 +107,9 @@ export const TopicDetailPage: React.FC = () => {
     }
     if (topic.slug === 'pitch-decks') {
       return <DeckNarrativeHero topic={topic} />;
+    }
+    if (topic.slug === 'personal-assistance') {
+      return <CalendarConstraintHero topic={topic} />;
     }
     return null;
   };
