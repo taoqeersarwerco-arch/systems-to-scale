@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { TopicData } from '../../data/topics';
-import { ArrowLeft, Play, RotateCcw, Activity } from 'lucide-react';
+import { ArrowLeft, Play, RotateCcw, Activity, ChevronDown } from 'lucide-react';
 import styles from '../../styles/circuitPipelineHero.module.css';
 
 interface CircuitPipelineHeroProps {
@@ -673,82 +673,97 @@ export const CircuitPipelineHero: React.FC<CircuitPipelineHeroProps> = ({ topic 
 
   return (
     <section className={styles.heroContainer} ref={containerRef}>
-      {/* Contrast Vignette */}
+      {/* Contrast Atmospheric Vignette */}
       <div className={styles.vignetteOverlay} />
 
       <div className={styles.contentWrapper}>
-        {/* Minimal Navigation Breadcrumb */}
-        <div className={styles.breadcrumbRow}>
-          <Link to="/topics" className={styles.breadcrumbLink} title="Return to All Domains">
-            <ArrowLeft size={13} />
-            <span>All Domains</span>
-          </Link>
-          <span className={styles.breadcrumbDivider}>//</span>
-          <span className={styles.breadcrumbTag}>SYS-01: AI & AUTOMATION</span>
-        </div>
-
-        {/* Minimal, High-End Editorial Hero Header */}
-        <div className={styles.headerArea}>
-          <h1 className={styles.headline}>{topic.name}</h1>
-          <p className={styles.hookText}>{topic.hook}</p>
-        </div>
-
-        {/* =====================================================================
-            CINEMATIC VECTOR CIRCUIT REACTOR SIMULATION STAGE
-            ===================================================================== */}
-        <div className={styles.circuitStageFrame}>
-          {/* Stage Header Controls */}
-          <div className={styles.stageHeader}>
-            <div className={styles.stageTitleArea}>
-              <span className={styles.statusIndicatorDot} />
-              <div>
-                <div className={styles.stageConsoleTitle}>Circuit Pipeline Reactor</div>
-                <div className={styles.stageConsoleSubtitle}>Fault Injection & Exponential Backoff State Machine</div>
-              </div>
-            </div>
-
-            <div className={styles.stageControlsRow}>
-              {/* Hardware Switch for 503 Fault Injection */}
-              <div
-                className={styles.faultToggle}
-                onClick={() => !isExecuting && setIsFaultArmed(!isFaultArmed)}
-                title="Toggle upstream HTTP 503 Service Unavailable fault simulation"
-                style={{ opacity: isExecuting ? 0.6 : 1, cursor: isExecuting ? 'not-allowed' : 'pointer' }}
-              >
-                <div className={`${styles.toggleTrack} ${isFaultArmed ? styles.toggleTrackActive : ''}`}>
-                  <div className={`${styles.toggleThumb} ${isFaultArmed ? styles.toggleThumbActive : ''}`} />
-                </div>
-                <span className={styles.toggleText}>
-                  503 Fault: <strong>{isFaultArmed ? 'ARMED' : 'BYPASS'}</strong>
-                </span>
-              </div>
-
-              {/* Initiate Pipeline Execution Button */}
-              <button
-                className={styles.executeBtn}
-                onClick={handleInitiate}
-                disabled={isExecuting}
-                title="Execute the living circuit state machine"
-              >
-                {isExecuting ? (
-                  <>
-                    <Activity size={14} className="animate-spin" />
-                    <span>Executing Pipeline...</span>
-                  </>
-                ) : (
-                  <>
-                    <Play size={13} fill="#080808" />
-                    <span>Initiate Pipeline</span>
-                  </>
-                )}
-              </button>
-
-              {/* Reset Button */}
-              <button className={styles.resetBtn} onClick={handleReset} title="Reset pipeline to standby">
-                <RotateCcw size={14} />
-              </button>
-            </div>
+        {/* Top Meta & System Breadcrumb */}
+        <div className={styles.topMetaRow}>
+          <div className={styles.breadcrumbRow}>
+            <Link to="/topics" className={styles.breadcrumbLink} title="Return to All Domains">
+              <ArrowLeft size={13} />
+              <span>All Domains</span>
+            </Link>
+            <span className={styles.breadcrumbDivider}>//</span>
+            <span className={styles.breadcrumbTag}>SYS-01: AI & AUTOMATION</span>
           </div>
+
+          <div className={styles.liveSystemBadge}>
+            <span
+              className={`${styles.systemStatusDot} ${
+                isExecuting ? styles.systemStatusDotActive : ''
+              }`}
+            />
+            <span className={styles.systemStatusText}>
+              {stageState === 'idle'
+                ? 'CIRCUIT IDLE // STANDBY'
+                : stageState === 'completed'
+                ? 'SETTLED // 0 CASCADE'
+                : stageState === 's3_fault_loop'
+                ? '503 BACKOFF // IN FLIGHT'
+                : 'PIPELINE EXECUTING'}
+            </span>
+          </div>
+        </div>
+
+        {/* Unified Command Header: Title & Hook on Left, Hardware Controls on Right */}
+        <div className={styles.commandHeader}>
+          <div className={styles.titleBlock}>
+            <h1 className={styles.headline}>{topic.name}</h1>
+            <p className={styles.hookText}>{topic.hook}</p>
+          </div>
+
+          {/* Dedicated Hardware Controls Bar */}
+          <div className={styles.hardwareConsole}>
+            {/* Hardware Switch for 503 Fault Injection */}
+            <div
+              className={styles.faultToggle}
+              onClick={() => !isExecuting && setIsFaultArmed(!isFaultArmed)}
+              title="Toggle upstream HTTP 503 Service Unavailable fault simulation"
+              style={{ opacity: isExecuting ? 0.6 : 1, cursor: isExecuting ? 'not-allowed' : 'pointer' }}
+            >
+              <div className={`${styles.toggleTrack} ${isFaultArmed ? styles.toggleTrackActive : ''}`}>
+                <div className={`${styles.toggleThumb} ${isFaultArmed ? styles.toggleThumbActive : ''}`} />
+              </div>
+              <span className={styles.toggleText}>
+                503 Fault: <strong>{isFaultArmed ? 'ARMED' : 'BYPASS'}</strong>
+              </span>
+            </div>
+
+            {/* Initiate Pipeline Execution Button */}
+            <button
+              className={styles.executeBtn}
+              onClick={handleInitiate}
+              disabled={isExecuting}
+              title="Execute the living circuit state machine"
+            >
+              {isExecuting ? (
+                <>
+                  <Activity size={14} className="animate-spin" />
+                  <span>Executing...</span>
+                </>
+              ) : (
+                <>
+                  <Play size={13} fill="#080808" />
+                  <span>Initiate Pipeline</span>
+                </>
+              )}
+            </button>
+
+            {/* Reset Button */}
+            <button className={styles.resetBtn} onClick={handleReset} title="Reset pipeline to standby">
+              <RotateCcw size={14} />
+            </button>
+          </div>
+        </div>
+
+        {/* Living Vector Circuit Reactor Simulator Stage */}
+        <div className={styles.circuitStageFrame}>
+          {/* Corner Engineering Reticles */}
+          <span className={styles.reticleTL}>+</span>
+          <span className={styles.reticleTR}>+</span>
+          <span className={styles.reticleBL}>+</span>
+          <span className={styles.reticleBR}>+</span>
 
           {/* Vector Simulation Canvas Viewport */}
           <div className={styles.canvasViewport}>
@@ -779,6 +794,21 @@ export const CircuitPipelineHero: React.FC<CircuitPipelineHeroProps> = ({ topic 
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Subtle Scroll Cue at the base of the Hero */}
+        <div className={styles.scrollCueWrapper}>
+          <button
+            className={styles.scrollCueBtn}
+            onClick={() => {
+              const el = document.getElementById('topic-articles');
+              if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }}
+            title="Scroll to articles"
+          >
+            <span>Explore 5 Articles</span>
+            <ChevronDown size={14} className={styles.scrollChevron} />
+          </button>
         </div>
       </div>
     </section>

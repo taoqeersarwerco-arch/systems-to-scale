@@ -123,7 +123,15 @@ export const TopicDetailPage: React.FC = () => {
         </div>
       )}
 
-      <div className="sts-container" style={{ marginTop: isPipelineDomain ? '4rem' : '0' }}>
+      <div
+        id="topic-articles"
+        className="sts-container"
+        style={{
+          marginTop: isPipelineDomain ? '5.5rem' : '0',
+          paddingTop: isPipelineDomain ? '3rem' : '0',
+          borderTop: isPipelineDomain ? '1px solid rgba(255, 255, 255, 0.07)' : 'none'
+        }}
+      >
 
         {/* Section 3: Article Repository Grid */}
         <div style={{ marginBottom: '5rem' }}>
