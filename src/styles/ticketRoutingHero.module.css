@@ -1,0 +1,444 @@
+/* ==========================================================================
+   Systems to Scale — Sleek Cinematic Ticket Routing Hero (Customer Service)
+   Obsidian Palette (#080808 / #FFFFFF)
+   Ethereal Borderless Stage + Precision SLA Priority Queue Ribbon
+   ========================================================================== */
+
+.heroContainer {
+  position: relative;
+  width: 100%;
+  min-height: 85vh;
+  background-color: #080808;
+  overflow: hidden;
+  /* Generous top clearance so the floating nav pill (top: 16px, height: 52px) never collides */
+  padding-top: calc(var(--sts-header-height, 52px) + 4.5rem);
+  padding-bottom: 3.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Atmospheric Subtle Reading Vignette */
+.vignetteOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 85% 65% at 50% 25%,
+    rgba(8, 8, 8, 0.82) 0%,
+    rgba(8, 8, 8, 0.5) 50%,
+    rgba(8, 8, 8, 0.98) 100%
+  );
+}
+
+/* Main Content Layer */
+.contentWrapper {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 0 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  flex: 1;
+  justify-content: center;
+}
+
+/* --------------------------------------------------------------------------
+   Navigation Breadcrumb Trail
+   -------------------------------------------------------------------------- */
+.breadcrumbRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 0.25rem;
+}
+
+.breadcrumbLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(237, 233, 227, 0.5);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.breadcrumbLink:hover {
+  color: #FFFFFF;
+  transform: translateX(-2px);
+}
+
+.breadcrumbDivider {
+  color: rgba(255, 255, 255, 0.16);
+  font-size: 11px;
+}
+
+.breadcrumbTag {
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+/* --------------------------------------------------------------------------
+   Spacious Editorial Hero Header (Clean, Uncrowded)
+   -------------------------------------------------------------------------- */
+.headerArea {
+  margin-bottom: 0.75rem;
+  max-width: 760px;
+}
+
+.headline {
+  font-family: var(--sts-font-display, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
+  font-size: clamp(36px, 4.8vw, 54px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.08;
+  margin: 0 0 0.65rem 0;
+  background: linear-gradient(180deg, #FFFFFF 40%, rgba(255, 255, 255, 0.72) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hookText {
+  font-family: var(--sts-font-body, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
+  font-size: clamp(15px, 1.6vw, 17px);
+  font-weight: 400;
+  color: rgba(237, 233, 227, 0.68);
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* --------------------------------------------------------------------------
+   THE LIVING TICKET ROUTING STAGE (Ethereal & Borderless)
+   -------------------------------------------------------------------------- */
+.stageWrapper {
+  position: relative;
+  width: 100%;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 1.5rem 0 1rem 0;
+  background: radial-gradient(
+    ellipse 90% 80% at 50% 50%,
+    rgba(14, 16, 18, 0.45) 0%,
+    rgba(8, 8, 8, 0) 100%
+  );
+}
+
+/* Canvas Viewport */
+.canvasViewport {
+  position: relative;
+  width: 100%;
+  height: 310px;
+  overflow: hidden;
+}
+
+.routingCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* --------------------------------------------------------------------------
+   Integrated Modern Instrument Ribbon (Telemetry & Precision Controls)
+   -------------------------------------------------------------------------- */
+.instrumentRibbon {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  background: rgba(14, 16, 18, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 8px 32px -8px rgba(0, 0, 0, 0.5);
+}
+
+.telemetryArea {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 11px;
+  color: rgba(237, 233, 227, 0.65);
+  overflow: hidden;
+}
+
+.telemetryDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.telemetryDotActive {
+  background: #FFFFFF;
+  box-shadow: 0 0 8px #FFFFFF;
+  animation: beaconPulse 1.8s infinite ease-in-out;
+}
+
+.telemetryDotEscalated {
+  background: #E5A93C;
+  box-shadow: 0 0 8px #E5A93C;
+  animation: beaconPulse 0.8s infinite ease-in-out;
+}
+
+@keyframes beaconPulse {
+  0%, 100% { opacity: 0.4; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+
+.telemetryToken {
+  color: #FFFFFF;
+  letter-spacing: 0.08em;
+  font-weight: 500;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.telemetryDivider {
+  color: rgba(255, 255, 255, 0.2);
+  flex-shrink: 0;
+}
+
+.telemetryText {
+  color: rgba(237, 233, 227, 0.85);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 440px;
+}
+
+.controlsArea {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+/* Deflection Rate Capsule Pill */
+.deflectPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 10.5px;
+  color: rgba(237, 233, 227, 0.55);
+}
+
+.deflectVal {
+  color: #FFFFFF;
+  font-weight: 600;
+}
+
+/* AI Deflection Toggle Pill */
+.toggleBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 10.5px;
+  color: rgba(237, 233, 227, 0.65);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+}
+
+.toggleBtn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #FFFFFF;
+}
+
+.toggleBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.toggleDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transition: all 0.2s;
+}
+
+.toggleBtnActive .toggleDot {
+  background: #FFFFFF;
+  box-shadow: 0 0 6px #FFFFFF;
+}
+
+.toggleBtnActive {
+  color: rgba(255, 255, 255, 0.9);
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+/* Inject Urgent Ticket Button */
+.injectButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 10.5px;
+  color: rgba(237, 233, 227, 0.7);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.injectButton:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #FFFFFF;
+}
+
+.injectButton:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Action Buttons */
+.routeButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 18px;
+  border-radius: 9999px;
+  background: #FFFFFF;
+  color: #080808;
+  font-family: var(--sts-font-body, sans-serif);
+  font-size: 12px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 14px rgba(255, 255, 255, 0.15);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.routeButton:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.25);
+  background: #EDEDED;
+}
+
+.routeButton:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.routeButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.resetButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(237, 233, 227, 0.55);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.resetButton:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.22);
+  color: #FFFFFF;
+}
+
+/* --------------------------------------------------------------------------
+   Minimal Scroll Cue at the base of the Hero
+   -------------------------------------------------------------------------- */
+.scrollCueWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.scrollCueBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(237, 233, 227, 0.4);
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 6px 15px;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scrollCueBtn:hover {
+  color: #FFFFFF;
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(2px);
+}
+
+.scrollChevron {
+  opacity: 0.6;
+  transition: transform 0.2s ease;
+}
+
+.scrollCueBtn:hover .scrollChevron {
+  transform: translateY(2px);
+  opacity: 1;
+}
+
+@media (max-width: 900px) {
+  .instrumentRibbon {
+    border-radius: 16px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .controlsArea {
+    justify-content: flex-end;
+    flex-wrap: wrap;
+  }
+
+  .telemetryText {
+    max-width: 100%;
+  }
+
+  .canvasViewport {
+    height: 270px;
+  }
+}
