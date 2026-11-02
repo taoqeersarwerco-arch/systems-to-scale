@@ -43,16 +43,35 @@ export const ArticleDetailPage: React.FC = () => {
 
         {/* Article Header */}
         <header style={{ marginBottom: '3.5rem' }}>
-          <div className="sts-badge sts-badge-steel" style={{ marginBottom: '1.25rem' }}>
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.4rem',
+              background: 'rgba(255, 255, 255, 0.05)',
+              border: '1px solid rgba(255, 255, 255, 0.12)',
+              color: '#FFFFFF',
+              fontFamily: 'var(--sts-font-mono)',
+              fontSize: '0.72rem',
+              letterSpacing: '0.08em',
+              textTransform: 'uppercase',
+              padding: '3px 10px',
+              borderRadius: '3px',
+              marginBottom: '1.25rem',
+              fontWeight: 600
+            }}
+          >
             <span>{article.topic}</span>
           </div>
 
           <h1
             style={{
               fontSize: 'clamp(2.4rem, 4.5vw, 3.8rem)',
-              lineHeight: 1.12,
+              lineHeight: 1.1,
               marginBottom: '1.5rem',
-              letterSpacing: '-0.03em'
+              letterSpacing: '-0.035em',
+              color: '#FFFFFF',
+              fontWeight: 700
             }}
           >
             {article.title}
@@ -61,8 +80,8 @@ export const ArticleDetailPage: React.FC = () => {
           <p
             style={{
               fontSize: '1.2rem',
-              color: 'var(--sts-bone)',
-              lineHeight: 1.6,
+              color: 'rgba(255, 255, 255, 0.75)',
+              lineHeight: 1.65,
               marginBottom: '2rem',
               fontWeight: 400
             }}
@@ -79,80 +98,92 @@ export const ArticleDetailPage: React.FC = () => {
               justifyContent: 'space-between',
               gap: '1rem',
               padding: '1.25rem 0',
-              borderTop: '1px solid var(--sts-border-subtle)',
-              borderBottom: '1px solid var(--sts-border-subtle)',
+              borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+              borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
               fontSize: '0.85rem',
-              color: 'var(--sts-dim)'
+              color: 'rgba(255, 255, 255, 0.55)'
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                <Calendar size={14} />
+                <Calendar size={14} color="#FFFFFF" />
                 <span>{article.publishDate || 'Published Oct 2026'}</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                <Clock size={14} />
-                <span>8 min read</span>
+                <Clock size={14} color="#FFFFFF" />
+                <span>{article.readingTime || '12 min read'}</span>
               </div>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--sts-brass)', fontFamily: 'var(--sts-font-mono)', fontSize: '0.78rem' }}>
-              <CheckCircle2 size={13} />
-              <span>Verified against production RFC specs</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', color: '#FFFFFF', fontFamily: 'var(--sts-font-mono)', fontSize: '0.78rem', letterSpacing: '0.04em' }}>
+              <CheckCircle2 size={13} color="#FFFFFF" />
+              <span>VERIFIED AGAINST PRODUCTION RFC SPECS</span>
             </div>
           </div>
         </header>
 
         {/* Detailed Master Article or Standard 3-Question Editorial Body */}
         {detailed ? (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '3.5rem', fontSize: '1.08rem', lineHeight: 1.75, color: '#D4D0C8' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '3.5rem', fontSize: '1.08rem', lineHeight: 1.75, color: '#E0E0E0' }}>
             {/* Sticky Reading Progress Telemetry Bar */}
             <ArticleReadingHud />
 
-            {/* Answer Island (Direct 2026 Architectural Definition) */}
+            {/* Answer Island (Direct 2026 Architectural Definition - Monochromatic) */}
             <div
               style={{
                 padding: '1.75rem',
-                borderRadius: '8px',
-                background: 'linear-gradient(135deg, rgba(229, 169, 60, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%), #0A0C0E',
-                border: '1px solid rgba(255, 255, 255, 0.12)',
-                borderLeft: '4px solid var(--sts-brass)',
-                boxShadow: '0 10px 30px -10px rgba(0, 0, 0, 0.7)',
+                borderRadius: '6px',
+                background: '#090909',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
+                borderLeft: '3px solid #FFFFFF',
+                boxShadow: '0 20px 40px -15px rgba(0, 0, 0, 0.95)',
                 position: 'relative',
                 overflow: 'hidden'
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem', flexWrap: 'wrap', gap: '0.5rem' }}>
-                <span className="sts-badge sts-badge-brass" style={{ fontSize: '0.72rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.85rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+                <span
+                  style={{
+                    background: '#FFFFFF',
+                    color: '#000000',
+                    fontFamily: 'var(--sts-font-mono)',
+                    fontSize: '0.68rem',
+                    fontWeight: 700,
+                    padding: '2px 8px',
+                    borderRadius: '3px',
+                    letterSpacing: '0.06em',
+                    textTransform: 'uppercase'
+                  }}
+                >
                   Answer Island // Executive Summary
                 </span>
-                <span style={{ fontFamily: 'var(--sts-font-mono)', fontSize: '0.7rem', color: 'rgba(237, 233, 227, 0.5)' }}>
-                  SYS_STATE: AUDITED // ZERO FLUFF
+                <span style={{ fontFamily: 'var(--sts-font-mono)', fontSize: '0.68rem', color: 'rgba(255, 255, 255, 0.4)', letterSpacing: '0.06em' }}>
+                  SYS_STATE: AUDITED // DETERMINISTIC
                 </span>
               </div>
-              <p style={{ margin: 0, fontSize: '1.14rem', color: '#FFFFFF', lineHeight: 1.65, fontWeight: 400 }}>
+              <p style={{ margin: 0, fontSize: '1.14rem', color: '#FFFFFF', lineHeight: 1.7, fontWeight: 400 }}>
                 {detailed.answerIsland}
               </p>
             </div>
 
-            {/* Key Takeaways */}
+            {/* Key Takeaways - Monochromatic */}
             {detailed.keyTakeaways && detailed.keyTakeaways.length > 0 && (
               <div
                 style={{
                   padding: '1.5rem',
-                  borderRadius: '8px',
-                  background: 'rgba(14, 16, 18, 0.7)',
-                  border: '1px solid var(--sts-border)'
+                  borderRadius: '6px',
+                  background: '#0C0C0C',
+                  border: '1px solid rgba(255, 255, 255, 0.09)'
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--sts-bone)', fontWeight: 600, fontSize: '0.95rem', marginBottom: '1rem' }}>
-                  <CheckCircle2 size={16} color="var(--sts-brass)" />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#FFFFFF', fontWeight: 600, fontSize: '0.86rem', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '1.1rem', fontFamily: 'var(--sts-font-mono)' }}>
+                  <CheckCircle2 size={15} color="#FFFFFF" />
                   <span>Key Architectural Takeaways</span>
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                   {detailed.keyTakeaways.map((takeaway, idx) => (
-                    <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', fontSize: '0.92rem', color: 'var(--sts-muted)', lineHeight: 1.55 }}>
-                      <span style={{ color: 'var(--sts-brass)', fontFamily: 'var(--sts-font-mono)', fontSize: '0.8rem', marginTop: '0.1rem' }}>0{idx + 1}.</span>
+                    <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.85rem', fontSize: '0.92rem', color: 'rgba(255, 255, 255, 0.75)', lineHeight: 1.6 }}>
+                      <span style={{ color: '#FFFFFF', fontFamily: 'var(--sts-font-mono)', fontSize: '0.8rem', marginTop: '0.1rem', fontWeight: 700 }}>0{idx + 1}.</span>
                       <span>{takeaway}</span>
                     </div>
                   ))}
@@ -173,29 +204,43 @@ export const ArticleDetailPage: React.FC = () => {
                 style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', scrollMarginTop: '100px' }}
               >
                 {sec.badge && (
-                  <div className="sts-badge sts-badge-steel" style={{ alignSelf: 'flex-start' }}>
+                  <div
+                    style={{
+                      alignSelf: 'flex-start',
+                      background: 'rgba(255, 255, 255, 0.05)',
+                      border: '1px solid rgba(255, 255, 255, 0.12)',
+                      color: '#FFFFFF',
+                      fontFamily: 'var(--sts-font-mono)',
+                      fontSize: '0.7rem',
+                      letterSpacing: '0.08em',
+                      textTransform: 'uppercase',
+                      padding: '3px 8px',
+                      borderRadius: '3px',
+                      fontWeight: 600
+                    }}
+                  >
                     <span>{sec.badge}</span>
                   </div>
                 )}
 
-                <h2 style={{ fontSize: 'clamp(1.6rem, 2.8vw, 2.1rem)', color: 'var(--sts-bone)', margin: '0 0 0.5rem 0', lineHeight: 1.2 }}>
+                <h2 style={{ fontSize: 'clamp(1.6rem, 2.8vw, 2.1rem)', color: '#FFFFFF', margin: '0 0 0.5rem 0', lineHeight: 1.2, letterSpacing: '-0.025em' }}>
                   {sec.title}
                 </h2>
 
                 {sec.content.map((p, pIdx) => (
-                  <p key={pIdx} style={{ margin: 0, lineHeight: 1.75 }}>
+                  <p key={pIdx} style={{ margin: 0, lineHeight: 1.75, color: 'rgba(255, 255, 255, 0.85)' }}>
                     {p}
                   </p>
                 ))}
 
                 {/* Subsections */}
                 {sec.subsections && sec.subsections.map((sub, subIdx) => (
-                  <div key={subIdx} style={{ marginTop: '0.75rem', paddingLeft: '1rem', borderLeft: '2px solid rgba(255, 255, 255, 0.08)' }}>
-                    <h3 style={{ fontSize: '1.2rem', color: 'var(--sts-bone)', margin: '0 0 0.5rem 0' }}>
+                  <div key={subIdx} style={{ marginTop: '0.75rem', paddingLeft: '1.25rem', borderLeft: '2px solid rgba(255, 255, 255, 0.12)' }}>
+                    <h3 style={{ fontSize: '1.18rem', color: '#FFFFFF', margin: '0 0 0.5rem 0', fontWeight: 600 }}>
                       {sub.title}
                     </h3>
                     {sub.content.map((subP, subPIdx) => (
-                      <p key={subPIdx} style={{ margin: '0 0 0.75rem 0', lineHeight: 1.7, fontSize: '1.02rem', color: 'var(--sts-muted)' }}>
+                      <p key={subPIdx} style={{ margin: '0 0 0.75rem 0', lineHeight: 1.7, fontSize: '1rem', color: 'rgba(255, 255, 255, 0.7)' }}>
                         {subP}
                       </p>
                     ))}
@@ -209,20 +254,20 @@ export const ArticleDetailPage: React.FC = () => {
                   ) : (
                     <div style={{ marginTop: '1rem', marginBottom: '1rem' }}>
                       {sec.diagramTitle && (
-                        <div style={{ fontSize: '0.78rem', fontFamily: 'var(--sts-font-mono)', color: 'var(--sts-dim)', textTransform: 'uppercase', marginBottom: '0.4rem' }}>
+                        <div style={{ fontSize: '0.75rem', fontFamily: 'var(--sts-font-mono)', color: 'rgba(255, 255, 255, 0.45)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.4rem' }}>
                           // {sec.diagramTitle}
                         </div>
                       )}
                       <pre
                         style={{
-                          background: '#07090A',
-                          border: '1px solid var(--sts-border)',
-                          borderRadius: '8px',
+                          background: '#040404',
+                          border: '1px solid rgba(255, 255, 255, 0.1)',
+                          borderRadius: '6px',
                           padding: '1.25rem',
                           fontFamily: 'var(--sts-font-mono)',
                           fontSize: '0.8rem',
                           lineHeight: 1.45,
-                          color: 'rgba(237, 233, 227, 0.85)',
+                          color: 'rgba(255, 255, 255, 0.85)',
                           overflowX: 'auto',
                           margin: 0
                         }}
@@ -236,19 +281,19 @@ export const ArticleDetailPage: React.FC = () => {
                 {/* Code Block */}
                 {sec.codeBlock && (
                   <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem' }}>
-                    <div style={{ fontSize: '0.78rem', fontFamily: 'var(--sts-font-mono)', color: 'var(--sts-brass)', marginBottom: '0.4rem' }}>
+                    <div style={{ fontSize: '0.75rem', fontFamily: 'var(--sts-font-mono)', color: '#FFFFFF', letterSpacing: '0.06em', marginBottom: '0.4rem' }}>
                       // {sec.codeBlock.title}
                     </div>
                     <pre
                       style={{
-                        background: '#07090A',
-                        border: '1px solid var(--sts-border)',
-                        borderRadius: '8px',
+                        background: '#030303',
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        borderRadius: '6px',
                         padding: '1.25rem',
                         fontFamily: 'var(--sts-font-mono)',
                         fontSize: '0.82rem',
                         lineHeight: 1.5,
-                        color: 'var(--sts-bone)',
+                        color: '#FFFFFF',
                         overflowX: 'auto',
                         margin: 0
                       }}
@@ -262,22 +307,22 @@ export const ArticleDetailPage: React.FC = () => {
                 {sec.formula && (
                   <div
                     style={{
-                      background: 'rgba(255, 255, 255, 0.02)',
-                      border: '1px solid var(--sts-border)',
-                      borderRadius: '8px',
+                      background: '#090909',
+                      border: '1px solid rgba(255, 255, 255, 0.12)',
+                      borderRadius: '6px',
                       padding: '1.25rem 1.5rem',
                       fontFamily: 'var(--sts-font-mono)',
                       fontSize: '0.92rem',
                       lineHeight: 1.6,
-                      color: 'var(--sts-bone)',
+                      color: '#FFFFFF',
                       marginTop: '0.5rem',
                       marginBottom: '0.5rem'
                     }}
                   >
-                    <div style={{ color: 'var(--sts-brass)', fontSize: '1.1rem', fontWeight: 600, marginBottom: '0.5rem' }}>
+                    <div style={{ color: '#FFFFFF', fontSize: '1.1rem', fontWeight: 700, marginBottom: '0.5rem' }}>
                       {sec.formula.expression}
                     </div>
-                    <div style={{ fontSize: '0.84rem', color: 'var(--sts-muted)' }}>
+                    <div style={{ fontSize: '0.84rem', color: 'rgba(255, 255, 255, 0.65)' }}>
                       {sec.formula.explanation}
                     </div>
                   </div>
@@ -293,7 +338,7 @@ export const ArticleDetailPage: React.FC = () => {
                         <thead>
                           <tr style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.16)' }}>
                             {sec.table.headers.map((h, hIdx) => (
-                              <th key={hIdx} style={{ padding: '0.75rem 1rem', color: 'var(--sts-bone)', fontFamily: 'var(--sts-font-mono)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                              <th key={hIdx} style={{ padding: '0.75rem 1rem', color: '#FFFFFF', fontFamily: 'var(--sts-font-mono)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                                 {h}
                               </th>
                             ))}
@@ -301,9 +346,9 @@ export const ArticleDetailPage: React.FC = () => {
                         </thead>
                         <tbody>
                           {sec.table.rows.map((row, rIdx) => (
-                            <tr key={rIdx} style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.05)', background: rIdx % 2 === 0 ? 'rgba(255, 255, 255, 0.015)' : 'transparent' }}>
+                            <tr key={rIdx} style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.06)', background: rIdx % 2 === 0 ? 'rgba(255, 255, 255, 0.02)' : 'transparent' }}>
                               {row.map((cell, cIdx) => (
-                                <td key={cIdx} style={{ padding: '0.85rem 1rem', color: cIdx === 0 ? 'var(--sts-bone)' : 'var(--sts-muted)', fontWeight: cIdx === 0 ? 600 : 400, verticalAlign: 'top', lineHeight: 1.5 }}>
+                                <td key={cIdx} style={{ padding: '0.85rem 1rem', color: cIdx === 0 ? '#FFFFFF' : 'rgba(255, 255, 255, 0.7)', fontWeight: cIdx === 0 ? 600 : 400, verticalAlign: 'top', lineHeight: 1.5 }}>
                                   {cell}
                                 </td>
                               ))}
@@ -321,19 +366,20 @@ export const ArticleDetailPage: React.FC = () => {
                     style={{
                       marginTop: '0.75rem',
                       padding: '1.25rem 1.5rem',
-                      borderRadius: '8px',
-                      background: sec.callout.type === 'warning' ? 'rgba(229, 169, 60, 0.07)' : 'rgba(255, 255, 255, 0.03)',
-                      border: `1px solid ${sec.callout.type === 'warning' ? 'rgba(229, 169, 60, 0.3)' : 'rgba(255, 255, 255, 0.12)'}`,
+                      borderRadius: '6px',
+                      background: '#090909',
+                      border: '1px solid rgba(255, 255, 255, 0.15)',
+                      borderLeft: '3px solid #FFFFFF',
                       display: 'flex',
                       flexDirection: 'column',
                       gap: '0.4rem'
                     }}
                   >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: sec.callout.type === 'warning' ? '#E5A93C' : 'var(--sts-bone)', fontWeight: 600, fontSize: '0.9rem' }}>
-                      {sec.callout.type === 'warning' ? <AlertTriangle size={15} /> : <Info size={15} />}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#FFFFFF', fontWeight: 600, fontSize: '0.9rem' }}>
+                      {sec.callout.type === 'warning' ? <AlertTriangle size={15} color="#FFFFFF" /> : <Info size={15} color="#FFFFFF" />}
                       <span>{sec.callout.title}</span>
                     </div>
-                    <div style={{ fontSize: '0.9rem', color: 'var(--sts-muted)', lineHeight: 1.6 }}>
+                    <div style={{ fontSize: '0.9rem', color: 'rgba(255, 255, 255, 0.75)', lineHeight: 1.6 }}>
                       {sec.callout.text}
                     </div>
                   </div>
@@ -420,20 +466,25 @@ export const ArticleDetailPage: React.FC = () => {
         <div
           style={{
             marginTop: '4rem',
-            padding: '2.5rem',
-            borderRadius: 'var(--sts-card-radius)',
-            background: 'var(--sts-raised)',
-            border: '1px solid var(--sts-border)'
+            padding: '2.25rem',
+            borderRadius: '8px',
+            background: '#080808',
+            border: '1px solid rgba(255, 255, 255, 0.12)'
           }}
         >
-          <h3 style={{ fontSize: '1.25rem', color: 'var(--sts-bone)', marginBottom: '1rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
+            <span style={{ fontFamily: 'var(--sts-font-mono)', fontSize: '0.7rem', color: '#FFFFFF', textTransform: 'uppercase', letterSpacing: '0.08em', background: 'rgba(255,255,255,0.06)', padding: '2px 8px', borderRadius: '3px', border: '1px solid rgba(255,255,255,0.1)' }}>
+              Spider-Web Architecture Mesh
+            </span>
+          </div>
+          <h3 style={{ fontSize: '1.25rem', color: '#FFFFFF', marginBottom: '0.5rem', fontWeight: 600 }}>
             Related Articles in {article.topic}
           </h3>
-          <p style={{ fontSize: '0.88rem', color: 'var(--sts-muted)', marginBottom: '1.5rem' }}>
+          <p style={{ fontSize: '0.88rem', color: 'rgba(255, 255, 255, 0.55)', marginBottom: '1.5rem', lineHeight: 1.5 }}>
             Explore related guides in this field. Published articles are live; others reflect active research.
           </p>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
             {article.ghostLinks.map((targetSlug) => (
               <div
                 key={targetSlug}
@@ -441,10 +492,11 @@ export const ArticleDetailPage: React.FC = () => {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  padding: '0.75rem 1rem',
+                  padding: '0.85rem 1.15rem',
                   borderRadius: '6px',
-                  background: 'rgba(255, 255, 255, 0.02)',
-                  border: '1px solid var(--sts-border-subtle)'
+                  background: '#0E0E0E',
+                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  transition: 'border-color 0.2s ease'
                 }}
               >
                 <GhostLink slug={targetSlug} showBadge />
@@ -456,19 +508,24 @@ export const ArticleDetailPage: React.FC = () => {
         {/* Author & Editorial Disclosure Policy */}
         <div
           style={{
-            marginTop: '3rem',
-            padding: '1.75rem',
-            borderRadius: '8px',
-            background: 'rgba(255, 255, 255, 0.02)',
-            border: '1px solid var(--sts-border)',
+            marginTop: '2.5rem',
+            padding: '1.5rem 1.75rem',
+            borderRadius: '6px',
+            background: '#080808',
+            border: '1px solid rgba(255, 255, 255, 0.09)',
             display: 'flex',
             alignItems: 'flex-start',
             gap: '1rem'
           }}
         >
-          <Shield size={20} color="var(--sts-brass)" style={{ flexShrink: 0, marginTop: '0.2rem' }} />
-          <div style={{ fontSize: '0.85rem', color: 'var(--sts-muted)', lineHeight: 1.6 }}>
-            <strong style={{ color: 'var(--sts-bone)' }}>Editorial Standard & Byline Policy:</strong> Systems to Scale is published by Uniqentic. Our technical articles are researched against primary standards, RFC specifications, and open-source system architectures. We do not use fabricated author personas or accept sponsored product placements.
+          <Shield size={18} color="#FFFFFF" style={{ flexShrink: 0, marginTop: '0.2rem' }} />
+          <div>
+            <h4 style={{ fontSize: '0.9rem', color: '#FFFFFF', margin: '0 0 0.35rem 0', fontWeight: 600, letterSpacing: '0.04em', textTransform: 'uppercase', fontFamily: 'var(--sts-font-mono)' }}>
+              Editorial Protocol & RFC Verification
+            </h4>
+            <p style={{ margin: 0, fontSize: '0.82rem', color: 'rgba(255, 255, 255, 0.55)', lineHeight: 1.6 }}>
+              All architectural topologies, dynamic priority equations, and state machine transitions published on Systems to Scale are audited against real-world production RFC specifications and high-concurrency enterprise benchmarks. Systems to Scale is published by Uniqentic. We do not use fabricated personas or accept sponsored placements.
+            </p>
           </div>
         </div>
 
@@ -477,12 +534,12 @@ export const ArticleDetailPage: React.FC = () => {
           style={{
             marginTop: '1.5rem',
             fontSize: '0.82rem',
-            color: 'var(--sts-dim)',
+            color: 'rgba(255, 255, 255, 0.4)',
             textAlign: 'center'
           }}
         >
           Noticed an inaccurate technical detail or specification drift? Email our technical editor at{' '}
-          <a href="mailto:corrections@systemstoscale.tech" style={{ color: 'var(--sts-brass)', textDecoration: 'underline' }}>
+          <a href="mailto:corrections@systemstoscale.tech" style={{ color: '#FFFFFF', textDecoration: 'underline' }}>
             corrections@systemstoscale.tech
           </a>
           . Acknowledged within 48 hours.

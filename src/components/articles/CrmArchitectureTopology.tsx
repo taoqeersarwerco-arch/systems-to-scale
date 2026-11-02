@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Layers, Terminal, ChevronDown, ChevronUp, Cpu, Database, Activity, GitFork, RefreshCw, AlertCircle } from 'lucide-react';
+import { Layers, Terminal, ChevronDown, ChevronUp } from 'lucide-react';
 import styles from '../../styles/crmArchitectureTopology.module.css';
 
 interface LayerData {
@@ -75,13 +75,13 @@ interface CrmArchitectureTopologyProps {
 
 export const CrmArchitectureTopology: React.FC<CrmArchitectureTopologyProps> = ({ rawAscii }) => {
   const [viewMode, setViewMode] = useState<'interactive' | 'ascii'>('interactive');
-  const [selectedLayer, setSelectedLayer] = useState<number>(2); // Default to Event streaming
+  const [selectedLayer, setSelectedLayer] = useState<number>(2);
 
   return (
     <div className={styles.topologyContainer}>
       <div className={styles.topologyHeader}>
         <div className={styles.topologyTitle}>
-          <Layers size={14} color="#E5A93C" />
+          <Layers size={13} color="#FFFFFF" />
           <span>Interactive Reference Architecture (6-Layer Pipeline)</span>
         </div>
 
@@ -121,7 +121,7 @@ export const CrmArchitectureTopology: React.FC<CrmArchitectureTopologyProps> = (
                     <span className={styles.layerNumber}>LAYER 0{layer.id}</span>
                     <span className={styles.layerTitle}>{layer.title}</span>
                   </div>
-                  {isSelected ? <ChevronUp size={14} color="#E5A93C" /> : <ChevronDown size={14} color="rgba(255,255,255,0.4)" />}
+                  {isSelected ? <ChevronUp size={14} color="#FFFFFF" /> : <ChevronDown size={14} color="rgba(255,255,255,0.4)" />}
                 </div>
 
                 <div className={styles.layerSpecs}>{layer.components}</div>
@@ -134,15 +134,15 @@ export const CrmArchitectureTopology: React.FC<CrmArchitectureTopologyProps> = (
                     </div>
                     <div className={styles.drawerItem}>
                       <span className={styles.drawerKey}>p99 Latency</span>
-                      <span className={styles.drawerVal} style={{ color: '#4ade80' }}>{layer.p99Latency}</span>
+                      <span className={styles.drawerVal}>{layer.p99Latency}</span>
                     </div>
                     <div className={styles.drawerItem}>
                       <span className={styles.drawerKey}>Peak Throughput</span>
-                      <span className={styles.drawerVal} style={{ color: '#E5A93C' }}>{layer.throughput}</span>
+                      <span className={styles.drawerVal}>{layer.throughput}</span>
                     </div>
                     <div className={styles.drawerItem} style={{ gridColumn: 'span 2' }}>
                       <span className={styles.drawerKey}>Primary Failure Mode</span>
-                      <span className={styles.drawerVal} style={{ color: '#f87171' }}>{layer.failureMode}</span>
+                      <span className={styles.drawerVal} style={{ color: 'rgba(255,255,255,0.7)' }}>{layer.failureMode}</span>
                     </div>
                   </div>
                 )}

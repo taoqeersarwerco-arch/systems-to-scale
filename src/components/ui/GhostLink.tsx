@@ -29,12 +29,13 @@ export const GhostLink: React.FC<GhostLinkProps> = ({
         to={`/articles/${slug}`}
         className={`sts-ghost-link sts-ghost-published ${className}`}
         style={{
-          color: 'var(--sts-bone)',
-          borderBottom: '1px solid rgba(201, 151, 74, 0.4)',
+          color: '#FFFFFF',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.3)',
           transition: 'border-color 0.2s ease, color 0.2s ease',
           display: 'inline-flex',
           alignItems: 'center',
-          gap: '0.35rem'
+          gap: '0.45rem',
+          textDecoration: 'none'
         }}
       >
         <span>{displayText}</span>
@@ -43,11 +44,13 @@ export const GhostLink: React.FC<GhostLinkProps> = ({
             style={{
               fontSize: '0.65rem',
               fontFamily: 'var(--sts-font-mono)',
-              padding: '0.1rem 0.4rem',
-              borderRadius: '999px',
-              background: 'var(--sts-brass-dim)',
-              color: 'var(--sts-brass)',
-              border: '1px solid rgba(201, 151, 74, 0.3)'
+              padding: '0.1rem 0.45rem',
+              borderRadius: '3px',
+              background: '#FFFFFF',
+              color: '#000000',
+              fontWeight: 700,
+              letterSpacing: '0.04em',
+              textTransform: 'uppercase'
             }}
           >
             Live

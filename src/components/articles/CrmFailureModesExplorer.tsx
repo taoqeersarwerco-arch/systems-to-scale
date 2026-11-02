@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AlertTriangle, CheckCircle2, ShieldCheck, Flame, RefreshCw, Lock } from 'lucide-react';
+import { AlertTriangle, CheckCircle2, ShieldCheck, RefreshCw } from 'lucide-react';
 import styles from '../../styles/crmFailureModesExplorer.module.css';
 
 interface FailureModeItem {
@@ -78,7 +78,7 @@ export const CrmFailureModesExplorer: React.FC = () => {
     <div className={styles.explorerContainer}>
       <div className={styles.explorerHeader}>
         <div className={styles.explorerTitle}>
-          <AlertTriangle size={14} color="#E5A93C" />
+          <AlertTriangle size={13} color="#FFFFFF" />
           <span>Interactive Failure Mode Simulator & Engineering Controls</span>
         </div>
       </div>
@@ -104,12 +104,12 @@ export const CrmFailureModesExplorer: React.FC = () => {
           <div className={styles.statusText}>
             {isMitigated ? (
               <>
-                <ShieldCheck size={16} />
+                <ShieldCheck size={15} color="#FFFFFF" />
                 <span>ENGINEERING CONTROL DEPLOYED // ZERO STATE DECAY</span>
               </>
             ) : (
               <>
-                <Flame size={16} />
+                <AlertTriangle size={15} color="rgba(255,255,255,0.6)" />
                 <span>VULNERABILITY ACTIVE // UNGUARDED FAILURE MODE</span>
               </>
             )}
@@ -122,19 +122,19 @@ export const CrmFailureModesExplorer: React.FC = () => {
           >
             {isMitigated ? (
               <>
-                <RefreshCw size={12} />
+                <RefreshCw size={11} />
                 <span>Simulate Breakdown</span>
               </>
             ) : (
               <>
-                <CheckCircle2 size={12} />
+                <CheckCircle2 size={11} />
                 <span>Deploy Engineering Control</span>
               </>
             )}
           </button>
         </div>
 
-        <h3 style={{ fontSize: '1.2rem', color: '#EDE9E3', margin: 0, fontWeight: 600 }}>
+        <h3 style={{ fontSize: '1.15rem', color: '#FFFFFF', margin: 0, fontWeight: 600 }}>
           {current.title}
         </h3>
 
@@ -147,16 +147,16 @@ export const CrmFailureModesExplorer: React.FC = () => {
 
           <div className={styles.detailBox}>
             <span className={styles.detailHeading}>Observable Production Breakdown</span>
-            <span className={styles.detailText} style={{ color: isMitigated ? 'rgba(237,233,227,0.7)' : '#fca5a5' }}>
+            <span className={styles.detailText} style={{ color: isMitigated ? 'rgba(255,255,255,0.7)' : '#FFFFFF' }}>
               {current.observableSymptom}
             </span>
           </div>
 
           <div className={styles.detailBox} style={{ gridColumn: 'span 2' }}>
-            <span className={styles.detailHeading} style={{ color: '#E5A93C' }}>
+            <span className={styles.detailHeading} style={{ color: '#FFFFFF' }}>
               RFC Engineering Control & Technical Implementation
             </span>
-            <span className={styles.detailText} style={{ color: isMitigated ? '#86efac' : '#EDE9E3' }}>
+            <span className={styles.detailText} style={{ color: isMitigated ? '#FFFFFF' : 'rgba(255,255,255,0.85)' }}>
               {isMitigated ? current.technicalMechanism : current.engineeringControl}
             </span>
           </div>
