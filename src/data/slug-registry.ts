@@ -34,7 +34,7 @@ export const SLUG_REGISTRY: Record<string, ArticleEntry> = {
     focusQuestion: 'What happens inside an automation runner between the trigger firing and the final step completing?',
     publishDate: 'Oct 12, 2026',
     readingTime: '9 min read',
-    ghostLinks: ['retry-and-backoff', 'idempotency-keys', 'webhooks-vs-polling', 'dead-letter-queues', 'how-ticket-routing-works', 'how-online-checkout-works']
+    ghostLinks: ['retry-and-backoff', 'idempotency-keys', 'webhooks-vs-polling', 'dead-letter-queues', 'how-enterprise-crm-works', 'how-online-checkout-works']
   },
   'retry-and-backoff': {
     slug: 'retry-and-backoff',
@@ -296,67 +296,110 @@ export const SLUG_REGISTRY: Record<string, ArticleEntry> = {
   },
 
   // --------------------------------------------------------------------------
-  // Customer Service (5 articles)
+  // Customer Service & CRM (CRM-05) (5 articles)
   // --------------------------------------------------------------------------
+  'how-enterprise-crm-works': {
+    slug: 'how-enterprise-crm-works',
+    title: 'How enterprise CRM works under the hood',
+    topic: 'Customer Service',
+    topicSlug: 'customer-service',
+    type: 'Pillar',
+    focusKeyword: 'enterprise CRM architecture',
+    status: 'published',
+    standfirst: 'The mechanical architecture of modern customer operating systems: unified data models, deterministic identity resolution, and reverse ETL activation.',
+    beginnerStandfirst: 'What actually happens inside a CRM: how modern companies connect fragmented customer records from websites, emails, billing, and support into a single living profile without creating duplicate data.',
+    focusQuestion: 'What underlying data models, identity resolution algorithms, and event pipelines transform fragmented customer touchpoints into a unified operational system?',
+    publishDate: 'Nov 02, 2026',
+    readingTime: '12 min read',
+    ghostLinks: [
+      'sales-force-automation-pipeline-mechanics',
+      'cdp-identity-resolution-crm',
+      'service-desk-routing-sla-architecture',
+      'crm-churn-prediction-ltv-intelligence',
+      'automation-pipelines-explained',
+      'how-online-checkout-works'
+    ]
+  },
+  'sales-force-automation-pipeline-mechanics': {
+    slug: 'sales-force-automation-pipeline-mechanics',
+    title: 'Sales force automation and pipeline velocity',
+    topic: 'Customer Service',
+    topicSlug: 'customer-service',
+    type: 'Cluster',
+    focusKeyword: 'sales force automation mechanics',
+    status: 'planned',
+    standfirst: 'Algorithmic lead scoring, multi-stakeholder buying committee graphs, CPQ pricing engines, and deal velocity state machines.',
+    focusQuestion: 'What mathematical models and state machine transitions govern the progression from inbound buying signal to recognized revenue?',
+    ghostLinks: [
+      'how-enterprise-crm-works',
+      'cdp-identity-resolution-crm',
+      'attribution-models',
+      'how-task-delegation-works'
+    ]
+  },
+  'cdp-identity-resolution-crm': {
+    slug: 'cdp-identity-resolution-crm',
+    title: 'CDPs and identity resolution: the golden record',
+    topic: 'Customer Service',
+    topicSlug: 'customer-service',
+    type: 'Cluster',
+    focusKeyword: 'CRM identity resolution CDP',
+    status: 'planned',
+    standfirst: 'Deterministic matching keys, probabilistic Jaro-Winkler string similarity, survivorship rules, and reverse ETL race condition traps.',
+    focusQuestion: 'How do enterprise data engines reconcile fragmented cross-device records into a golden customer profile without false-positive merges?',
+    ghostLinks: [
+      'how-enterprise-crm-works',
+      'sales-force-automation-pipeline-mechanics',
+      'consent-mode-conversion-tracking',
+      'how-online-checkout-works'
+    ]
+  },
+  'service-desk-routing-sla-architecture': {
+    slug: 'service-desk-routing-sla-architecture',
+    title: 'Service CRM routing and SLA priority queues',
+    topic: 'Customer Service',
+    topicSlug: 'customer-service',
+    type: 'Cluster',
+    focusKeyword: 'service CRM ticket routing SLA',
+    status: 'planned',
+    standfirst: 'Dynamic priority weight calculations, SLA countdown timers, conversational AI deflection gates, and closed-loop feedback.',
+    focusQuestion: 'How does an enterprise support helpdesk calculate dynamic priority scores and route emergency tickets without breaching contract SLAs?',
+    ghostLinks: [
+      'how-enterprise-crm-works',
+      'crm-churn-prediction-ltv-intelligence',
+      'idempotency-keys',
+      'how-task-delegation-works'
+    ]
+  },
+  'crm-churn-prediction-ltv-intelligence': {
+    slug: 'crm-churn-prediction-ltv-intelligence',
+    title: 'Predictive retention and customer LTV modeling',
+    topic: 'Customer Service',
+    topicSlug: 'customer-service',
+    type: 'Cluster',
+    focusKeyword: 'CRM churn prediction LTV',
+    status: 'planned',
+    standfirst: 'Discounted Customer Lifetime Value physics, churn hazard models, and next-best-action arbitration with governed AI agents.',
+    focusQuestion: 'How do enterprise CRMs transform behavioral product telemetry into predictive churn warnings and automated next-best retention interventions?',
+    ghostLinks: [
+      'how-enterprise-crm-works',
+      'service-desk-routing-sla-architecture',
+      'automation-pipelines-explained',
+      'cart-abandonment'
+    ]
+  },
+  // Alias for backward compatibility
   'how-ticket-routing-works': {
     slug: 'how-ticket-routing-works',
     title: 'How ticket routing works in support',
     topic: 'Customer Service',
     topicSlug: 'customer-service',
-    type: 'Pillar',
+    type: 'Cluster',
     focusKeyword: 'ticket routing',
     status: 'planned',
     standfirst: 'Priority queues, skill-based assignment algorithms, round-robin distribution, and SLA breach monitors.',
     focusQuestion: 'How does an enterprise helpdesk decide which agent receives a VIP ticket when 500 tickets arrive in 5 minutes?',
-    ghostLinks: ['support-queues-slas', 'ticket-escalation', 'omnichannel-support', 'chatbot-deflection', 'automation-pipelines-explained', 'how-task-delegation-works']
-  },
-  'support-queues-slas': {
-    slug: 'support-queues-slas',
-    title: 'Queues and SLAs: how support prioritises',
-    topic: 'Customer Service',
-    topicSlug: 'customer-service',
-    type: 'Cluster',
-    focusKeyword: 'support SLA',
-    status: 'planned',
-    standfirst: 'Dynamic priority weight calculations, SLA countdown timers, and breach warning escalations.',
-    focusQuestion: 'How do support engines calculate ticket priority scores dynamically based on contract terms?',
-    ghostLinks: ['how-ticket-routing-works', 'ticket-escalation']
-  },
-  'ticket-escalation': {
-    slug: 'ticket-escalation',
-    title: 'Escalation paths: how hard tickets move up',
-    topic: 'Customer Service',
-    topicSlug: 'customer-service',
-    type: 'Cluster',
-    focusKeyword: 'ticket escalation',
-    status: 'planned',
-    standfirst: 'Tier 1 to Tier 3 engineering escalation triggers, context transfer, and post-incident tagging.',
-    focusQuestion: 'What information must be preserved when an unresolved ticket escalates from front-line support to core engineering?',
-    ghostLinks: ['how-ticket-routing-works', 'support-queues-slas']
-  },
-  'omnichannel-support': {
-    slug: 'omnichannel-support',
-    title: 'Omnichannel support: one conversation across channels',
-    topic: 'Customer Service',
-    topicSlug: 'customer-service',
-    type: 'Cluster',
-    focusKeyword: 'omnichannel support',
-    status: 'planned',
-    standfirst: 'Merging email threads, live chat, SMS, and voice calls into a unified customer identity graph.',
-    focusQuestion: 'How does an agent see past chat logs when a customer suddenly calls in from a different phone number?',
-    ghostLinks: ['how-ticket-routing-works', 'chatbot-deflection']
-  },
-  'chatbot-deflection': {
-    slug: 'chatbot-deflection',
-    title: 'Chatbot deflection: how bots resolve tickets',
-    topic: 'Customer Service',
-    topicSlug: 'customer-service',
-    type: 'Cluster',
-    focusKeyword: 'chatbot deflection',
-    status: 'planned',
-    standfirst: 'Semantic search retrieval, intent classification, and graceful human handoff mechanisms.',
-    focusQuestion: 'When should an automated support bot surrender and hand off the chat to a live human operator?',
-    ghostLinks: ['how-ticket-routing-works', 'omnichannel-support', 'automation-pipelines-explained']
+    ghostLinks: ['how-enterprise-crm-works', 'service-desk-routing-sla-architecture']
   },
 
   // --------------------------------------------------------------------------
@@ -372,7 +415,7 @@ export const SLUG_REGISTRY: Record<string, ArticleEntry> = {
     status: 'planned',
     standfirst: 'Deconstructing knowledge transfer: boundary definition, autonomy levels, and verification feedback loops.',
     focusQuestion: 'Why do most delegation attempts collapse into micromanagement or missed deliverables?',
-    ghostLinks: ['standard-operating-procedures', 'async-communication', 'task-handoff', 'onboarding-a-virtual-assistant', 'how-ticket-routing-works', 'how-calendar-scheduling-works']
+    ghostLinks: ['standard-operating-procedures', 'async-communication', 'task-handoff', 'onboarding-a-virtual-assistant', 'how-enterprise-crm-works', 'how-calendar-scheduling-works']
   },
   'standard-operating-procedures': {
     slug: 'standard-operating-procedures',

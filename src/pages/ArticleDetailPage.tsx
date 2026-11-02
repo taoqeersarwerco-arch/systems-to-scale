@@ -1,13 +1,15 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { SLUG_REGISTRY } from '../data/slug-registry';
+import { ARTICLE_CONTENTS } from '../data/article-contents';
 import { GhostLink } from '../components/ui/GhostLink';
 import { NewsletterCta } from '../components/sections/NewsletterCta';
-import { ArrowLeft, Clock, Calendar, CheckCircle2, Shield, AlertCircle, ExternalLink, HelpCircle } from 'lucide-react';
+import { ArrowLeft, Clock, Calendar, CheckCircle2, Shield, AlertCircle, AlertTriangle, ExternalLink, HelpCircle, Layers, Info } from 'lucide-react';
 
 export const ArticleDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const article = slug ? SLUG_REGISTRY[slug] : undefined;
+  const detailed = slug ? ARTICLE_CONTENTS[slug] : undefined;
 
   if (!article) {
     return (
@@ -95,79 +97,293 @@ export const ArticleDetailPage: React.FC = () => {
           </div>
         </header>
 
-        {/* The 3-Question Editorial Body */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '3.5rem', fontSize: '1.08rem', lineHeight: 1.75, color: '#D4D0C8' }}>
-          {/* Question 1: What it is */}
-          <section>
-            <div className="sts-badge sts-badge-steel" style={{ marginBottom: '0.75rem' }}>
-              <span>Question 01</span>
-            </div>
-            <h2 style={{ fontSize: '1.85rem', color: 'var(--sts-bone)', marginBottom: '1.25rem' }}>
-              What is the mechanism?
-            </h2>
-            <p style={{ marginBottom: '1.5rem' }}>
-              At its physical layer, an <strong>{article.focusKeyword}</strong> is a deterministic coordination contract designed to preserve data integrity across untrusted network boundaries. When systems fail under load, failure is rarely caused by syntax errors—it occurs because distributed components hold contradictory assumptions about state.
-            </p>
-            <p>
-              In conventional single-server setups, transactions rely on database row-level locking (ACID properties). But when you cross process boundaries into distributed microservices or third-party APIs, network packets are routinely dropped, duplicated, or delayed. The mechanism exists specifically to guarantee execution certainty without requiring distributed two-phase commits.
-            </p>
-          </section>
-
-          {/* Question 2: How it works */}
-          <section>
-            <div className="sts-badge sts-badge-steel" style={{ marginBottom: '0.75rem' }}>
-              <span>Question 02</span>
-            </div>
-            <h2 style={{ fontSize: '1.85rem', color: 'var(--sts-bone)', marginBottom: '1.25rem' }}>
-              How does it physically execute?
-            </h2>
-            <p style={{ marginBottom: '1.5rem' }}>
-              Consider the step-by-step lifecycle of an in-flight payload as it navigates the pipeline:
-            </p>
-
+        {/* Detailed Master Article or Standard 3-Question Editorial Body */}
+        {detailed ? (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '3.5rem', fontSize: '1.08rem', lineHeight: 1.75, color: '#D4D0C8' }}>
+            {/* Answer Island (Direct 2026 Architectural Definition) */}
             <div
               style={{
-                background: '#07090A',
-                border: '1px solid var(--sts-border)',
+                padding: '1.75rem',
                 borderRadius: '8px',
-                padding: '1.5rem',
-                fontFamily: 'var(--sts-font-mono)',
-                fontSize: '0.85rem',
-                lineHeight: 1.6,
-                marginBottom: '1.75rem'
+                background: 'rgba(255, 255, 255, 0.02)',
+                border: '1px solid rgba(255, 255, 255, 0.12)',
+                borderLeft: '4px solid var(--sts-brass)',
+                marginBottom: '1rem'
               }}
             >
-              <div style={{ color: 'var(--sts-brass)', marginBottom: '0.5rem' }}>
-                // State Machine Transition Sequence
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
+                <span className="sts-badge sts-badge-brass" style={{ fontSize: '0.72rem' }}>
+                  Answer Island // Executive Summary
+                </span>
               </div>
-              <div>1. Ingress: Request received with unique Client-Token UUID</div>
-              <div>2. Mutex Lock: Worker checks Redis key with 60s lease window</div>
-              <div>3. Execution: Downstream HTTP POST dispatched with 4000ms timeout</div>
-              <div>4. Fault Catch: If 5xx received, calculate exponential jitter: t = min(M, B * 2^n)</div>
-              <div>5. Finality: State written to PostgreSQL with write-ahead-log commit</div>
+              <p style={{ margin: 0, fontSize: '1.12rem', color: '#FFFFFF', lineHeight: 1.65, fontWeight: 400 }}>
+                {detailed.answerIsland}
+              </p>
             </div>
 
-            <p>
-              By separating the lock acquisition from execution settlement, the system ensures that even if the client application disconnects mid-flight, the server will either finalize the work cleanly or allow a clean idempotent retry without compounding state corruption.
-            </p>
-          </section>
+            {/* Key Takeaways */}
+            {detailed.keyTakeaways && detailed.keyTakeaways.length > 0 && (
+              <div
+                style={{
+                  padding: '1.5rem',
+                  borderRadius: '8px',
+                  background: 'rgba(14, 16, 18, 0.7)',
+                  border: '1px solid var(--sts-border)'
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--sts-bone)', fontWeight: 600, fontSize: '0.95rem', marginBottom: '1rem' }}>
+                  <CheckCircle2 size={16} color="var(--sts-brass)" />
+                  <span>Key Architectural Takeaways</span>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+                  {detailed.keyTakeaways.map((takeaway, idx) => (
+                    <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', fontSize: '0.92rem', color: 'var(--sts-muted)', lineHeight: 1.55 }}>
+                      <span style={{ color: 'var(--sts-brass)', fontFamily: 'var(--sts-font-mono)', fontSize: '0.8rem', marginTop: '0.1rem' }}>0{idx + 1}.</span>
+                      <span>{takeaway}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
-          {/* Question 3: Why it matters */}
-          <section>
-            <div className="sts-badge sts-badge-steel" style={{ marginBottom: '0.75rem' }}>
-              <span>Question 03</span>
-            </div>
-            <h2 style={{ fontSize: '1.85rem', color: 'var(--sts-bone)', marginBottom: '1.25rem' }}>
-              Why does conventional intuition break under load?
-            </h2>
-            <p style={{ marginBottom: '1.5rem' }}>
-              The most common architectural fallacy is assuming that retrying an operation immediately will recover the transaction. When an upstream dependency (such as a database or third-party payment provider) suffers a minor slowdown, immediate retry logic from thousands of clients generates a catastrophic <em>thundering herd</em>.
-            </p>
-            <p>
-              Instead of giving the recovering dependency breathing room to drain its queue, immediate retries flood the server with 2x to 10x normal traffic volume, turning a temporary 100ms blip into a multi-hour cascading platform outage.
-            </p>
-          </section>
-        </div>
+            {/* Sections */}
+            {detailed.sections.map((sec, secIdx) => (
+              <section key={secIdx} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                {sec.badge && (
+                  <div className="sts-badge sts-badge-steel" style={{ alignSelf: 'flex-start' }}>
+                    <span>{sec.badge}</span>
+                  </div>
+                )}
+
+                <h2 style={{ fontSize: 'clamp(1.6rem, 2.8vw, 2.1rem)', color: 'var(--sts-bone)', margin: '0 0 0.5rem 0', lineHeight: 1.2 }}>
+                  {sec.title}
+                </h2>
+
+                {sec.content.map((p, pIdx) => (
+                  <p key={pIdx} style={{ margin: 0, lineHeight: 1.75 }}>
+                    {p}
+                  </p>
+                ))}
+
+                {/* Subsections */}
+                {sec.subsections && sec.subsections.map((sub, subIdx) => (
+                  <div key={subIdx} style={{ marginTop: '0.75rem', paddingLeft: '1rem', borderLeft: '2px solid rgba(255, 255, 255, 0.08)' }}>
+                    <h3 style={{ fontSize: '1.2rem', color: 'var(--sts-bone)', margin: '0 0 0.5rem 0' }}>
+                      {sub.title}
+                    </h3>
+                    {sub.content.map((subP, subPIdx) => (
+                      <p key={subPIdx} style={{ margin: '0 0 0.75rem 0', lineHeight: 1.7, fontSize: '1.02rem', color: 'var(--sts-muted)' }}>
+                        {subP}
+                      </p>
+                    ))}
+                  </div>
+                ))}
+
+                {/* ASCII Diagram */}
+                {sec.diagramAscii && (
+                  <div style={{ marginTop: '1rem', marginBottom: '1rem' }}>
+                    {sec.diagramTitle && (
+                      <div style={{ fontSize: '0.78rem', fontFamily: 'var(--sts-font-mono)', color: 'var(--sts-dim)', textTransform: 'uppercase', marginBottom: '0.4rem' }}>
+                        // {sec.diagramTitle}
+                      </div>
+                    )}
+                    <pre
+                      style={{
+                        background: '#07090A',
+                        border: '1px solid var(--sts-border)',
+                        borderRadius: '8px',
+                        padding: '1.25rem',
+                        fontFamily: 'var(--sts-font-mono)',
+                        fontSize: '0.8rem',
+                        lineHeight: 1.45,
+                        color: 'rgba(237, 233, 227, 0.85)',
+                        overflowX: 'auto',
+                        margin: 0
+                      }}
+                    >
+                      {sec.diagramAscii}
+                    </pre>
+                  </div>
+                )}
+
+                {/* Code Block */}
+                {sec.codeBlock && (
+                  <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem' }}>
+                    <div style={{ fontSize: '0.78rem', fontFamily: 'var(--sts-font-mono)', color: 'var(--sts-brass)', marginBottom: '0.4rem' }}>
+                      // {sec.codeBlock.title}
+                    </div>
+                    <pre
+                      style={{
+                        background: '#07090A',
+                        border: '1px solid var(--sts-border)',
+                        borderRadius: '8px',
+                        padding: '1.25rem',
+                        fontFamily: 'var(--sts-font-mono)',
+                        fontSize: '0.82rem',
+                        lineHeight: 1.5,
+                        color: 'var(--sts-bone)',
+                        overflowX: 'auto',
+                        margin: 0
+                      }}
+                    >
+                      {sec.codeBlock.code}
+                    </pre>
+                  </div>
+                )}
+
+                {/* Formula */}
+                {sec.formula && (
+                  <div
+                    style={{
+                      background: 'rgba(255, 255, 255, 0.02)',
+                      border: '1px solid var(--sts-border)',
+                      borderRadius: '8px',
+                      padding: '1.25rem 1.5rem',
+                      fontFamily: 'var(--sts-font-mono)',
+                      fontSize: '0.92rem',
+                      lineHeight: 1.6,
+                      color: 'var(--sts-bone)',
+                      marginTop: '0.5rem',
+                      marginBottom: '0.5rem'
+                    }}
+                  >
+                    <div style={{ color: 'var(--sts-brass)', fontSize: '1.1rem', fontWeight: 600, marginBottom: '0.5rem' }}>
+                      {sec.formula.expression}
+                    </div>
+                    <div style={{ fontSize: '0.84rem', color: 'var(--sts-muted)' }}>
+                      {sec.formula.explanation}
+                    </div>
+                  </div>
+                )}
+
+                {/* Failure Modes / Data Table */}
+                {sec.table && (
+                  <div style={{ marginTop: '1rem', marginBottom: '1rem', overflowX: 'auto' }}>
+                    <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.88rem', textAlign: 'left' }}>
+                      <thead>
+                        <tr style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.16)' }}>
+                          {sec.table.headers.map((h, hIdx) => (
+                            <th key={hIdx} style={{ padding: '0.75rem 1rem', color: 'var(--sts-bone)', fontFamily: 'var(--sts-font-mono)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                              {h}
+                            </th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {sec.table.rows.map((row, rIdx) => (
+                          <tr key={rIdx} style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.05)', background: rIdx % 2 === 0 ? 'rgba(255, 255, 255, 0.015)' : 'transparent' }}>
+                            {row.map((cell, cIdx) => (
+                              <td key={cIdx} style={{ padding: '0.85rem 1rem', color: cIdx === 0 ? 'var(--sts-bone)' : 'var(--sts-muted)', fontWeight: cIdx === 0 ? 600 : 400, verticalAlign: 'top', lineHeight: 1.5 }}>
+                                {cell}
+                              </td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+
+                {/* Callout */}
+                {sec.callout && (
+                  <div
+                    style={{
+                      marginTop: '0.75rem',
+                      padding: '1.25rem 1.5rem',
+                      borderRadius: '8px',
+                      background: sec.callout.type === 'warning' ? 'rgba(229, 169, 60, 0.07)' : 'rgba(255, 255, 255, 0.03)',
+                      border: `1px solid ${sec.callout.type === 'warning' ? 'rgba(229, 169, 60, 0.3)' : 'rgba(255, 255, 255, 0.12)'}`,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '0.4rem'
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: sec.callout.type === 'warning' ? '#E5A93C' : 'var(--sts-bone)', fontWeight: 600, fontSize: '0.9rem' }}>
+                      {sec.callout.type === 'warning' ? <AlertTriangle size={15} /> : <Info size={15} />}
+                      <span>{sec.callout.title}</span>
+                    </div>
+                    <div style={{ fontSize: '0.9rem', color: 'var(--sts-muted)', lineHeight: 1.6 }}>
+                      {sec.callout.text}
+                    </div>
+                  </div>
+                )}
+              </section>
+            ))}
+          </div>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '3.5rem', fontSize: '1.08rem', lineHeight: 1.75, color: '#D4D0C8' }}>
+            {/* Question 1: What it is */}
+            <section>
+              <div className="sts-badge sts-badge-steel" style={{ marginBottom: '0.75rem' }}>
+                <span>Question 01</span>
+              </div>
+              <h2 style={{ fontSize: '1.85rem', color: 'var(--sts-bone)', marginBottom: '1.25rem' }}>
+                What is the mechanism?
+              </h2>
+              <p style={{ marginBottom: '1.5rem' }}>
+                At its physical layer, an <strong>{article.focusKeyword}</strong> is a deterministic coordination contract designed to preserve data integrity across untrusted network boundaries. When systems fail under load, failure is rarely caused by syntax errors—it occurs because distributed components hold contradictory assumptions about state.
+              </p>
+              <p>
+                In conventional single-server setups, transactions rely on database row-level locking (ACID properties). But when you cross process boundaries into distributed microservices or third-party APIs, network packets are routinely dropped, duplicated, or delayed. The mechanism exists specifically to guarantee execution certainty without requiring distributed two-phase commits.
+              </p>
+            </section>
+
+            {/* Question 2: How it works */}
+            <section>
+              <div className="sts-badge sts-badge-steel" style={{ marginBottom: '0.75rem' }}>
+                <span>Question 02</span>
+              </div>
+              <h2 style={{ fontSize: '1.85rem', color: 'var(--sts-bone)', marginBottom: '1.25rem' }}>
+                How does it physically execute?
+              </h2>
+              <p style={{ marginBottom: '1.5rem' }}>
+                Consider the step-by-step lifecycle of an in-flight payload as it navigates the pipeline:
+              </p>
+
+              <div
+                style={{
+                  background: '#07090A',
+                  border: '1px solid var(--sts-border)',
+                  borderRadius: '8px',
+                  padding: '1.5rem',
+                  fontFamily: 'var(--sts-font-mono)',
+                  fontSize: '0.85rem',
+                  lineHeight: 1.6,
+                  marginBottom: '1.75rem'
+                }}
+              >
+                <div style={{ color: 'var(--sts-brass)', marginBottom: '0.5rem' }}>
+                  // State Machine Transition Sequence
+                </div>
+                <div>1. Ingress: Request received with unique Client-Token UUID</div>
+                <div>2. Mutex Lock: Worker checks Redis key with 60s lease window</div>
+                <div>3. Execution: Downstream HTTP POST dispatched with 4000ms timeout</div>
+                <div>4. Fault Catch: If 5xx received, calculate exponential jitter: t = min(M, B * 2^n)</div>
+                <div>5. Finality: State written to PostgreSQL with write-ahead-log commit</div>
+              </div>
+
+              <p>
+                By separating the lock acquisition from execution settlement, the system ensures that even if the client application disconnects mid-flight, the server will either finalize the work cleanly or allow a clean idempotent retry without compounding state corruption.
+              </p>
+            </section>
+
+            {/* Question 3: Why it matters */}
+            <section>
+              <div className="sts-badge sts-badge-steel" style={{ marginBottom: '0.75rem' }}>
+                <span>Question 03</span>
+              </div>
+              <h2 style={{ fontSize: '1.85rem', color: 'var(--sts-bone)', marginBottom: '1.25rem' }}>
+                Why does conventional intuition break under load?
+              </h2>
+              <p style={{ marginBottom: '1.5rem' }}>
+                The most common architectural fallacy is assuming that retrying an operation immediately will recover the transaction. When an upstream dependency (such as a database or third-party payment provider) suffers a minor slowdown, immediate retry logic from thousands of clients generates a catastrophic <em>thundering herd</em>.
+              </p>
+              <p>
+                Instead of giving the recovering dependency breathing room to drain its queue, immediate retries flood the server with 2x to 10x normal traffic volume, turning a temporary 100ms blip into a multi-hour cascading platform outage.
+              </p>
+            </section>
+          </div>
+        )}
 
         {/* Ghost Links & Sibling Cluster Index */}
         <div
