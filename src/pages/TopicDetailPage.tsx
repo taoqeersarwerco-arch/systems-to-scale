@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { TOPIC_MAP, TOPICS } from '../data/topics';
 import { ALL_ARTICLES, ArticleEntry } from '../data/slug-registry';
 import { CircuitPipelineHero } from '../components/topics/CircuitPipelineHero';
+import { AuctionExchangeHero } from '../components/topics/AuctionExchangeHero';
 import { AuctionSim } from '../components/topics/AuctionSim';
 import { RenderSim } from '../components/topics/RenderSim';
 import { TransactionSim } from '../components/topics/TransactionSim';
@@ -69,13 +70,23 @@ export const TopicDetailPage: React.FC = () => {
     }
   };
 
-  const isPipelineDomain = topic.simType === 'pipeline';
+  const isDedicatedHeroDomain = topic.slug === 'ai-automation' || topic.slug === 'marketing-ads';
+
+  const renderDedicatedHero = () => {
+    if (topic.slug === 'ai-automation') {
+      return <CircuitPipelineHero topic={topic} />;
+    }
+    if (topic.slug === 'marketing-ads') {
+      return <AuctionExchangeHero topic={topic} />;
+    }
+    return null;
+  };
 
   return (
     <div style={{ paddingBottom: '6rem' }}>
       {/* Hero Section */}
-      {isPipelineDomain ? (
-        <CircuitPipelineHero topic={topic} />
+      {isDedicatedHeroDomain ? (
+        renderDedicatedHero()
       ) : (
         <div style={{ paddingTop: 'calc(var(--sts-header-height) + 2rem)', marginBottom: '3.5rem' }}>
           <div className="sts-container">
@@ -127,9 +138,9 @@ export const TopicDetailPage: React.FC = () => {
         id="topic-articles"
         className="sts-container"
         style={{
-          marginTop: isPipelineDomain ? '5.5rem' : '0',
-          paddingTop: isPipelineDomain ? '3rem' : '0',
-          borderTop: isPipelineDomain ? '1px solid rgba(255, 255, 255, 0.07)' : 'none'
+          marginTop: isDedicatedHeroDomain ? '5.5rem' : '0',
+          paddingTop: isDedicatedHeroDomain ? '3rem' : '0',
+          borderTop: isDedicatedHeroDomain ? '1px solid rgba(255, 255, 255, 0.07)' : 'none'
         }}
       >
 
