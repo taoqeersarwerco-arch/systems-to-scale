@@ -8,11 +8,11 @@ interface AuctionExchangeHeroProps {
   topic: TopicData;
 }
 
-type AuctionSimState =
+type RtbState =
   | 'idle'
   | 's1_ingress'
-  | 's2_consent'
-  | 's3_broadcast'
+  | 's2_broadcast'
+  | 's3_converge'
   | 's4_clear'
   | 's5_render'
   | 'completed';
@@ -48,91 +48,91 @@ export const AuctionExchangeHero: React.FC<AuctionExchangeHeroProps> = ({ topic 
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Simulation State
-  const [auctionState, setAuctionState] = useState<AuctionSimState>('idle');
+  const [rtbState, setRtbState] = useState<RtbState>('idle');
   const [isSecondPrice, setIsSecondPrice] = useState<boolean>(true);
   const [activeStageToken, setActiveStageToken] = useState<string>('STANDBY');
   const [tickerMessage, setTickerMessage] = useState<string>(
-    'OpenRTB 3.0 auction engine on standby. Ready for 80–120ms settlement trigger.'
+    'OpenRTB 3.0 auction clearinghouse ready. Sub-100ms programmatic settlement.'
   );
 
   // Animation Refs
-  const stateRef = useRef<AuctionSimState>('idle');
+  const stateRef = useRef<RtbState>('idle');
   const stateStartTimeRef = useRef<number>(0);
   const animTimeRef = useRef<number>(0);
   const ripplesRef = useRef<Ripple[]>([]);
   const sparksRef = useRef<Spark[]>([]);
 
   useEffect(() => {
-    stateRef.current = auctionState;
+    stateRef.current = rtbState;
     stateStartTimeRef.current = performance.now();
-  }, [auctionState]);
+  }, [rtbState]);
 
-  // Reset Auction
+  // Reset Auction State
   const handleReset = () => {
-    setAuctionState('idle');
+    setRtbState('idle');
     stateRef.current = 'idle';
     setActiveStageToken('STANDBY');
-    setTickerMessage('Auction conduits reset. Exchange cache cleared. Ready for trigger.');
+    setTickerMessage('Exchange conduits discharged. Cache cleared. Ready for trigger.');
     ripplesRef.current = [];
     sparksRef.current = [];
   };
 
   // Trigger Execution
   const handleInitiate = () => {
-    if (auctionState !== 'idle' && auctionState !== 'completed') return;
+    if (rtbState !== 'idle' && rtbState !== 'completed') return;
 
-    setAuctionState('s1_ingress');
+    setRtbState('s1_ingress');
     stateRef.current = 's1_ingress';
     setActiveStageToken('01 // INGRESS');
-    setTickerMessage('Publisher ad slot fired. OpenRTB 3.0 bid request generated (tmax = 100ms).');
+    setTickerMessage('Ad slot impression requested. Verifying Consent Mode v2 cookieless ping.');
   };
 
-  // State Machine Timers & Sequence Orchestrator (Total budget: ~2.8s visual expansion for 100ms physical auction)
+  // State Machine Timers & Sequence Orchestrator
   useEffect(() => {
-    if (auctionState === 'idle' || auctionState === 'completed') return;
+    if (rtbState === 'idle' || rtbState === 'completed') return;
 
     let timeoutId: ReturnType<typeof setTimeout>;
 
-    if (auctionState === 's1_ingress') {
+    if (rtbState === 's1_ingress') {
       timeoutId = setTimeout(() => {
-        setAuctionState('s2_consent');
-        setActiveStageToken('02 // CONSENT');
-        setTickerMessage('Consent Mode v2 verified: Attribution ping allowed. Routing to exchange.');
-      }, 600);
-    } else if (auctionState === 's2_consent') {
+        setRtbState('s2_broadcast');
+        setActiveStageToken('02 // BROADCAST');
+        setTickerMessage('Exchange broadcasting bid requests in parallel to 4 DSPs (tmax = 100ms)...');
+      }, 550);
+    } else if (rtbState === 's2_broadcast') {
       timeoutId = setTimeout(() => {
-        setAuctionState('s3_broadcast');
-        setActiveStageToken('03 // BROADCAST');
-        setTickerMessage('Ad exchange broadcasting bid requests in parallel to 4 DSPs...');
-      }, 650);
-    } else if (auctionState === 's3_broadcast') {
+        setRtbState('s3_converge');
+        setActiveStageToken('03 // CONVERGE');
+        setTickerMessage('4 DSP bids streaming concurrently into central clearinghouse...');
+      }, 500);
+    } else if (rtbState === 's3_converge') {
       timeoutId = setTimeout(() => {
-        setAuctionState('s4_clear');
-        setActiveStageToken('04 // CLEARING');
+        setRtbState('s4_clear');
+        setActiveStageToken('04 // CLEAR');
         if (isSecondPrice) {
-          setTickerMessage('DSP Alpha won (AdRank 59.8). Second-price clearing settled at $4.82 CPM.');
+          setTickerMessage('DSP Alpha won (AdRank: 59.8). Second-price cleared at $4.82 CPM (saved $1.68).');
         } else {
-          setTickerMessage('DSP Alpha won (AdRank 59.8). First-price clearing settled at $6.50 CPM.');
+          setTickerMessage('DSP Alpha won (AdRank: 59.8). First-price cleared at $6.50 CPM.');
         }
-      }, 950);
-    } else if (auctionState === 's4_clear') {
+      }, 850);
+    } else if (rtbState === 's4_clear') {
       timeoutId = setTimeout(() => {
-        setAuctionState('s5_render');
+        setRtbState('s5_render');
         setActiveStageToken('05 // RENDER');
-        setTickerMessage('Winning creative delivered to browser. Win notification acknowledged in 88ms.');
-      }, 700);
-    } else if (auctionState === 's5_render') {
+        setTickerMessage('Win notification acknowledged. Creative delivered to browser frame.');
+      }, 750);
+    } else if (rtbState === 's5_render') {
       timeoutId = setTimeout(() => {
-        setAuctionState('completed');
-        setActiveStageToken('COMPLETED');
+        setRtbState('completed');
+        setActiveStageToken('SETTLED');
         setTickerMessage('Auction settled in 88ms total. 0 fraud deflection. Viewport impression logged.');
-      }, 800);
+      }, 700);
     }
 
     return () => clearTimeout(timeoutId);
-  }, [auctionState, isSecondPrice]);
+  }, [rtbState, isSecondPrice]);
 
-  // Main Canvas Rendering Loop with Living Particle Stream Engine
+  // Main Canvas Rendering Loop: The Programmatic Auction Arena
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -154,17 +154,17 @@ export const AuctionExchangeHero: React.FC<AuctionExchangeHeroProps> = ({ topic 
 
     for (let i = 0; i < 45; i++) {
       particles.push({
-        x: Math.random() * 950,
-        y: Math.random() * 260,
-        vx: (Math.random() - 0.5) * 0.25,
-        vy: (Math.random() - 0.5) * 0.25,
-        r: Math.random() * 1.3 + 0.35,
+        x: Math.random() * 1100,
+        y: Math.random() * 320,
+        vx: (Math.random() - 0.5) * 0.22,
+        vy: (Math.random() - 0.5) * 0.22,
+        r: Math.random() * 1.2 + 0.35,
         a: 0.15 + Math.random() * 0.25,
         phase: Math.random() * Math.PI * 2
       });
     }
 
-    // Continuous Traveling Energy Stream Packets along the RTB bus
+    // Continuous Traveling Energy Stream Packets
     let streamPackets: StreamPacket[] = [];
 
     const render = () => {
@@ -189,21 +189,24 @@ export const AuctionExchangeHero: React.FC<AuctionExchangeHeroProps> = ({ topic 
 
       ctx.clearRect(0, 0, W, H);
 
-      // 5 Programmatic Pipeline Nodes across the screen
-      const x1 = W * 0.1;
-      const x2 = W * 0.3;
-      const x3 = W * 0.5;
-      const x4 = W * 0.7;
-      const x5 = W * 0.9;
-      const baseY = 92;
-      const nodeR = 17;
+      // Coordinates for Hub-and-Spoke Auction Arena
+      const pubX = W * 0.12;
+      const pubY = H * 0.5;
 
-      const nodes = [
-        { id: 1, x: x1, y: baseY, label: '01', title: 'INGRESS', sub: 'Ad Slot Ping' },
-        { id: 2, x: x2, y: baseY, label: '02', title: 'CONSENT', sub: 'Consent Mode v2' },
-        { id: 3, x: x3, y: baseY, label: '03', title: 'EXCHANGE', sub: 'DSP Broadcast' },
-        { id: 4, x: x4, y: baseY, label: '04', title: 'CLEARING', sub: isSecondPrice ? 'Vickrey GSP' : 'First Price' },
-        { id: 5, x: x5, y: baseY, label: '05', title: 'RENDER', sub: 'Win Telemetry' }
+      const consentX = W * 0.27;
+      const consentY = H * 0.5;
+
+      const exX = W * 0.50;
+      const exY = H * 0.5;
+      const exR = 30;
+
+      // 4 Satellite DSP Nodes on Right Side
+      const dspX = W * 0.84;
+      const dsps = [
+        { id: 1, name: 'Alpha (Brand)', bid: 6.50, qs: 9.2, adRank: 59.8, y: H * 0.18, isWinner: true },
+        { id: 2, name: 'Beta (Direct)', bid: 8.20, qs: 5.4, adRank: 44.3, y: H * 0.38, isWinner: false },
+        { id: 3, name: 'Gamma (Retarget)', bid: 4.80, qs: 8.8, adRank: 42.2, y: H * 0.62, isWinner: false },
+        { id: 4, name: 'Delta (Affiliate)', bid: 3.10, qs: 6.0, adRank: 18.6, y: H * 0.82, isWinner: false }
       ];
 
       const curState = stateRef.current;
@@ -215,23 +218,20 @@ export const AuctionExchangeHero: React.FC<AuctionExchangeHeroProps> = ({ topic 
       for (let pIdx = 0; pIdx < particles.length; pIdx++) {
         const p = particles[pIdx];
 
-        p.x += p.vx + Math.sin(t * 0.5 + p.phase) * 0.06;
-        p.y += p.vy + Math.cos(t * 0.4 + p.phase) * 0.06;
+        p.x += p.vx + Math.sin(t * 0.5 + p.phase) * 0.05;
+        p.y += p.vy + Math.cos(t * 0.4 + p.phase) * 0.05;
 
-        // Attractor to pipeline nodes
-        for (let nIdx = 0; nIdx < nodes.length; nIdx++) {
-          const n = nodes[nIdx];
-          const dx = n.x - p.x;
-          const dy = n.y - p.y;
-          const d = Math.sqrt(dx * dx + dy * dy);
-          if (d < 95 && d > 14) {
-            p.vx += (dx / d) * 0.0022;
-            p.vy += (dy / d) * 0.0022;
-          }
+        // Gravitational pull toward central exchange nexus
+        const dx = exX - p.x;
+        const dy = exY - p.y;
+        const d = Math.sqrt(dx * dx + dy * dy);
+        if (d < 160 && d > 20) {
+          p.vx += (dx / d) * 0.0028;
+          p.vy += (dy / d) * 0.0028;
         }
 
-        p.vx *= 0.996;
-        p.vy *= 0.996;
+        p.vx *= 0.995;
+        p.vy *= 0.995;
 
         if (p.x < -10) p.x = W + 10;
         if (p.x > W + 10) p.x = -10;
@@ -250,8 +250,8 @@ export const AuctionExchangeHero: React.FC<AuctionExchangeHeroProps> = ({ topic 
           const dx = particles[i].x - particles[j].x;
           const dy = particles[i].y - particles[j].y;
           const d = Math.sqrt(dx * dx + dy * dy);
-          if (d < 75) {
-            const alpha = (1 - d / 75) * 0.08 * Math.min(particles[i].a, particles[j].a);
+          if (d < 70) {
+            const alpha = (1 - d / 70) * 0.07 * Math.min(particles[i].a, particles[j].a);
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
@@ -262,82 +262,71 @@ export const AuctionExchangeHero: React.FC<AuctionExchangeHeroProps> = ({ topic 
         }
       }
 
-      // Stage completion flags
-      const isStage1Done = curState !== 'idle' && curState !== 's1_ingress';
-      const isStage2Done = ['s3_broadcast', 's4_clear', 's5_render', 'completed'].includes(curState);
-      const isStage3Done = ['s4_clear', 's5_render', 'completed'].includes(curState);
-      const isStage4Done = ['s5_render', 'completed'].includes(curState);
-      const isStage5Done = curState === 'completed';
+      // -------------------------------------------------------------
+      // 2. CONCENTRIC RADAR RINGS & EXCHANGE GRIDS
+      // -------------------------------------------------------------
+      const radarRadii = [45, 95, 155, 225];
+      radarRadii.forEach((rad) => {
+        ctx.beginPath();
+        ctx.arc(exX, exY, rad, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.035)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      });
+
+      // Subtle ambient radar sweep
+      const sweepAngle = (t * 0.7) % (Math.PI * 2);
+      ctx.beginPath();
+      ctx.moveTo(exX, exY);
+      ctx.arc(exX, exY, 225, sweepAngle, sweepAngle + 0.35);
+      ctx.lineTo(exX, exY);
+      const sweepGrad = ctx.createRadialGradient(exX, exY, 10, exX, exY, 225);
+      sweepGrad.addColorStop(0, 'rgba(255, 255, 255, 0.04)');
+      sweepGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+      ctx.fillStyle = sweepGrad;
+      ctx.fill();
 
       // -------------------------------------------------------------
-      // 2. MAIN CIRCUIT CONDUIT BUS TRACK
+      // 3. ARCHITECTURAL BUS CONDUITS
       // -------------------------------------------------------------
+      // Publisher to Consent Gate
+      ctx.beginPath();
+      ctx.moveTo(pubX, pubY);
+      ctx.lineTo(consentX, consentY);
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
       ctx.lineWidth = 1.4;
-      ctx.beginPath();
-      ctx.moveTo(x1, baseY);
-      ctx.lineTo(x5, baseY);
       ctx.stroke();
 
-      // Progressive Active Luminous Glow Lines
-      if (isStage1Done) {
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.85)';
-        ctx.lineWidth = 2;
-        ctx.shadowColor = '#FFFFFF';
-        ctx.shadowBlur = 8;
-        ctx.beginPath();
-        ctx.moveTo(x1, baseY);
-        ctx.lineTo(x2, baseY);
-        ctx.stroke();
-        ctx.shadowBlur = 0;
-      }
+      // Consent Gate to Central Exchange
+      ctx.beginPath();
+      ctx.moveTo(consentX, consentY);
+      ctx.lineTo(exX, exY);
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+      ctx.lineWidth = 1.4;
+      ctx.stroke();
 
-      if (isStage2Done) {
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.85)';
-        ctx.lineWidth = 2;
-        ctx.shadowColor = '#FFFFFF';
-        ctx.shadowBlur = 8;
+      // Central Exchange to 4 DSP Satellites
+      dsps.forEach((dsp) => {
         ctx.beginPath();
-        ctx.moveTo(x2, baseY);
-        ctx.lineTo(x3, baseY);
+        ctx.moveTo(exX, exY);
+        ctx.lineTo(dspX, dsp.y);
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.09)';
+        ctx.lineWidth = 1;
+        ctx.setLineDash([3, 4]);
         ctx.stroke();
-        ctx.shadowBlur = 0;
-      }
-
-      if (isStage3Done) {
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.85)';
-        ctx.lineWidth = 2;
-        ctx.shadowColor = '#FFFFFF';
-        ctx.shadowBlur = 8;
-        ctx.beginPath();
-        ctx.moveTo(x3, baseY);
-        ctx.lineTo(x4, baseY);
-        ctx.stroke();
-        ctx.shadowBlur = 0;
-      }
-
-      if (isStage4Done) {
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.85)';
-        ctx.lineWidth = 2;
-        ctx.shadowColor = '#FFFFFF';
-        ctx.shadowBlur = 8;
-        ctx.beginPath();
-        ctx.moveTo(x4, baseY);
-        ctx.lineTo(x5, baseY);
-        ctx.stroke();
-        ctx.shadowBlur = 0;
-      }
+        ctx.setLineDash([]);
+      });
 
       // -------------------------------------------------------------
-      // 3. CONTINUOUS TRAVELING STREAM PACKETS (Living Machine Flow)
+      // 4. CONTINUOUS STREAM PACKETS ALONG CONDUITS (Living Machine)
       // -------------------------------------------------------------
-      if (Math.random() < 0.12 && streamPackets.length < 8) {
+      if (Math.random() < 0.1 && streamPackets.length < 8) {
         streamPackets.push({
-          x: x1,
-          y: baseY,
-          speed: Math.random() * 1.8 + 1.4,
-          a: 0.35 + Math.random() * 0.45,
-          r: Math.random() * 1.5 + 0.6,
+          x: pubX,
+          y: pubY,
+          speed: Math.random() * 1.6 + 1.2,
+          a: 0.35 + Math.random() * 0.4,
+          r: Math.random() * 1.4 + 0.6,
           trail: []
         });
       }
@@ -346,7 +335,7 @@ export const AuctionExchangeHero: React.FC<AuctionExchangeHeroProps> = ({ topic 
         const s = streamPackets[sIdx];
         s.x += s.speed;
         s.trail.push({ x: s.x, y: s.y, a: s.a });
-        if (s.trail.length > 10) s.trail.shift();
+        if (s.trail.length > 8) s.trail.shift();
 
         for (let trIdx = 0; trIdx < s.trail.length; trIdx++) {
           const tr = s.trail[trIdx];
@@ -357,55 +346,75 @@ export const AuctionExchangeHero: React.FC<AuctionExchangeHeroProps> = ({ topic 
           ctx.fill();
         }
       }
-
-      streamPackets = streamPackets.filter((s) => s.x < x5);
+      streamPackets = streamPackets.filter((s) => s.x < exX);
 
       // -------------------------------------------------------------
-      // 4. PARALLEL DSP BID BROADCAST BEAMS (At Node 03)
+      // 5. INTERACTIVE AUCTION PHASES & BEAM CONVERGENCE
       // -------------------------------------------------------------
-      const dsps = [
-        { name: 'Alpha', bid: '$6.50', qs: '9.2', adRank: '59.8', yOff: -54, isWinner: true },
-        { name: 'Beta', bid: '$8.20', qs: '5.4', adRank: '44.3', yOff: -26, isWinner: false },
-        { name: 'Gamma', bid: '$4.80', qs: '8.8', adRank: '42.2', yOff: 26, isWinner: false },
-        { name: 'Delta', bid: '$3.10', qs: '6.0', adRank: '18.6', yOff: 54, isWinner: false }
-      ];
+      const smoothstep = (min: number, max: number, value: number) => {
+        const x = Math.max(0, Math.min(1, (value - min) / (max - min)));
+        return x * x * (3 - 2 * x);
+      };
 
-      if (curState === 's3_broadcast') {
-        const p = Math.min(1, elapsedInState / 900);
+      // Step 1: Ingress packet (Publisher -> Consent -> Exchange)
+      if (curState === 's1_ingress') {
+        const p = smoothstep(0, 550, elapsedInState);
+        const curX = pubX + (consentX - pubX) * p;
+        ctx.save();
+        ctx.shadowColor = '#FFFFFF';
+        ctx.shadowBlur = 14;
+        ctx.fillStyle = '#FFFFFF';
+        ctx.beginPath();
+        ctx.arc(curX, pubY, 4, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      // Step 2: Broadcast radar wave (Exchange -> DSPs)
+      if (curState === 's2_broadcast') {
+        const p = Math.min(1, elapsedInState / 450);
+        const waveR = 20 + p * 240;
+        ctx.beginPath();
+        ctx.arc(exX, exY, waveR, -Math.PI * 0.45, Math.PI * 0.45);
+        ctx.strokeStyle = `rgba(255, 255, 255, ${(1 - p).toFixed(2)})`;
+        ctx.lineWidth = 1.6;
+        ctx.stroke();
+      }
+
+      // Step 3: Concurrent Multi-DSP Bid Beams Converging into Core
+      if (curState === 's3_converge') {
+        const p = Math.min(1, elapsedInState / 800);
 
         dsps.forEach((dsp) => {
-          const startX = x3 - 90;
-          const startY = baseY + dsp.yOff;
-          const curX = startX + (x3 - startX) * p;
-          const curY = startY + (baseY - startY) * p;
+          const curX = dspX + (exX - dspX) * p;
+          const curY = dsp.y + (exY - dsp.y) * p;
 
           ctx.beginPath();
-          ctx.moveTo(startX, startY);
+          ctx.moveTo(dspX, dsp.y);
           ctx.lineTo(curX, curY);
           ctx.strokeStyle = dsp.isWinner
             ? 'rgba(255, 255, 255, 0.95)'
-            : 'rgba(255, 255, 255, 0.25)';
-          ctx.lineWidth = dsp.isWinner ? 2 : 1;
+            : 'rgba(255, 255, 255, 0.35)';
+          ctx.lineWidth = dsp.isWinner ? 2.2 : 1.2;
           if (dsp.isWinner) {
             ctx.shadowColor = '#FFFFFF';
-            ctx.shadowBlur = 8;
+            ctx.shadowBlur = 10;
           }
           ctx.stroke();
           ctx.shadowBlur = 0;
 
-          // DSP Node Label
-          ctx.font = '9px monospace';
-          ctx.fillStyle = dsp.isWinner ? '#FFFFFF' : 'rgba(237, 233, 227, 0.45)';
-          ctx.textAlign = 'right';
-          ctx.fillText(`DSP ${dsp.name} (${dsp.bid})`, startX - 6, startY + 3);
+          // Traveling Bid Tag
+          ctx.font = '600 9px monospace';
+          ctx.fillStyle = dsp.isWinner ? '#FFFFFF' : 'rgba(237, 233, 227, 0.6)';
+          ctx.fillText(`$${dsp.bid.toFixed(2)}`, curX, curY - 7);
 
-          // Spawn electrical sparks on winner bid
-          if (dsp.isWinner && Math.random() < 0.3) {
+          // Sparks at convergence point
+          if (Math.random() < 0.25) {
             sparksRef.current.push({
               x: curX,
               y: curY,
-              vx: (Math.random() - 0.5) * 1.5,
-              vy: (Math.random() - 0.5) * 1.5,
+              vx: (Math.random() - 0.5) * 1.8,
+              vy: (Math.random() - 0.5) * 1.8,
               alpha: 1,
               r: Math.random() * 1.4 + 0.5
             });
@@ -413,63 +422,47 @@ export const AuctionExchangeHero: React.FC<AuctionExchangeHeroProps> = ({ topic 
         });
       }
 
-      // -------------------------------------------------------------
-      // 5. SMOOTH PHYSICAL TRANSIT PACKET ON "SETTLE AUCTION"
-      // -------------------------------------------------------------
-      let packetPos: { x: number; y: number } | null = null;
-      const smoothstep = (min: number, max: number, value: number) => {
-        const x = Math.max(0, Math.min(1, (value - min) / (max - min)));
-        return x * x * (3 - 2 * x);
-      };
-
-      if (curState === 's1_ingress') {
-        const p = smoothstep(0, 600, elapsedInState);
-        packetPos = { x: x1 + (x2 - x1) * p, y: baseY };
-      } else if (curState === 's2_consent') {
-        const p = smoothstep(0, 650, elapsedInState);
-        packetPos = { x: x2 + (x3 - x2) * p, y: baseY };
-      } else if (curState === 's4_clear') {
-        const p = smoothstep(0, 700, elapsedInState);
-        packetPos = { x: x3 + (x4 - x3) * p, y: baseY };
-      } else if (curState === 's5_render') {
-        const p = smoothstep(0, 800, elapsedInState);
-        packetPos = { x: x4 + (x5 - x4) * p, y: baseY };
+      // Step 4: Vickrey Clearing Settlement
+      if (curState === 's4_clear' || curState === 's5_render' || curState === 'completed') {
+        // High-intensity winner laser lock from DSP Alpha
+        const winner = dsps[0];
+        ctx.beginPath();
+        ctx.moveTo(dspX, winner.y);
+        ctx.lineTo(exX, exY);
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
+        ctx.lineWidth = 2.4;
+        ctx.shadowColor = '#FFFFFF';
+        ctx.shadowBlur = 12;
+        ctx.stroke();
+        ctx.shadowBlur = 0;
       }
 
-      // Draw active surge photon packet
-      if (packetPos) {
+      // Step 5: Render Win Token transit back to Publisher
+      if (curState === 's5_render') {
+        const p = smoothstep(0, 700, elapsedInState);
+        const curX = exX + (pubX - exX) * p;
         ctx.save();
         ctx.shadowColor = '#FFFFFF';
-        ctx.shadowBlur = 18;
+        ctx.shadowBlur = 16;
         ctx.fillStyle = '#FFFFFF';
         ctx.beginPath();
-        ctx.arc(packetPos.x, packetPos.y, 4.5, 0, Math.PI * 2);
+        ctx.arc(curX, pubY, 4.5, 0, Math.PI * 2);
         ctx.fill();
-
-        ctx.shadowBlur = 6;
-        ctx.beginPath();
-        ctx.arc(packetPos.x, packetPos.y, 8, 0, Math.PI * 2);
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.75)';
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
         ctx.restore();
       }
 
       // -------------------------------------------------------------
       // 6. RIPPLE SHOCKWAVES & SPARK BURSTS
       // -------------------------------------------------------------
-      if (curState === 's1_ingress' && Math.random() < 0.08) {
-        ripplesRef.current.push({ x: x1, y: baseY, r: 16, maxR: 36, alpha: 0.8 });
-      } else if (curState === 's4_clear' && Math.random() < 0.08) {
-        ripplesRef.current.push({ x: x4, y: baseY, r: 18, maxR: 42, alpha: 0.9 });
-      } else if (curState === 's5_render' && Math.random() < 0.08) {
-        ripplesRef.current.push({ x: x5, y: baseY, r: 18, maxR: 44, alpha: 0.9 });
+      if (curState === 's4_clear' && Math.random() < 0.1) {
+        ripplesRef.current.push({ x: exX, y: exY, r: exR, maxR: exR + 32, alpha: 0.85 });
+      } else if (curState === 's5_render' && Math.random() < 0.1) {
+        ripplesRef.current.push({ x: pubX, y: pubY, r: 16, maxR: 40, alpha: 0.9 });
       }
 
-      // Draw & update ripples
       ripplesRef.current.forEach((rp) => {
-        rp.r += 0.9;
-        rp.alpha *= 0.94;
+        rp.r += 0.85;
+        rp.alpha *= 0.93;
         ctx.beginPath();
         ctx.arc(rp.x, rp.y, rp.r, 0, Math.PI * 2);
         ctx.strokeStyle = `rgba(255, 255, 255, ${rp.alpha.toFixed(3)})`;
@@ -478,7 +471,6 @@ export const AuctionExchangeHero: React.FC<AuctionExchangeHeroProps> = ({ topic 
       });
       ripplesRef.current = ripplesRef.current.filter((rp) => rp.alpha > 0.05);
 
-      // Draw & update sparks
       sparksRef.current.forEach((sp) => {
         sp.x += sp.vx;
         sp.y += sp.vy;
@@ -491,84 +483,121 @@ export const AuctionExchangeHero: React.FC<AuctionExchangeHeroProps> = ({ topic 
       sparksRef.current = sparksRef.current.filter((sp) => sp.alpha > 0.06);
 
       // -------------------------------------------------------------
-      // 7. DRAW STAGE NODES & SLEEK MINIMAL LABELS
+      // 7. DRAW NODES: PUBLISHER, CONSENT GATE, CORE, & DSPS
       // -------------------------------------------------------------
-      nodes.forEach((n) => {
-        const isActive =
-          (n.id === 1 && curState === 's1_ingress') ||
-          (n.id === 2 && curState === 's2_consent') ||
-          (n.id === 3 && curState === 's3_broadcast') ||
-          (n.id === 4 && curState === 's4_clear') ||
-          (n.id === 5 && curState === 's5_render');
+      // A. Publisher Ad Slot Node
+      ctx.beginPath();
+      ctx.arc(pubX, pubY, 16, 0, Math.PI * 2);
+      ctx.fillStyle = '#101214';
+      ctx.fill();
+      ctx.strokeStyle = curState === 's5_render' || curState === 'completed'
+        ? '#FFFFFF'
+        : 'rgba(255, 255, 255, 0.3)';
+      ctx.lineWidth = 1.4;
+      ctx.stroke();
 
-        const isDone =
-          (n.id === 1 && isStage1Done) ||
-          (n.id === 2 && isStage2Done) ||
-          (n.id === 3 && isStage3Done) ||
-          (n.id === 4 && isStage4Done) ||
-          (n.id === 5 && isStage5Done);
+      ctx.font = '600 10.5px monospace';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillText('AD', pubX, pubY);
 
-        // Outer halo ring if active
-        if (isActive) {
-          const pulseR = nodeR + 6 + Math.sin(t * 8) * 3;
-          ctx.beginPath();
-          ctx.arc(n.x, n.y, pulseR, 0, Math.PI * 2);
-          ctx.strokeStyle = 'rgba(255, 255, 255, 0.75)';
-          ctx.lineWidth = 1.2;
-          ctx.stroke();
-        }
+      ctx.font = '600 10px monospace';
+      ctx.fillStyle = 'rgba(237, 233, 227, 0.7)';
+      ctx.fillText('PUBLISHER', pubX, pubY - 26);
+      ctx.font = '9.5px -apple-system, sans-serif';
+      ctx.fillStyle = 'rgba(237, 233, 227, 0.4)';
+      ctx.fillText('300×250 MREC', pubX, pubY + 26);
 
-        // Main Node Circle Body
+      // B. Consent Mode v2 Gate
+      ctx.beginPath();
+      ctx.arc(consentX, consentY, 14, 0, Math.PI * 2);
+      ctx.fillStyle = '#0E1012';
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+
+      ctx.font = '600 9.5px monospace';
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillText('v2', consentX, consentY);
+
+      ctx.font = '600 9.5px monospace';
+      ctx.fillStyle = 'rgba(237, 233, 227, 0.65)';
+      ctx.fillText('CONSENT GATE', consentX, consentY - 24);
+      ctx.font = '9px -apple-system, sans-serif';
+      ctx.fillStyle = 'rgba(237, 233, 227, 0.4)';
+      ctx.fillText('Cookieless Ping', consentX, consentY + 24);
+
+      // C. The Central OpenRTB 3.0 Clearing Arbiter (Exchange Nexus)
+      const isExActive = curState === 's3_converge' || curState === 's4_clear';
+      const isExSettled = curState === 's5_render' || curState === 'completed';
+
+      ctx.beginPath();
+      ctx.arc(exX, exY, exR, 0, Math.PI * 2);
+      ctx.fillStyle = isExActive ? '#15181C' : '#0B0D0E';
+      ctx.fill();
+
+      ctx.strokeStyle = isExActive || isExSettled ? '#FFFFFF' : 'rgba(255, 255, 255, 0.35)';
+      ctx.lineWidth = isExActive ? 2.4 : 1.6;
+      if (isExActive || isExSettled) {
+        ctx.shadowColor = '#FFFFFF';
+        ctx.shadowBlur = 14;
+      }
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      // Exchange Core Label Above
+      ctx.font = '600 11px monospace';
+      ctx.fillStyle = isExActive || isExSettled ? '#FFFFFF' : 'rgba(237, 233, 227, 0.7)';
+      ctx.fillText('OPENRTB 3.0 EXCHANGE', exX, exY - exR - 14);
+
+      // Center Core Readout
+      ctx.font = '700 12px monospace';
+      let coreReadout = 'STANDBY';
+      if (curState === 's1_ingress') coreReadout = 'INGRESS';
+      else if (curState === 's2_broadcast') coreReadout = 'BROADCAST';
+      else if (curState === 's3_converge') coreReadout = 'BIDDING';
+      else if (isExSettled || curState === 's4_clear') {
+        coreReadout = isSecondPrice ? '$4.82 CPM' : '$6.50 CPM';
+      }
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillText(coreReadout, exX, exY);
+
+      // Core Subtitle Below
+      ctx.font = '9.5px -apple-system, sans-serif';
+      ctx.fillStyle = 'rgba(237, 233, 227, 0.45)';
+      ctx.fillText(isSecondPrice ? 'Vickrey GSP Arbiter' : 'First-Price Arbiter', exX, exY + exR + 15);
+
+      // D. 4 DSP Satellite Nodes on the Right
+      dsps.forEach((dsp) => {
+        const isDspWinner = dsp.isWinner && (curState === 's4_clear' || isExSettled);
+
         ctx.beginPath();
-        ctx.arc(n.x, n.y, nodeR, 0, Math.PI * 2);
-        ctx.fillStyle = isActive ? '#14171A' : isDone ? '#101214' : '#0B0D0E';
+        ctx.arc(dspX, dsp.y, 11, 0, Math.PI * 2);
+        ctx.fillStyle = isDspWinner ? '#181C20' : '#0E1012';
         ctx.fill();
 
-        ctx.strokeStyle = isActive
+        ctx.strokeStyle = isDspWinner
           ? '#FFFFFF'
-          : isDone
-          ? 'rgba(255, 255, 255, 0.75)'
-          : 'rgba(255, 255, 255, 0.22)';
-        ctx.lineWidth = isActive ? 2.2 : 1.4;
-
-        if (isActive) {
+          : 'rgba(255, 255, 255, 0.25)';
+        ctx.lineWidth = isDspWinner ? 2 : 1.2;
+        if (isDspWinner) {
           ctx.shadowColor = '#FFFFFF';
           ctx.shadowBlur = 8;
         }
         ctx.stroke();
         ctx.shadowBlur = 0;
 
-        // Stage numerical label in center
-        ctx.font = '600 11px monospace';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillStyle = isActive || isDone ? '#FFFFFF' : 'rgba(237, 233, 227, 0.45)';
-        ctx.fillText(n.label, n.x, n.y);
+        // DSP Name and Metrics text
+        ctx.font = isDspWinner ? '600 10.5px monospace' : '500 10px monospace';
+        ctx.textAlign = 'left';
+        ctx.fillStyle = isDspWinner ? '#FFFFFF' : 'rgba(237, 233, 227, 0.6)';
+        ctx.fillText(`DSP ${dsp.name}`, dspX + 16, dsp.y - 4);
 
-        // Header Stage Title above (single clean label)
-        ctx.font = '600 11px monospace';
-        ctx.fillStyle = isActive || isDone ? '#FFFFFF' : 'rgba(237, 233, 227, 0.65)';
-        ctx.fillText(n.title, n.x, baseY - nodeR - 12);
-
-        // Live Contextual Subtitle / Status below (single dynamic label)
-        ctx.font = '10.5px -apple-system, sans-serif';
-        let statusText = n.sub;
-        let statusColor = 'rgba(237, 233, 227, 0.4)';
-
-        if (isActive) {
-          statusText = 'RESOLVING...';
-          statusColor = '#FFFFFF';
-        } else if (isDone) {
-          if (n.id === 4) {
-            statusText = isSecondPrice ? 'CLEARED ($4.82)' : 'CLEARED ($6.50)';
-          } else {
-            statusText = 'SETTLED [OK]';
-          }
-          statusColor = 'rgba(255, 255, 255, 0.85)';
-        }
-
-        ctx.fillStyle = statusColor;
-        ctx.fillText(statusText, n.x, baseY + nodeR + 15);
+        ctx.font = '9px monospace';
+        ctx.fillStyle = isDspWinner ? 'rgba(255, 255, 255, 0.85)' : 'rgba(237, 233, 227, 0.35)';
+        ctx.fillText(`Bid: $${dsp.bid.toFixed(2)} · QS: ${dsp.qs} · AdRank: ${dsp.adRank}`, dspX + 16, dsp.y + 8);
       });
 
       ctx.restore();
@@ -580,7 +609,7 @@ export const AuctionExchangeHero: React.FC<AuctionExchangeHeroProps> = ({ topic 
     return () => cancelAnimationFrame(animId);
   }, [isSecondPrice]);
 
-  const isExecuting = auctionState !== 'idle' && auctionState !== 'completed';
+  const isExecuting = rtbState !== 'idle' && rtbState !== 'completed';
 
   return (
     <section className={styles.heroContainer} ref={containerRef}>
@@ -604,9 +633,9 @@ export const AuctionExchangeHero: React.FC<AuctionExchangeHeroProps> = ({ topic 
           <p className={styles.hookText}>{topic.hook}</p>
         </div>
 
-        {/* Ethereal Living Vector RTB Auction Stage (Sleek & Unboxed) */}
+        {/* The Programmatic RTB Auction Arena Stage */}
         <div className={styles.auctionStageWrapper}>
-          {/* Simulation Canvas Viewport */}
+          {/* Canvas Viewport */}
           <div className={styles.canvasViewport}>
             <canvas ref={canvasRef} className={styles.auctionCanvas} />
           </div>
@@ -634,7 +663,7 @@ export const AuctionExchangeHero: React.FC<AuctionExchangeHeroProps> = ({ topic 
                 title="Toggle between Vickrey Generalized Second-Price (GSP) and First-Price clearing"
               >
                 <span className={styles.toggleDot} />
-                <span>Model: <strong>{isSecondPrice ? 'GSP SECOND-PRICE' : 'FIRST-PRICE'}</strong></span>
+                <span>Model: <strong>{isSecondPrice ? 'VICKREY GSP (2ND-PRICE)' : 'FIRST-PRICE'}</strong></span>
               </button>
 
               {/* Initiate Auction Execution Button */}
