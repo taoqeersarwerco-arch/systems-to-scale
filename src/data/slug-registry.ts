@@ -388,19 +388,6 @@ export const SLUG_REGISTRY: Record<string, ArticleEntry> = {
       'cart-abandonment'
     ]
   },
-  // Alias for backward compatibility
-  'how-ticket-routing-works': {
-    slug: 'how-ticket-routing-works',
-    title: 'How ticket routing works in support',
-    topic: 'Customer Service',
-    topicSlug: 'customer-service',
-    type: 'Cluster',
-    focusKeyword: 'ticket routing',
-    status: 'planned',
-    standfirst: 'Priority queues, skill-based assignment algorithms, round-robin distribution, and SLA breach monitors.',
-    focusQuestion: 'How does an enterprise helpdesk decide which agent receives a VIP ticket when 500 tickets arrive in 5 minutes?',
-    ghostLinks: ['how-enterprise-crm-works', 'service-desk-routing-sla-architecture']
-  },
 
   // --------------------------------------------------------------------------
   // Virtual Assistance (5 articles)

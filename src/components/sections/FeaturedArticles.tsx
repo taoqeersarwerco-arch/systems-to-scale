@@ -88,14 +88,14 @@ const FEATURED_PILLARS: FeaturedItem[] = [
     ]
   },
   {
-    title: 'How ticket routing works',
+    title: 'How enterprise CRM works',
     topicBadge: 'Customer Service',
-    focusQuestion: 'How a support ticket gets classified, prioritised by SLA, routed to the right queue, and escalated when it stalls.',
-    slug: 'how-ticket-routing-works',
+    focusQuestion: 'Unified customer models, identity resolution, dynamic SLA priority queues, and reverse ETL activation.',
+    slug: 'how-enterprise-crm-works',
     microNodes: [
-      { label: 'Ticket Ingest', icon: Inbox },
-      { label: 'SLA Escalation', icon: ClockAlert },
-      { label: 'CSAT Resolve', icon: Smile }
+      { label: 'Identity Graph', icon: Database },
+      { label: 'SLA Priority', icon: ClockAlert },
+      { label: 'Reverse ETL', icon: Sparkles }
     ]
   },
   {

@@ -8,8 +8,10 @@ import { ArrowLeft, Clock, Calendar, CheckCircle2, Shield, AlertCircle, AlertTri
 
 export const ArticleDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
-  const article = slug ? SLUG_REGISTRY[slug] : undefined;
-  const detailed = slug ? ARTICLE_CONTENTS[slug] : undefined;
+  // Seamless alias for legacy routing link
+  const resolvedSlug = slug === 'how-ticket-routing-works' ? 'how-enterprise-crm-works' : slug;
+  const article = resolvedSlug ? SLUG_REGISTRY[resolvedSlug] : undefined;
+  const detailed = resolvedSlug ? ARTICLE_CONTENTS[resolvedSlug] : undefined;
 
   if (!article) {
     return (
