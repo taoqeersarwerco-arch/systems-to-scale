@@ -1,0 +1,147 @@
+/* ============================================================================
+   Article Hero Chassis Styles
+   Canonical Monochromatic Design Language Matching Systems to Scale Topic Detail
+   Strict Black & White (#080808 / #111111 / #FFFFFF / #A3A3A3)
+   ============================================================================ */
+
+.heroChassis {
+  position: relative;
+  width: 100%;
+  padding-top: calc(var(--sts-header-height, 52px) + 2rem);
+  padding-bottom: 2.5rem;
+  background-color: var(--sts-ground, #080808);
+}
+
+.innerContainer {
+  width: 100%;
+  max-width: var(--sts-max-width, 1280px);
+  margin: 0 auto;
+  padding: 0 clamp(16px, 4vw, 32px);
+}
+
+/* Navigation Breadcrumb Row (Direct Match to Topic Detail) */
+.breadcrumbRow {
+  margin-bottom: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--sts-dim, #737373);
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.backLink:hover {
+  color: #FFFFFF;
+}
+
+.breadcrumbRight {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 0.72rem;
+  color: var(--sts-dim, #737373);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.pillarTag {
+  background: #FFFFFF;
+  color: #080808;
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: var(--sts-pill-radius, 9999px);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Constrained Hero Content Column (Matches Topic Detail max-width: 820px) */
+.heroContent {
+  max-width: 820px;
+  margin-bottom: 3.5rem;
+}
+
+.badgeWrapper {
+  margin-bottom: 1.25rem;
+}
+
+.headline {
+  font-family: var(--sts-font-display, sans-serif);
+  font-size: clamp(2.4rem, 4.5vw, 3.8rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  color: #FFFFFF;
+  font-weight: 700;
+  margin: 0 0 1.25rem 0;
+}
+
+.standfirst {
+  font-size: 1.18rem;
+  line-height: 1.6;
+  color: var(--sts-bone, #FFFFFF);
+  margin: 0 0 1.25rem 0;
+  font-weight: 500;
+}
+
+.leadParagraph {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--sts-muted, #A3A3A3);
+  margin: 0 0 2rem 0;
+}
+
+/* Clean Hairline Metadata Bar */
+.metadataBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.1rem 0;
+  border-top: 1px solid var(--sts-border, rgba(255, 255, 255, 0.08));
+  border-bottom: 1px solid var(--sts-border, rgba(255, 255, 255, 0.08));
+  font-family: var(--sts-font-mono, monospace);
+  font-size: 0.78rem;
+  color: var(--sts-dim, #737373);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.metaLeft {
+  display: flex;
+  align-items: center;
+  gap: 1.75rem;
+}
+
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--sts-muted, #A3A3A3);
+}
+
+.verificationStamp {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: #FFFFFF;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 640px) {
+  .metadataBar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

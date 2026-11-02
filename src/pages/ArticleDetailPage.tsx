@@ -4,6 +4,8 @@ import { SLUG_REGISTRY } from '../data/slug-registry';
 import { ARTICLE_CONTENTS } from '../data/article-contents';
 import { GhostLink } from '../components/ui/GhostLink';
 import { NewsletterCta } from '../components/sections/NewsletterCta';
+import { ArticleHeroChassis } from '../components/articles/ArticleHeroChassis';
+import { ArticleExecutiveCockpit } from '../components/articles/ArticleExecutiveCockpit';
 import { CrmInteractiveWorkbench } from '../components/articles/CrmInteractiveWorkbench';
 import { CrmArchitectureTopology } from '../components/articles/CrmArchitectureTopology';
 import { CrmFailureModesExplorer } from '../components/articles/CrmFailureModesExplorer';
@@ -30,171 +32,53 @@ export const ArticleDetailPage: React.FC = () => {
   }
 
   return (
-    <article style={{ paddingTop: 'calc(var(--sts-header-height) + 2.5rem)', paddingBottom: '6rem' }}>
-      <div className="sts-container" style={{ maxWidth: '840px' }}>
-        {/* Breadcrumb Trail */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.82rem', color: 'var(--sts-dim)', marginBottom: '2rem' }}>
-          <Link to="/" style={{ color: 'var(--sts-dim)' }}>Home</Link>
-          <span>/</span>
-          <Link to={`/topics/${article.topicSlug}`} style={{ color: 'var(--sts-dim)' }}>{article.topic}</Link>
-          <span>/</span>
-          <span style={{ color: 'var(--sts-bone)' }}>{article.type}</span>
-        </div>
+    <article style={{ paddingBottom: '6rem' }}>
+      {/* Floating Reading Progress Telemetry Bar (Docked only when scrolled past hero) */}
+      <ArticleReadingHud />
 
-        {/* Article Header */}
-        <header style={{ marginBottom: '3.5rem' }}>
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.4rem',
-              background: 'rgba(255, 255, 255, 0.05)',
-              border: '1px solid rgba(255, 255, 255, 0.12)',
-              color: '#FFFFFF',
-              fontFamily: 'var(--sts-font-mono)',
-              fontSize: '0.72rem',
-              letterSpacing: '0.08em',
-              textTransform: 'uppercase',
-              padding: '3px 10px',
-              borderRadius: '3px',
-              marginBottom: '1.25rem',
-              fontWeight: 600
-            }}
-          >
-            <span>{article.topic}</span>
-          </div>
+      {/* Hero Section (Canonical Observatory Framing matching Topic Detail) */}
+      <ArticleHeroChassis
+        topic={article.topic}
+        topicSlug={article.topicSlug}
+        type={article.type}
+        title={article.title}
+        standfirst={article.standfirst}
+        leadParagraph="Enterprise CRM is a distributed operational transaction engine coordinating identity resolution, event streams, and reverse ETL activation across frontline sales, service, and data warehouse meshes."
+        publishDate={article.publishDate || 'Nov 02, 2026'}
+        readingTime={article.readingTime || '12 min read'}
+        rfcSpec="RFC-CRM-2026"
+      />
 
-          <h1
-            style={{
-              fontSize: 'clamp(2.4rem, 4.5vw, 3.8rem)',
-              lineHeight: 1.1,
-              marginBottom: '1.5rem',
-              letterSpacing: '-0.035em',
-              color: '#FFFFFF',
-              fontWeight: 700
-            }}
-          >
-            {article.title}
-          </h1>
-
-          <p
-            style={{
-              fontSize: '1.2rem',
-              color: 'rgba(255, 255, 255, 0.75)',
-              lineHeight: 1.65,
-              marginBottom: '2rem',
-              fontWeight: 400
-            }}
-          >
-            {article.standfirst}
-          </p>
-
-          {/* Byline & Verification Stamp */}
-          <div
-            style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              gap: '1rem',
-              padding: '1.25rem 0',
-              borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-              borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-              fontSize: '0.85rem',
-              color: 'rgba(255, 255, 255, 0.55)'
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                <Calendar size={14} color="#FFFFFF" />
-                <span>{article.publishDate || 'Published Oct 2026'}</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                <Clock size={14} color="#FFFFFF" />
-                <span>{article.readingTime || '12 min read'}</span>
-              </div>
-            </div>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', color: '#FFFFFF', fontFamily: 'var(--sts-font-mono)', fontSize: '0.78rem', letterSpacing: '0.04em' }}>
-              <CheckCircle2 size={13} color="#FFFFFF" />
-              <span>VERIFIED AGAINST PRODUCTION RFC SPECS</span>
-            </div>
-          </div>
-        </header>
-
-        {/* Detailed Master Article or Standard 3-Question Editorial Body */}
+      <div className="sts-container">
         {detailed ? (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '3.5rem', fontSize: '1.08rem', lineHeight: 1.75, color: '#E0E0E0' }}>
-            {/* Sticky Reading Progress Telemetry Bar */}
-            <ArticleReadingHud />
-
-            {/* Answer Island (Direct 2026 Architectural Definition - Monochromatic) */}
-            <div
-              style={{
-                padding: '1.75rem',
-                borderRadius: '6px',
-                background: '#090909',
-                border: '1px solid rgba(255, 255, 255, 0.15)',
-                borderLeft: '3px solid #FFFFFF',
-                boxShadow: '0 20px 40px -15px rgba(0, 0, 0, 0.95)',
-                position: 'relative',
-                overflow: 'hidden'
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.85rem', flexWrap: 'wrap', gap: '0.5rem' }}>
-                <span
-                  style={{
-                    background: '#FFFFFF',
-                    color: '#000000',
-                    fontFamily: 'var(--sts-font-mono)',
-                    fontSize: '0.68rem',
-                    fontWeight: 700,
-                    padding: '2px 8px',
-                    borderRadius: '3px',
-                    letterSpacing: '0.06em',
-                    textTransform: 'uppercase'
-                  }}
-                >
-                  Answer Island // Executive Summary
-                </span>
-                <span style={{ fontFamily: 'var(--sts-font-mono)', fontSize: '0.68rem', color: 'rgba(255, 255, 255, 0.4)', letterSpacing: '0.06em' }}>
-                  SYS_STATE: AUDITED // DETERMINISTIC
-                </span>
-              </div>
-              <p style={{ margin: 0, fontSize: '1.14rem', color: '#FFFFFF', lineHeight: 1.7, fontWeight: 400 }}>
-                {detailed.answerIsland}
-              </p>
+          <div>
+            {/* First Section: Executive Cockpit (Answer Island & Architectural Spec Sheet) */}
+            <div id="cockpit" style={{ scrollMarginTop: '100px' }}>
+              <ArticleExecutiveCockpit
+                answerIsland={detailed.answerIsland}
+                keyTakeaways={detailed.keyTakeaways}
+                rfcCode="RFC-CRM-2026"
+              />
             </div>
 
-            {/* Key Takeaways - Monochromatic */}
-            {detailed.keyTakeaways && detailed.keyTakeaways.length > 0 && (
-              <div
-                style={{
-                  padding: '1.5rem',
-                  borderRadius: '6px',
-                  background: '#0C0C0C',
-                  border: '1px solid rgba(255, 255, 255, 0.09)'
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#FFFFFF', fontWeight: 600, fontSize: '0.86rem', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '1.1rem', fontFamily: 'var(--sts-font-mono)' }}>
-                  <CheckCircle2 size={15} color="#FFFFFF" />
-                  <span>Key Architectural Takeaways</span>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                  {detailed.keyTakeaways.map((takeaway, idx) => (
-                    <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.85rem', fontSize: '0.92rem', color: 'rgba(255, 255, 255, 0.75)', lineHeight: 1.6 }}>
-                      <span style={{ color: '#FFFFFF', fontFamily: 'var(--sts-font-mono)', fontSize: '0.8rem', marginTop: '0.1rem', fontWeight: 700 }}>0{idx + 1}.</span>
-                      <span>{takeaway}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Interactive Architecture Workbench (Centerpiece Engine) */}
+            {/* Second Section: Centerpiece Interactive Simulator */}
             <div id="workbench" style={{ scrollMarginTop: '100px' }}>
               <CrmInteractiveWorkbench />
             </div>
+
+            {/* Third Section: Long-Form Technical Architecture Deep Dive */}
+            <div
+              style={{
+                maxWidth: '840px',
+                margin: '0 auto',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '3.5rem',
+                fontSize: '1.08rem',
+                lineHeight: 1.75,
+                color: '#E0E0E0'
+              }}
+            >
 
             {/* Sections */}
             {detailed.sections.map((sec, secIdx) => (
@@ -386,6 +270,7 @@ export const ArticleDetailPage: React.FC = () => {
                 )}
               </section>
             ))}
+            </div>
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '3.5rem', fontSize: '1.08rem', lineHeight: 1.75, color: '#D4D0C8' }}>
